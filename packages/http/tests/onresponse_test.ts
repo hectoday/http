@@ -12,7 +12,7 @@ Deno.test("onResponse: receives context and response", async () => {
     ],
     onResponse: (c, res) => {
       const headers = new Headers(res.headers);
-      headers.set("x-method", c.req.method);
+      headers.set("x-method", c.request.method);
       return new Response(res.body, {
         status: res.status,
         headers,

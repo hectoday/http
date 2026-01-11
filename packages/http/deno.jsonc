@@ -2,6 +2,7 @@
   "name": "@hectoday/http",
   "version": "0.1.0",
   "license": "MIT",
+  "description": "A minimal, explicit web framework built on Web Standards with deterministic control flow and no magic responses",
   "exports": {
     ".": "./mod.ts",
   },

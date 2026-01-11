@@ -13,7 +13,7 @@ export type OnErrorHandler = (
 // onRequest hook that runs before routing begins
 // Receives minimal input (just the request), returns a locals patch
 export type OnRequestHandler = (
-  req: Request,
+  request: Request,
 ) => void | Record<string, unknown> | Promise<void | Record<string, unknown>>;
 
 // onResponse hook that runs after handler execution, before returning response
@@ -45,7 +45,27 @@ export interface Config {
   onResponse?: OnResponseHandler;
 }
 
-// Bootstrap the framework: returns a fetch handler for Deno/Bun servers
+/**
+ * Bootstrap the Hectoday HTTP framework.
+ *
+ * Creates a fetch handler compatible with Deno.serve, Bun.serve, and Cloudflare Workers.
+ *
+ * @param config - Configuration object with handlers, validator, and lifecycle hooks, or an array of handlers
+ * @returns An object with a `fetch` function that processes incoming requests
+ *
+ * @example
+ * ```ts
+ * const app = setupHttp({
+ *   handlers: [
+ *     route.get("/hello", {
+ *       resolve: () => new Response("Hello world"),
+ *     }),
+ *   ],
+ * });
+ *
+ * Deno.serve(app.fetch);
+ * ```
+ */
 export function setupHttp(config: Handler[] | Config): {
   fetch: (req: Request) => Promise<Response>;
 } {
@@ -62,13 +82,13 @@ export function setupHttp(config: Handler[] | Config): {
 
   return {
     // Standard fetch signature compatible with Deno.serve / Bun.serve
-    fetch: async (req: Request): Promise<Response> => {
+    fetch: async (request: Request): Promise<Response> => {
       try {
         // Run onRequest hook BEFORE routing to get initial locals
-        const initialLocals = onRequest ? await onRequest(req) : {};
+        const initialLocals = onRequest ? await onRequest(request) : {};
 
         // Normal request processing - guards and handlers use explicit returns
-        let response = await router.handle(req, initialLocals || {});
+        let response = await router.handle(request, initialLocals || {});
 
         // Run onResponse hook after handler execution
         // Note: onResponse receives the full context from the route handler
@@ -85,7 +105,7 @@ export function setupHttp(config: Handler[] | Config): {
         // We need to build a minimal context for onError
         // If we have context from the error, use it; otherwise create a minimal one
         const context = (error as any).context || {
-          req,
+          request,
           raw: { params: {}, query: {}, body: undefined },
           input: { ok: true, params: {}, query: {}, body: undefined },
           locals: {},

@@ -8,8 +8,26 @@ export interface GroupOptions {
   guards?: GuardFn[];
 }
 
-// Compose multiple handlers or handler groups into a flat array
-// Guards are applied to all handlers in the group and nested groups
+/**
+ * Compose multiple handlers with shared guards.
+ *
+ * Guards are prepended to all handlers in the group. This allows you to apply
+ * common authentication, authorization, or other middleware logic to multiple routes.
+ *
+ * @param options - Configuration object with handlers and optional guards
+ * @returns A flat array of handlers with guards applied
+ *
+ * @example
+ * ```ts
+ * const protectedRoutes = group({
+ *   guards: [requireAuth],
+ *   handlers: [
+ *     route.get("/profile", { resolve: getProfile }),
+ *     route.post("/logout", { resolve: logout }),
+ *   ],
+ * });
+ * ```
+ */
 export function group(options: GroupOptions): Handler[] {
   const { handlers, guards } = options;
   const result: Handler[] = [];

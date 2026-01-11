@@ -6,10 +6,20 @@ import type {
   SchemaLike,
 } from "./validation-types.ts";
 
-// Path parameters extracted from URL (e.g., { id: "123" })
+/**
+ * Path parameters extracted from the URL pattern.
+ *
+ * @example
+ * For route `/users/:id`, RouteParams would be `{ id: "123" }`
+ */
 export type RouteParams = Record<string, string | undefined>;
 
-// Raw, unvalidated values extracted from the request
+/**
+ * Raw, unvalidated values extracted from the request.
+ *
+ * These values are always available regardless of validation state.
+ * Access validated values through `c.input` instead.
+ */
 export interface RawValues {
   /** Request's path parameters (strings from URLPattern) */
   readonly params: RouteParams;
@@ -19,14 +29,22 @@ export interface RawValues {
   readonly body?: unknown;
 }
 
-// Context object passed to handlers and guards
+/**
+ * Request context passed to handlers and guards.
+ *
+ * Contains the native Request object, raw values, validation state, and shared locals.
+ *
+ * @typeParam TParams - Type of validated path parameters
+ * @typeParam TQuery - Type of validated query parameters
+ * @typeParam TBody - Type of validated request body
+ */
 export interface Context<
   TParams = unknown,
   TQuery = unknown,
   TBody = unknown,
 > {
   /** Native Request (source of truth) */
-  readonly req: Request;
+  readonly request: Request;
   /** Extracted, unvalidated values */
   readonly raw: RawValues;
   /** Validation gate */
@@ -35,7 +53,16 @@ export interface Context<
   locals: Record<string, unknown>;
 }
 
-// Function signature for route handlers
+/**
+ * Route handler function that returns an HTTP Response.
+ *
+ * Handlers must explicitly return a Response object. The framework never
+ * auto-generates responses based on return values or thrown errors.
+ *
+ * @typeParam TParams - Type of validated path parameters
+ * @typeParam TQuery - Type of validated query parameters
+ * @typeParam TBody - Type of validated request body
+ */
 export type HandlerFn<
   TParams = unknown,
   TQuery = unknown,
@@ -44,17 +71,46 @@ export type HandlerFn<
   c: Context<TParams, TQuery, TBody>,
 ) => Response | Promise<Response>;
 
-// Guard result types
+/**
+ * Result returned by a guard function.
+ *
+ * Guards either allow the request to proceed (optionally adding locals)
+ * or deny it by returning a Response.
+ */
 export type GuardResult =
   | { allow: true; locals?: Record<string, unknown> }
   | { deny: Response };
 
-// Guard function that returns a structured result
+/**
+ * Guard function that controls access to routes.
+ *
+ * Guards run after validation but before the handler. They can deny requests
+ * or add facts to the context via locals.
+ *
+ * @example
+ * ```ts
+ * const requireAuth: GuardFn = (c) => {
+ *   const token = c.request.headers.get("authorization");
+ *   if (!token) {
+ *     return { deny: Response.json({ error: "Unauthorized" }, { status: 401 }) };
+ *   }
+ *   const user = verifyToken(token);
+ *   return { allow: true, locals: { user } };
+ * };
+ * ```
+ */
 export type GuardFn = (
   c: Context,
 ) => GuardResult | Promise<GuardResult>;
 
-// Route configuration object with type inference from schemas
+/**
+ * Configuration for a route handler.
+ *
+ * Defines the handler function, optional guards, and request schemas for validation.
+ * Types are automatically inferred from the schemas.
+ *
+ * @typeParam TSchemas - Request validation schemas for params, query, and body
+ */
 export interface RouteConfig<
   TSchemas extends RequestSchemas<SchemaLike> = RequestSchemas<SchemaLike>,
 > {
@@ -73,7 +129,11 @@ export interface RouteConfig<
   request?: TSchemas;
 }
 
-// Descriptor linking HTTP method + path + handler function
+/**
+ * Internal handler descriptor that links an HTTP method, path pattern, and handler function.
+ *
+ * Created by route factory functions like `route.get()`, `route.post()`, etc.
+ */
 export type Handler = {
   method: string;
   path: string;
@@ -82,7 +142,28 @@ export type Handler = {
   request?: RequestSchemas<SchemaLike>;
 };
 
-// Factory methods to create Handler descriptors for each HTTP verb
+/**
+ * Route factory functions for creating HTTP handlers.
+ *
+ * Each method creates a handler descriptor for a specific HTTP verb.
+ * Supports automatic type inference from request schemas.
+ *
+ * @example
+ * ```ts
+ * route.get("/users/:id", {
+ *   request: {
+ *     params: z.object({ id: z.string() }),
+ *   },
+ *   resolve: (c) => {
+ *     if (!c.input.ok) {
+ *       return Response.json({ error: c.input.issues }, { status: 400 });
+ *     }
+ *     const { id } = c.input.params; // Type-safe!
+ *     return Response.json({ id });
+ *   },
+ * })
+ * ```
+ */
 export const route = {
   get: <
     TSchemas extends RequestSchemas<SchemaLike> = RequestSchemas<SchemaLike>,

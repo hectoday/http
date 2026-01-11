@@ -2,11 +2,11 @@ import type {
   InputErr,
   InputOk,
   InputState,
-  Validator,
   RequestSchemas,
   SchemaLike,
   ValidationIssue,
   ValidationPart,
+  Validator,
 } from "../validation-types.ts";
 
 // ==============================
@@ -44,15 +44,15 @@ export function parseQuery(url: string): Record<string, string | string[]> {
  * Empty body is treated as undefined (not an error).
  */
 export async function parseBody(
-  req: Request,
+  request: Request,
 ): Promise<{ parsed: unknown | undefined; error?: SyntaxError }> {
   // Check if body exists
-  if (!req.body) {
+  if (!request.body) {
     return { parsed: undefined };
   }
 
   try {
-    const text = await req.text();
+    const text = await request.text();
 
     // Empty string body → undefined (not an error)
     if (text === "") {
@@ -66,8 +66,9 @@ export async function parseBody(
     // Invalid JSON → return error for validation to handle
     return {
       parsed: undefined,
-      error:
-        error instanceof SyntaxError ? error : new SyntaxError("Invalid JSON"),
+      error: error instanceof SyntaxError
+        ? error
+        : new SyntaxError("Invalid JSON"),
     };
   }
 }

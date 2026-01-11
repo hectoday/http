@@ -9,6 +9,6 @@
   },
   "imports": {
     "zod": "npm:zod@^3.24.1",
-    "@hectoday/http": "../core/mod.ts",
+    "@hectoday/http": "../http/mod.ts",
   },
 }

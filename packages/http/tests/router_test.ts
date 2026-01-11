@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
-import { createRouter } from "../../core/src/router.ts";
-import { route } from "../../core/src/route.ts";
+import { createRouter } from "../src/router.ts";
+import { route } from "../src/route.ts";
 
 Deno.test("createRouter.match returns null for no routes", () => {
   const router = createRouter([]);
@@ -21,7 +21,7 @@ Deno.test("handler can access request headers", async () => {
   const router = createRouter([
     route.get("/auth", {
       resolve: (c) => {
-        const auth = c.req.headers.get("authorization");
+        const auth = c.request.headers.get("authorization");
         return new Response(auth ?? "none");
       },
     }),
@@ -37,7 +37,7 @@ Deno.test("handler can access URL via request", async () => {
   const router = createRouter([
     route.get("/search", {
       resolve: (c) => {
-        const url = new URL(c.req.url);
+        const url = new URL(c.request.url);
         return new Response(url.searchParams.get("q") ?? "");
       },
     }),

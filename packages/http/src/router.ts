@@ -1,5 +1,5 @@
 import type { Context, Handler, RouteParams } from "./route.ts";
-import type { Validator, SchemaLike } from "./validation-types.ts";
+import type { SchemaLike, Validator } from "./validation-types.ts";
 import {
   parseBody,
   parseQuery,
@@ -24,7 +24,7 @@ export interface RouterResponse {
 export interface Router {
   match: (method: string, url: string) => RouteMatch | null;
   handle: (
-    req: Request,
+    request: Request,
     initialLocals: Record<string, unknown>,
   ) => Promise<RouterResponse>;
 }
@@ -61,14 +61,14 @@ export function createRouter(
   return {
     match,
     handle: async (
-      req: Request,
+      request: Request,
       initialLocals: Record<string, unknown>,
     ): Promise<RouterResponse> => {
-      const matched = match(req.method, req.url);
+      const matched = match(request.method, request.url);
       if (!matched) {
         // Create minimal context for 404 response
         const notFoundContext: Context = {
-          req,
+          request,
           raw: { params: {}, query: {}, body: undefined },
           input: { ok: true, params: {}, query: {}, body: undefined },
           locals: {},
@@ -80,14 +80,14 @@ export function createRouter(
       }
 
       // Extract raw query parameters
-      const query = parseQuery(req.url);
+      const query = parseQuery(request.url);
 
       // Parse body if route defines a body schema (single-read guarantee)
       let bodyValue: unknown | undefined = undefined;
       let bodyParseError: SyntaxError | undefined = undefined;
 
       if (matched.handler.request?.body) {
-        const result = await parseBody(req);
+        const result = await parseBody(request);
         bodyValue = result.parsed;
         bodyParseError = result.error;
       }
@@ -106,7 +106,7 @@ export function createRouter(
 
       // Create initial context with locals from onRequest hook
       let context: Context = {
-        req,
+        request,
         raw: {
           params: matched.params,
           query,

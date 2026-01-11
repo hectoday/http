@@ -15,7 +15,7 @@ Deno.test("onError: receives error and context", async () => {
       return Response.json(
         {
           error: err.message,
-          method: c.req.method,
+          method: c.request.method,
         },
         { status: 500 },
       );

@@ -37,7 +37,7 @@ import type { GuardFn } from "@hectoday/http";
  */
 export function maxBodyBytes(maxBytes: number): GuardFn {
   return (c) => {
-    const contentLength = c.req.headers.get("content-length");
+    const contentLength = c.request.headers.get("content-length");
 
     if (contentLength === null) {
       // No Content-Length header - could allow or deny based on your policy

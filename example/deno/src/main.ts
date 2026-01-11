@@ -8,7 +8,7 @@ import { z } from "zod";
 // ============================================================================
 
 const requireAuth: GuardFn = (c) => {
-  const apiKey = c.req.headers.get("x-api-key");
+  const apiKey = c.request.headers.get("x-api-key");
 
   if (!apiKey || apiKey !== "secret-key-123") {
     return {
@@ -204,8 +204,9 @@ const app = setupHttp({
   validator: zodValidator,
   handlers: [...publicRoutes, ...protectedRoutes],
 
-  onRequest: (req) => {
-    const requestId = req.headers.get("x-request-id") || crypto.randomUUID();
+  onRequest: (request) => {
+    const requestId = request.headers.get("x-request-id") ||
+      crypto.randomUUID();
     return { requestId };
   },
 

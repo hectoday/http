@@ -62,7 +62,7 @@ Deno.test("guard rejects request when returning Response", async () => {
 
 Deno.test("guard has access to request headers", async () => {
   const authGuard: GuardFn = (c) => {
-    const authHeader = c.req.headers.get("authorization");
+    const authHeader = c.request.headers.get("authorization");
     if (!authHeader) {
       return { deny: new Response("Unauthorized", { status: 401 }) };
     }
@@ -119,7 +119,7 @@ Deno.test("guard has access to request params", async () => {
 
 Deno.test("guard has access to request object", async () => {
   const methodGuard: GuardFn = (c) => {
-    if (c.req.method !== "GET") {
+    if (c.request.method !== "GET") {
       return { deny: new Response("Method not allowed", { status: 405 }) };
     }
     return { allow: true };
@@ -275,7 +275,7 @@ Deno.test("async guards work correctly", async () => {
     // Simulate async validation (e.g., database check)
     await new Promise((resolve) => setTimeout(resolve, 10));
 
-    if (!c.req.headers.get("authorization")) {
+    if (!c.request.headers.get("authorization")) {
       return { deny: new Response("Unauthorized", { status: 401 }) };
     }
     return { allow: true };
@@ -307,7 +307,7 @@ Deno.test(
   "guards can be applied to individual routes without group",
   async () => {
     const authGuard: GuardFn = (c) => {
-      if (!c.req.headers.get("authorization")) {
+      if (!c.request.headers.get("authorization")) {
         return { deny: new Response("Unauthorized", { status: 401 }) };
       }
       return { allow: true };
