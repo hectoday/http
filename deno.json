@@ -1,0 +1,12 @@
+{
+  "workspace": ["./packages/core", "./packages/helpers", "./example/deno"],
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1"
+  },
+  "tasks": {
+    "test": "deno test --allow-net packages/core/tests",
+    "bench": "cd benchmarks && ./run.sh",
+    "example": "deno task --cwd example/deno dev",
+    "example:bun": "cd example/bun && bun run dev"
+  }
+}
