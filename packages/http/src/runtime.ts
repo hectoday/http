@@ -1,7 +1,7 @@
 // runtime.ts
 
 import type { Context, Handler } from "./route.ts";
-import type { Validator, SchemaLike } from "./validation-types.ts";
+import type { SchemaLike, Validator } from "./validation-types.ts";
 import { createRouter } from "./router.ts";
 
 // onError handler that processes unexpected exceptions
@@ -46,7 +46,9 @@ export interface Config {
 }
 
 // Bootstrap the framework: returns a fetch handler for Deno/Bun servers
-export function setupHttp(config: Handler[] | Config) {
+export function setupHttp(config: Handler[] | Config): {
+  fetch: (req: Request) => Promise<Response>;
+} {
   // Support both array of handlers (legacy) and config object
   const handlers = Array.isArray(config) ? config : config.handlers;
   const validator = Array.isArray(config) ? undefined : config.validator;
