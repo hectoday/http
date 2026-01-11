@@ -770,9 +770,15 @@ Hectoday HTTP is:
 * explicit
 * deterministic
 * platform-first
-* tiny (~3KB)
 * library-agnostic
 
 > **Hectoday HTTP never decides what HTTP means.
 > It only describes what happened.
 > You commit reality.**
+
+---
+
+## License
+
+- Code is licensed under MIT.
+- Documentation is licensed under CC BY 4.0 (see apps/docs/LICENSE).
