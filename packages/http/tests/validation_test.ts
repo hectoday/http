@@ -1,5 +1,7 @@
 import { assertEquals, assertExists } from "@std/assert";
 import {
+  type InferSchema,
+  type InferSchemaError,
   route,
   type SchemaLike,
   setupHttp,
@@ -61,11 +63,11 @@ function createMockValidator(): Validator<MockSchema<unknown>> {
       schema: S,
       input: unknown,
       part: ValidationPart,
-    ): ValidateResult<unknown, unknown> {
+    ): ValidateResult<InferSchema<S>, InferSchemaError<S>> {
       const result = schema.safeParse(input);
 
       if (result.success) {
-        return { ok: true, value: result.data };
+        return { ok: true, value: result.data as InferSchema<S> };
       }
 
       return {
@@ -76,7 +78,7 @@ function createMockValidator(): Validator<MockSchema<unknown>> {
           message: issue.message,
           code: issue.code,
         })),
-        error: result.error,
+        error: result.error as InferSchemaError<S>,
       };
     },
   };

@@ -5,6 +5,9 @@
   },
   "tasks": {
     "test": "deno test --allow-net packages/http/tests",
+    "lint": "deno lint",
+    "fmt": "deno fmt",
+    "fmt:check": "deno fmt --check",
     "bench": "cd benchmarks && ./run.sh",
     "example": "deno task --cwd example/deno dev",
     "example:bun": "cd example/bun && bun run dev"

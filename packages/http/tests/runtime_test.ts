@@ -1,7 +1,7 @@
 // runtime_test.ts
 
 import { assertEquals } from "@std/assert";
-import { route, setupHttp } from "../mod.ts";
+import { route, setupHttp, type Validator } from "../mod.ts";
 
 Deno.test("setupHttp returns object with fetch method", () => {
   const app = setupHttp([]);
@@ -66,19 +66,22 @@ Deno.test("setupHttp.fetch returns 404 for unmatched method", async () => {
 Deno.test("setupHttp.fetch handler receives request and body", async () => {
   // Simple schema that accepts anything
   const bodySchema = {
-    safeParse: (data: unknown) => ({ success: true as const, data }),
+    safeParse: (data: unknown) =>
+      ({ success: true as const, data }) as
+        | { success: true; data: unknown }
+        | { success: false; error: unknown },
   };
 
   // Simple validator
   const validator = {
-    validate: (schema: unknown, input: unknown, _part: string) => {
+    validate: (schema: typeof bodySchema, input: unknown, _part: string) => {
       const result = schema.safeParse(input);
       if (result.success) {
         return { ok: true as const, value: result.data };
       }
       return { ok: false as const, issues: [], error: result.error };
     },
-  };
+  } as Validator<typeof bodySchema>;
 
   const app = setupHttp({
     validator,
