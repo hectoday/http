@@ -1,0 +1,59 @@
+name: Publish to JSR
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Run in dry-run mode (no actual publish)"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Run http package tests
+        working-directory: ./packages/http
+        run: deno test --allow-net
+
+      - name: Verify no slow types
+        working-directory: ./packages/http
+        run: deno publish --dry-run --allow-dirty
+
+  publish:
+    name: Publish to JSR
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Publish package (dry-run)
+        if: inputs.dry-run == true
+        working-directory: ./packages/http
+        run: deno publish --dry-run
+
+      - name: Publish package
+        if: inputs.dry-run == false
+        working-directory: ./packages/http
+        run: deno publish

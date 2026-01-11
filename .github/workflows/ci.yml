@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Check formatting
+        run: deno fmt --check
+
+      - name: Run linter
+        run: deno lint
+
+      - name: Run http package tests
+        working-directory: ./packages/http
+        run: deno test --allow-net
+
+      - name: Type check example
+        working-directory: ./example/deno
+        run: deno check src/main.ts
+
+      - name: Type check benchmarks
+        working-directory: ./benchmarks
+        run: deno check server.ts
+
+      - name: Verify no slow types
+        working-directory: ./packages/http
+        run: deno publish --dry-run --allow-dirty

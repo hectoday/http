@@ -1,5 +1,4 @@
 import type {
-  InferInput,
   InferSchema,
   InputState,
   RequestSchemas,
