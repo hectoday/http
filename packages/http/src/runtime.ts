@@ -23,7 +23,7 @@ export type OnResponseHandler = (
 ) => Response | Promise<Response>;
 
 // Default onError implementation: logs the error and returns a sanitized 500 response
-const defaultOnError: OnErrorHandler = (error, c) => {
+const defaultOnError: OnErrorHandler = (error, _c) => {
   // Log the unexpected error
   console.error("Unexpected error during request handling:", error);
 
@@ -88,15 +88,16 @@ export function setupHttp(config: Handler[] | Config): {
         const initialLocals = onRequest ? await onRequest(request) : {};
 
         // Normal request processing - guards and handlers use explicit returns
-        let response = await router.handle(request, initialLocals || {});
+        const response = await router.handle(request, initialLocals || {});
 
         // Run onResponse hook after handler execution
         // Note: onResponse receives the full context from the route handler
         if (onResponse && response.context) {
-          response.response = await onResponse(
+          const updatedResponse = await onResponse(
             response.context,
             response.response,
           );
+          return updatedResponse;
         }
 
         return response.response;
@@ -104,7 +105,7 @@ export function setupHttp(config: Handler[] | Config): {
         // Exception caught = unexpected failure (bug, crash, infrastructure problem)
         // We need to build a minimal context for onError
         // If we have context from the error, use it; otherwise create a minimal one
-        const context = (error as any).context || {
+        const context = (error as { context?: Context }).context || {
           request,
           raw: { params: {}, query: {}, body: undefined },
           input: { ok: true, params: {}, query: {}, body: undefined },

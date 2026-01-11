@@ -19,7 +19,6 @@ export {
   type InputErr,
   type InputOk,
   type InputState,
-  type Validator,
   type RequestSchemas,
   type SafeParseFailure,
   type SafeParseResult,
@@ -30,6 +29,7 @@ export {
   type ValidateResult,
   type ValidationIssue,
   type ValidationPart,
+  type Validator,
 } from "./src/validation-types.ts";
 
 // Grouping

@@ -4,15 +4,12 @@
 
 Hectoday HTTP is designed around one core idea:
 
-> **The framework describes facts.
-> You decide what HTTP means.**
+> **The framework describes facts. You decide what HTTP means.**
 
-No hidden control flow.
-No magic responses.
-No implicit error handling.
+No hidden control flow. No magic responses. No implicit error handling.
 
-If a request ends, it's because **you returned a `Response`**
-or a **guard explicitly denied it.**
+If a request ends, it's because **you returned a `Response`** or a **guard
+explicitly denied it.**
 
 ---
 
@@ -20,34 +17,29 @@ or a **guard explicitly denied it.**
 
 Hectoday HTTP is built for:
 
-* Learnability
-* Explicit control flow
-* Deterministic behavior
-* Web platform first (Fetch API)
-* Edge compatibility (Deno, Bun, Workers)
+- Learnability
+- Explicit control flow
+- Deterministic behavior
+- Web platform first (Fetch API)
+- Edge compatibility (Deno, Bun, Workers)
 
 ### Design laws
 
-1. **One decision boundary**
-   Only handlers and guards can end a request.
+1. **One decision boundary** Only handlers and guards can end a request.
 
-2. **No hidden branching**
-   Nothing auto-returns 400/401/403 for you.
+2. **No hidden branching** Nothing auto-returns 400/401/403 for you.
 
-3. **Facts before decisions**
-   The framework computes:
+3. **Facts before decisions** The framework computes:
 
-   * raw inputs
-   * validation results
-   * guard facts
+   - raw inputs
+   - validation results
+   - guard facts
 
    You decide what they mean.
 
-4. **Errors are responses**
-   Expected failures are returned explicitly.
+4. **Errors are responses** Expected failures are returned explicitly.
 
-5. **Unexpected failures throw**
-   Bugs go to one error boundary.
+5. **Unexpected failures throw** Bugs go to one error boundary.
 
 ---
 
@@ -83,19 +75,19 @@ Response
 Facts → Gates → Decision
 ```
 
-* **Facts**
+- **Facts**
 
-  * `c.raw`
-  * `c.input`
-  * `c.locals`
+  - `c.raw`
+  - `c.input`
+  - `c.locals`
 
-* **Gates**
+- **Gates**
 
-  * guards (allow / deny)
+  - guards (allow / deny)
 
-* **Decision**
+- **Decision**
 
-  * handler returns Response
+  - handler returns Response
 
 ---
 
@@ -110,7 +102,7 @@ npm install @hectoday/http
 # Basic example
 
 ```ts
-import { setupHttp, route } from "@hectoday/http";
+import { route, setupHttp } from "@hectoday/http";
 
 const app = setupHttp({
   handlers: [
@@ -132,35 +124,37 @@ Deno.serve(app.fetch);
 ```ts
 const handler = setupHttp({
   handlers,
-  validator?,
-  onRequest?,
-  onResponse?,
-  onError?
+  validator,
+  onRequest,
+  onResponse,
+  onError,
 });
 ```
 
 ### Options
 
-| Name         | Type                           | Description                            |
-| ------------ | ------------------------------ | -------------------------------------- |
-| `handlers`   | `Handler[]`                    | All registered handlers                |
-| `validator`  | `Validator<TSchema>`     | Schema adapter (required if using validation) |
-| `onRequest`  | `(req) => void \| LocalsPatch` | Runs **before routing**                |
-| `onResponse` | `(c, res) => Response`         | Runs before returning response         |
-| `onError`    | `(err, c) => Response`         | Global error handler                   |
+| Name         | Type                           | Description                                   |
+| ------------ | ------------------------------ | --------------------------------------------- |
+| `handlers`   | `Handler[]`                    | All registered handlers                       |
+| `validator`  | `Validator<TSchema>`           | Schema adapter (required if using validation) |
+| `onRequest`  | `(req) => void \| LocalsPatch` | Runs **before routing**                       |
+| `onResponse` | `(c, res) => Response`         | Runs before returning response                |
+| `onError`    | `(err, c) => Response`         | Global error handler                          |
 
 Returns:
 
 ```ts
-{ fetch: (req: Request) => Promise<Response> }
+{
+  fetch: ((req: Request) => Promise<Response>);
+}
 ```
 
 Compatible with:
 
-* Deno
-* Bun
-* Cloudflare Workers
-* Node (fetch runtimes)
+- Deno
+- Bun
+- Cloudflare Workers
+- Node (fetch runtimes)
 
 ---
 
@@ -195,14 +189,14 @@ If no route matches → framework returns `404`.
 ```ts
 interface RouteConfig {
   request?: {
-    params?: TSchema
-    query?: TSchema
-    body?: TSchema
-  }
+    params?: TSchema;
+    query?: TSchema;
+    body?: TSchema;
+  };
 
-  guards?: GuardFn[]
+  guards?: GuardFn[];
 
-  resolve: HandlerFn
+  resolve: HandlerFn;
 }
 ```
 
@@ -212,29 +206,28 @@ interface RouteConfig {
 
 ```ts
 interface Context {
-  request: Request
-  raw: RawValues
-  input: InputState
-  locals: Record<string, unknown>
+  request: Request;
+  raw: RawValues;
+  input: InputState;
+  locals: Record<string, unknown>;
 }
 ```
 
 ### Important rules
 
-* Hectoday HTTP does **not** duplicate HTTP primitives
-  Use:
+- Hectoday HTTP does **not** duplicate HTTP primitives Use:
 
 ```ts
-c.request.headers
-c.request.method
-new URL(c.request.url)
+c.request.headers;
+c.request.method;
+new URL(c.request.url);
 ```
 
 No:
 
-* `c.headers`
-* `c.method`
-* `c.url`
+- `c.headers`
+- `c.method`
+- `c.url`
 
 ---
 
@@ -242,15 +235,15 @@ No:
 
 ```ts
 interface RawValues {
-  params: Record<string, string | undefined>
-  query: Record<string, string | string[]>
-  body?: unknown
+  params: Record<string, string | undefined>;
+  query: Record<string, string | string[]>;
+  body?: unknown;
 }
 ```
 
-* Extracted by framework
-* **Never trusted**
-* Always accessible
+- Extracted by framework
+- **Never trusted**
+- Always accessible
 
 ### Query parsing
 
@@ -263,14 +256,15 @@ interface RawValues {
 
 # Body parsing
 
-Hectoday HTTP performs **framework-level body parsing only for JSON**, and **only when a body schema is declared**.
+Hectoday HTTP performs **framework-level body parsing only for JSON**, and
+**only when a body schema is declared**.
 
 ### When the body is read
 
-* If a route defines `request.body`
-  → Hectoday HTTP reads the request body **once** and parses it as JSON.
-* If a route does **not** define `request.body`
-  → Hectoday HTTP does **not** touch the request body at all.
+- If a route defines `request.body` → Hectoday HTTP reads the request body
+  **once** and parses it as JSON.
+- If a route does **not** define `request.body` → Hectoday HTTP does **not**
+  touch the request body at all.
 
 This keeps body consumption explicit and Fetch-compliant.
 
@@ -279,17 +273,17 @@ This keeps body consumption explicit and Fetch-compliant.
 ### How the body is parsed
 
 1. The body is read **once** using `req.text()`
-2. If the body is empty (`""`)
-   → it is treated as `undefined`
+2. If the body is empty (`""`) → it is treated as `undefined`
 3. Otherwise, Hectoday HTTP attempts `JSON.parse(text)`
 
 The parsed value is cached on:
 
 ```ts
-c.raw.body
+c.raw.body;
 ```
 
-If Hectoday HTTP parses the body, **do not call** `req.json()` or `req.text()` again.
+If Hectoday HTTP parses the body, **do not call** `req.json()` or `req.text()`
+again.
 
 ---
 
@@ -297,9 +291,9 @@ If Hectoday HTTP parses the body, **do not call** `req.json()` or `req.text()` a
 
 Invalid JSON is treated as a **validation failure**, not an exception.
 
-* Hectoday HTTP does **not** throw
-* Hectoday HTTP does **not** auto-return a response
-* `c.input.ok` becomes `false`
+- Hectoday HTTP does **not** throw
+- Hectoday HTTP does **not** auto-return a response
+- `c.input.ok` becomes `false`
 
 A normalized issue is produced:
 
@@ -319,13 +313,13 @@ The handler decides how to respond (e.g. return 400).
 
 At the framework level, Hectoday HTTP supports:
 
-* ✅ JSON
+- ✅ JSON
 
 Hectoday HTTP does **not** automatically parse:
 
-* `multipart/form-data`
-* `application/x-www-form-urlencoded`
-* binary / streams
+- `multipart/form-data`
+- `application/x-www-form-urlencoded`
+- binary / streams
 
 For these formats, parse the body manually in the handler:
 
@@ -351,11 +345,11 @@ This behavior is intentional and explicit.
 
 ### Why this design
 
-* No hidden body consumption
-* Single-read, deterministic behavior
-* Schema-driven parsing
-* Full control stays with the handler
-* Edge-safe and Fetch-native
+- No hidden body consumption
+- Single-read, deterministic behavior
+- Schema-driven parsing
+- Full control stays with the handler
+- Edge-safe and Fetch-native
 
 ---
 
@@ -371,24 +365,25 @@ request: {
 }
 ```
 
-Hectoday HTTP is **schema-library agnostic**. It works with any library that implements:
+Hectoday HTTP is **schema-library agnostic**. It works with any library that
+implements:
 
 ```ts
 interface SchemaLike<TOut, TErr> {
-  safeParse(input: unknown): SafeParseResult<TOut, TErr>
+  safeParse(input: unknown): SafeParseResult<TOut, TErr>;
 }
 
 type SafeParseResult<T, E> =
   | { success: true; data: T }
-  | { success: false; error: E }
+  | { success: false; error: E };
 ```
 
 Works with:
 
-* Zod
-* Valibot
-* ArkType
-* Any library with `safeParse`
+- Zod
+- Valibot
+- ArkType
+- Any library with `safeParse`
 
 ---
 
@@ -397,30 +392,30 @@ Works with:
 ```ts
 type InputState =
   | {
-      ok: true
-      params: TParams
-      query: TQuery
-      body: TBody
-    }
+    ok: true;
+    params: TParams;
+    query: TQuery;
+    body: TBody;
+  }
   | {
-      ok: false
-      failed: ("params" | "query" | "body")[]
-      issues: ValidationIssue[]
-      received: {
-        params?: unknown
-        query?: unknown
-        body?: unknown
-      }
-      errors?: Record<string, unknown>
-    }
+    ok: false;
+    failed: ("params" | "query" | "body")[];
+    issues: ValidationIssue[];
+    received: {
+      params?: unknown;
+      query?: unknown;
+      body?: unknown;
+    };
+    errors?: Record<string, unknown>;
+  };
 ```
 
 ```ts
 interface ValidationIssue {
-  part: "params" | "query" | "body"
-  path: readonly string[]
-  message: string
-  code?: string
+  part: "params" | "query" | "body";
+  path: readonly string[];
+  message: string;
+  code?: string;
 }
 ```
 
@@ -429,26 +424,27 @@ interface ValidationIssue {
 If:
 
 ```ts
-c.input.ok === false
+c.input.ok === false;
 ```
 
 Then:
 
-* ❌ no validated values exist
-* ✅ only `issues`, `failed`, `received`
+- ❌ no validated values exist
+- ✅ only `issues`, `failed`, `received`
 
 If:
 
 ```ts
-c.input.ok === true
+c.input.ok === true;
 ```
 
 Then:
 
-* ✅ all validated values available
-* ❌ no `issues` or `failed`
+- ✅ all validated values available
+- ❌ no `issues` or `failed`
 
-> **Raw values are always accessible via `c.raw`, regardless of validation state.**
+> **Raw values are always accessible via `c.raw`, regardless of validation
+> state.**
 
 ---
 
@@ -463,7 +459,8 @@ const app = setupHttp({
 });
 ```
 
-If a route defines `request` schemas but no `validator` is provided, Hectoday HTTP throws an error (treated as unexpected, goes to `onError` → 500).
+If a route defines `request` schemas but no `validator` is provided, Hectoday
+HTTP throws an error (treated as unexpected, goes to `onError` → 500).
 
 ### Validator contract
 
@@ -472,19 +469,23 @@ interface Validator<TSchema> {
   validate<S extends TSchema>(
     schema: S,
     input: unknown,
-    part: "params" | "query" | "body"
-  ): ValidateResult<InferSchema<S>, InferSchemaError<S>>
+    part: "params" | "query" | "body",
+  ): ValidateResult<InferSchema<S>, InferSchemaError<S>>;
 }
 
 type ValidateResult<T, TErr> =
   | { ok: true; value: T }
-  | { ok: false; issues: ValidationIssue[]; error?: TErr }
+  | { ok: false; issues: ValidationIssue[]; error?: TErr };
 ```
 
 ### Zod adapter (copy/paste)
 
 ```ts
-import type { Validator, ValidationIssue, ValidationPart } from "@hectoday/http";
+import type {
+  ValidationIssue,
+  ValidationPart,
+  Validator,
+} from "@hectoday/http";
 import type { ZodTypeAny } from "zod";
 
 export function createZodValidator(): Validator<ZodTypeAny> {
@@ -517,11 +518,11 @@ See [`example/src/main.ts`](./example/src/main.ts) for full working example.
 
 ### Why this design
 
-* Hectoday HTTP never depends on any schema library
-* Type inference comes from `safeParse()` typing
-* Runtime stays tiny (~3KB)
-* Users control error formatting
-* Easy to adapt any validation library
+- Hectoday HTTP never depends on any schema library
+- Type inference comes from `safeParse()` typing
+- Runtime stays tiny (~3KB)
+- Users control error formatting
+- Easy to adapt any validation library
 
 ---
 
@@ -545,14 +546,14 @@ const app = setupHttp({
         if (!c.input.ok) {
           return Response.json(
             { error: { issues: c.input.issues } },
-            { status: 400 }
+            { status: 400 },
           );
         }
 
         // ✨ Types are automatically inferred from schemas!
         // c.input.body is { name: string; email: string }
         const { name, email } = c.input.body;
-        
+
         return Response.json({ id: crypto.randomUUID(), name, email });
       },
     }),
@@ -560,9 +561,11 @@ const app = setupHttp({
 });
 ```
 
-**Type inference is automatic.** No need for type assertions - TypeScript knows the exact shape of validated data.
+**Type inference is automatic.** No need for type assertions - TypeScript knows
+the exact shape of validated data.
 
-**Hectoday HTTP never auto-returns 400.** You decide what validation failures mean.
+**Hectoday HTTP never auto-returns 400.** You decide what validation failures
+mean.
 
 ---
 
@@ -573,18 +576,17 @@ Guards are **pure request gates**.
 ```ts
 type GuardResult =
   | { allow: true; locals?: object }
-  | { deny: Response }
+  | { deny: Response };
 
-type GuardFn = (c: Context) =>
-  GuardResult | Promise<GuardResult>
+type GuardFn = (c: Context) => GuardResult | Promise<GuardResult>;
 ```
 
 ### Behavior
 
-* Guards run **after validation**
-* Guards run in order
-* First `deny` short-circuits
-* Allows may attach locals
+- Guards run **after validation**
+- Guards run in order
+- First `deny` short-circuits
+- Allows may attach locals
 
 ### Example: Auth guard
 
@@ -605,45 +607,51 @@ const requireAuth: GuardFn = (c) => {
 
 # Locals (`c.locals`)
 
-* Request-scoped facts
-* **Immutable accumulation**
-* Provided by:
+- Request-scoped facts
+- **Immutable accumulation**
+- Provided by:
 
-  * `onRequest`
-  * guards
+  - `onRequest`
+  - guards
 
 ## How immutable accumulation works
 
-Each guard or hook returns a **locals patch**.
-Hectoday HTTP creates a **new context** with merged locals at each step.
+Each guard or hook returns a **locals patch**. Hectoday HTTP creates a **new
+context** with merged locals at each step.
 
 Nothing mutates. Data only flows forward. Every step is pure.
 
 ```ts
 // Step 1: onRequest
-{ requestId }
+{
+  requestId;
+}
 
 // Step 2: guard 1
-{ requestId, user }
+{
+  requestId, user;
+}
 
 // Step 3: guard 2
-{ requestId, user, tenant }
+{
+  requestId, user, tenant;
+}
 ```
 
 Later patches override earlier values.
 
 Good for:
 
-* user
-* tenant
-* requestId
-* feature flags
+- user
+- tenant
+- requestId
+- feature flags
 
 Avoid:
 
-* Node buffers
-* DB clients
-* large payloads
+- Node buffers
+- DB clients
+- large payloads
 
 > Locals are **facts**, not services.
 
@@ -665,8 +673,8 @@ Behavior:
 ```ts
 final.guards = [
   ...group.guards,
-  ...(route.guards ?? [])
-]
+  ...(route.guards ?? []),
+];
 ```
 
 ### Example
@@ -689,15 +697,15 @@ Runs **before routing**, receives the raw Fetch `Request`.
 
 Rules:
 
-* Cannot deny
-* Cannot return Response
-* May only return locals patch
+- Cannot deny
+- Cannot return Response
+- May only return locals patch
 
 ```ts
-onRequest: (request) => ({
+onRequest: ((request) => ({
   requestId: crypto.randomUUID(),
   startedAt: Date.now(),
-})
+}));
 ```
 
 Returns a locals patch that will be merged into context **before routing**.
@@ -749,17 +757,17 @@ onError(error, c) {
 
 # What Hectoday HTTP decides
 
-* 404 if no route matches
-* 500 on uncaught throw
-* Validation failures create `c.input.ok === false`
+- 404 if no route matches
+- 500 on uncaught throw
+- Validation failures create `c.input.ok === false`
 
 # What YOU decide
 
-* 400 validation errors
-* 401 / 403 auth
-* 409 conflicts
-* 200/201 success
-* **All HTTP semantics**
+- 400 validation errors
+- 401 / 403 auth
+- 409 conflicts
+- 200/201 success
+- **All HTTP semantics**
 
 ---
 
@@ -767,14 +775,13 @@ onError(error, c) {
 
 Hectoday HTTP is:
 
-* explicit
-* deterministic
-* platform-first
-* library-agnostic
+- explicit
+- deterministic
+- platform-first
+- library-agnostic
 
-> **Hectoday HTTP never decides what HTTP means.
-> It only describes what happened.
-> You commit reality.**
+> **Hectoday HTTP never decides what HTTP means. It only describes what
+> happened. You commit reality.**
 
 ---
 

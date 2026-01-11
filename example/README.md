@@ -1,6 +1,7 @@
 # @hectoday/http Examples
 
-Example applications demonstrating @hectoday/http usage across different runtimes.
+Example applications demonstrating @hectoday/http usage across different
+runtimes.
 
 ## Deno Example
 

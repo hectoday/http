@@ -1,6 +1,8 @@
 # @hectoday/http-helpers
 
-A collection of common validators and guards for [@hectoday/http](https://github.com/hectoday/http), similar to [convex-helpers](https://github.com/get-convex/convex-helpers).
+A collection of common validators and guards for
+[@hectoday/http](https://github.com/hectoday/http), similar to
+[convex-helpers](https://github.com/get-convex/convex-helpers).
 
 ## Features
 
@@ -18,7 +20,8 @@ deno add @hectoday/http-helpers
 
 ### Zod Validator
 
-Integrate [Zod](https://zod.dev/) schemas with @hectoday/http for runtime validation.
+Integrate [Zod](https://zod.dev/) schemas with @hectoday/http for runtime
+validation.
 
 ```ts
 import { z } from "zod";
@@ -61,7 +64,10 @@ setup@hectoday/http({
 Enforce a maximum request body size to prevent oversized payloads.
 
 ```ts
-import { maxBodyBytes, SIZES } from "@hectoday/http-helpers/guards/max-body-bytes";
+import {
+  maxBodyBytes,
+  SIZES,
+} from "@hectoday/http-helpers/guards/max-body-bytes";
 import { route } from "@hectoday/http";
 
 // Limit to 1MB
@@ -83,6 +89,7 @@ export const uploadImage = route.post("/upload/image", {
 ```
 
 **Size constants available:**
+
 - `SIZES.KB` = 1,024 bytes
 - `SIZES.MB` = 1,048,576 bytes
 - `SIZES.GB` = 1,073,741,824 bytes
@@ -102,7 +109,7 @@ import { maxBodyBytes } from "@hectoday/http-helpers/guards/max-body-bytes";
 import { maxBodyBytes } from "@hectoday/http-helpers/guards";
 
 // Or import everything (not recommended, but possible)
-import { zodValidator, maxBodyBytes } from "@hectoday/http-helpers";
+import { maxBodyBytes, zodValidator } from "@hectoday/http-helpers";
 ```
 
 ## License

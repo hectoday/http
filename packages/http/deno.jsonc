@@ -4,9 +4,9 @@
   "license": "MIT",
   "description": "A minimal, explicit web framework built on Web Standards with deterministic control flow and no magic responses",
   "exports": {
-    ".": "./mod.ts",
+    ".": "./mod.ts"
   },
   "tasks": {
-    "test": "deno test --allow-net",
-  },
+    "test": "deno test --allow-net"
+  }
 }

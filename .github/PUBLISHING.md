@@ -26,13 +26,15 @@ deno publish            # Publish
 ## Before Publishing
 
 Update version in `packages/http/deno.jsonc`:
+
 ```jsonc
 {
-  "version": "0.2.0"  // Increment this
+  "version": "0.2.0" // Increment this
 }
 ```
 
 Verify locally:
+
 ```bash
 deno fmt && deno lint
 cd packages/http && deno test --allow-net
@@ -47,6 +49,7 @@ deno publish --dry-run
 ## Rollback
 
 Within 72 hours:
+
 ```bash
 cd packages/http
 deno publish --undo

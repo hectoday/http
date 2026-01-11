@@ -19,7 +19,7 @@ const hello = route.get("/hello/:name", {
 });
 
 const echo = route.post("/echo", {
-  resolve: async (c) => {
+  resolve: (c) => {
     const body = c.raw.body;
     return Response.json({ received: body });
   },

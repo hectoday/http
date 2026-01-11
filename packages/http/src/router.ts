@@ -139,7 +139,9 @@ export function createRouter(
             }
           } catch (error) {
             // Attach context to error so onError can access it
-            (error as any).context = context;
+            if (error && typeof error === "object") {
+              (error as { context?: Context }).context = context;
+            }
             throw error;
           }
         }
@@ -154,7 +156,9 @@ export function createRouter(
         };
       } catch (error) {
         // Attach context to error so onError can access it
-        (error as any).context = context;
+        if (error && typeof error === "object") {
+          (error as { context?: Context }).context = context;
+        }
         throw error;
       }
     },

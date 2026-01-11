@@ -1,11 +1,11 @@
 import { assertEquals, assertExists } from "@std/assert";
 import {
-  type Validator,
   route,
   type SchemaLike,
   setupHttp,
   type ValidateResult,
   type ValidationPart,
+  type Validator,
 } from "../mod.ts";
 
 // ==============================
@@ -14,10 +14,11 @@ import {
 
 type MockSchemaValidateFn<T> = (data: unknown) => T | null;
 
-interface MockSchema<T> extends SchemaLike<
-  T,
-  { issues: Array<{ path: string[]; message: string; code?: string }> }
-> {
+interface MockSchema<T> extends
+  SchemaLike<
+    T,
+    { issues: Array<{ path: string[]; message: string; code?: string }> }
+  > {
   _validate: MockSchemaValidateFn<T>;
 }
 
@@ -54,13 +55,13 @@ function createMockSchema<T>(validate: MockSchemaValidateFn<T>): MockSchema<T> {
   };
 }
 
-function createMockValidator(): Validator<MockSchema<any>> {
+function createMockValidator(): Validator<MockSchema<unknown>> {
   return {
-    validate<S extends MockSchema<any>>(
+    validate<S extends MockSchema<unknown>>(
       schema: S,
       input: unknown,
       part: ValidationPart,
-    ): ValidateResult<any, any> {
+    ): ValidateResult<unknown, unknown> {
       const result = schema.safeParse(input);
 
       if (result.success) {
@@ -545,7 +546,7 @@ Deno.test("validation: validator required when schemas exist", async () => {
         request: {
           body: bodySchema,
         },
-        resolve: (c) => {
+        resolve: (_c) => {
           return Response.json({ ok: true });
         },
       }),
@@ -672,7 +673,7 @@ Deno.test("validation: guards run after validation", async () => {
             return { allow: true };
           },
         ],
-        resolve: (c) => {
+        resolve: (_c) => {
           return Response.json({ ok: true });
         },
       }),

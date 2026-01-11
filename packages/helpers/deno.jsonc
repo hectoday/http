@@ -5,10 +5,10 @@
     ".": "./mod.ts",
     "./zod": "./src/validators/zod.ts",
     "./guards": "./src/guards/mod.ts",
-    "./guards/max-body-bytes": "./src/guards/max-body-bytes.ts",
+    "./guards/max-body-bytes": "./src/guards/max-body-bytes.ts"
   },
   "imports": {
     "zod": "npm:zod@^3.24.1",
-    "@hectoday/http": "../http/mod.ts",
-  },
+    "@hectoday/http": "../http/mod.ts"
+  }
 }

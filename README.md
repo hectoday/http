@@ -2,10 +2,11 @@
 
 **An explicit, standards-first HTTP framework built for learning.**
 
-`@hectoday/http` is a minimal web framework that exposes the real mechanics of HTTP.
-Nothing is hidden. No magic. Every step is visible and intentional.
+`@hectoday/http` is a minimal web framework that exposes the real mechanics of
+HTTP. Nothing is hidden. No magic. Every step is visible and intentional.
 
-It is designed first and foremost as a **teaching tool**, but it is fully usable for real applications.
+It is designed first and foremost as a **teaching tool**, but it is fully usable
+for real applications.
 
 ---
 
@@ -17,12 +18,12 @@ Most frameworks abstract HTTP away.
 
 You work directly with:
 
-* `Request`
-* `Response`
-* headers
-* status codes
-* routing
-* guards
+- `Request`
+- `Response`
+- headers
+- status codes
+- routing
+- guards
 
 So you actually learn **how the web works** — not just how to use a framework.
 
@@ -30,19 +31,14 @@ So you actually learn **how the web works** — not just how to use a framework.
 
 ## Design principles
 
-* **Web standards first**
-  Built on the Fetch API and platform primitives.
+- **Web standards first** Built on the Fetch API and platform primitives.
 
-* **Explicit control flow**
-  You always decide what happens.
-  No implicit behavior. No hidden responses.
+- **Explicit control flow** You always decide what happens. No implicit
+  behavior. No hidden responses.
 
-* **Minimal surface area**
-  Small API. Easy to reason about.
+- **Minimal surface area** Small API. Easy to reason about.
 
-* **Education-first**
-  Clarity > convenience
-  Understanding > shortcuts
+- **Education-first** Clarity > convenience Understanding > shortcuts
 
 ---
 
@@ -62,26 +58,24 @@ const app = setup([
 Deno.serve(app.fetch);
 ```
 
-No wrappers.
-No custom response objects.
-Just HTTP.
+No wrappers. No custom response objects. Just HTTP.
 
 ---
 
 ## What this is great for
 
-* Learning HTTP properly
-* Teaching web fundamentals
-* Understanding request lifecycles
-* Building APIs
-* Experimenting with protocol-level behavior
+- Learning HTTP properly
+- Teaching web fundamentals
+- Understanding request lifecycles
+- Building APIs
+- Experimenting with protocol-level behavior
 
 ---
 
-## What this is *not*
+## What this is _not_
 
-* A batteries-included framework
-* A "magic" DX-first abstraction
+- A batteries-included framework
+- A "magic" DX-first abstraction
 
 This project values **clarity over convenience**.
 
@@ -89,8 +83,7 @@ This project values **clarity over convenience**.
 
 ## Documentation
 
-Full docs:
-👉 **[https://docs.hectoday.com](https://docs.hectoday.com)**
+Full docs: 👉 **[https://docs.hectoday.com](https://docs.hectoday.com)**
 
 Docs live in the repository and accept community contributions.
 
@@ -100,10 +93,10 @@ Docs live in the repository and accept community contributions.
 
 Contributions are welcome ❤️
 
-* Code improvements
-* Documentation fixes
-* Examples
-* Typos
+- Code improvements
+- Documentation fixes
+- Examples
+- Typos
 
 See `CONTRIBUTING.md`.
 
@@ -111,12 +104,11 @@ See `CONTRIBUTING.md`.
 
 ## License
 
-* **Code:** MIT
-* **Documentation:** CC BY 4.0
+- **Code:** MIT
+- **Documentation:** CC BY 4.0
 
 ---
 
 ## Philosophy
 
-> Learn the protocol.
-> Then build the abstractions.
+> Learn the protocol. Then build the abstractions.

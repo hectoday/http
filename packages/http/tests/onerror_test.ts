@@ -41,7 +41,7 @@ Deno.test("onError: can access locals from context", async () => {
     onRequest: () => ({
       requestId: "req-789",
     }),
-    onError: (error, c) => {
+    onError: (_error, c) => {
       return Response.json(
         {
           requestId: c.locals.requestId,
@@ -67,7 +67,7 @@ Deno.test("onError: can access route params from context", async () => {
         },
       }),
     ],
-    onError: (error, c) => {
+    onError: (_error, c) => {
       return Response.json(
         {
           userId: c.raw.params.id,
@@ -111,7 +111,7 @@ Deno.test("onError: async handler works", async () => {
         },
       }),
     ],
-    onError: async (error, c) => {
+    onError: async (_error, _c) => {
       // Simulate async error logging
       await new Promise((resolve) => setTimeout(resolve, 1));
       return Response.json(
@@ -141,8 +141,8 @@ Deno.test("onError: handles errors from guards", async () => {
         resolve: () => new Response("Should not reach here"),
       }),
     ],
-    onError: (error, c) => {
-      const err = error as Error;
+    onError: (_error, _c) => {
+      const err = _error as Error;
       return Response.json(
         {
           error: err.message,

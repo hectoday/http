@@ -1,11 +1,11 @@
 import type {
   InferSchema,
   InferSchemaError,
-  Validator,
   SafeParseResult,
   ValidateResult,
   ValidationIssue,
   ValidationPart,
+  Validator,
 } from "@hectoday/http";
 import type { ZodError, ZodIssue, ZodSchema } from "zod";
 

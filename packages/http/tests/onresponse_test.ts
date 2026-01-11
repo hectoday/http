@@ -86,7 +86,7 @@ Deno.test("onResponse: can modify response status", async () => {
         },
       }),
     ],
-    onResponse: (c, res) => {
+    onResponse: (_c, res) => {
       // Force all responses to 202 Accepted
       return new Response(res.body, {
         status: 202,
@@ -108,7 +108,7 @@ Deno.test("onResponse: async handler works", async () => {
         },
       }),
     ],
-    onResponse: async (c, res) => {
+    onResponse: async (_c, res) => {
       // Simulate async operation
       await new Promise((resolve) => setTimeout(resolve, 1));
       const headers = new Headers(res.headers);

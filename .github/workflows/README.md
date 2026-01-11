@@ -5,6 +5,7 @@
 **Triggers:** Push to `main` or pull requests
 
 **Runs:**
+
 - Format check (`deno fmt --check`)
 - Lint (`deno lint`)
 - Tests (`deno test`)
@@ -16,10 +17,12 @@
 **Trigger:** Manual only
 
 **How to use:**
+
 1. Actions tab → "Publish to JSR" → "Run workflow"
 2. Optional: Enable "dry-run" to test
 
 **What it does:**
+
 1. Runs tests
 2. If tests pass → publishes to JSR
 

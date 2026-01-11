@@ -71,7 +71,7 @@ Deno.test("setupHttp.fetch handler receives request and body", async () => {
 
   // Simple validator
   const validator = {
-    validate: (schema: any, input: unknown, part: string) => {
+    validate: (schema: unknown, input: unknown, _part: string) => {
       const result = schema.safeParse(input);
       if (result.success) {
         return { ok: true as const, value: result.data };

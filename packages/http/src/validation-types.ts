@@ -34,15 +34,13 @@ export type SchemaLike<TOut = unknown, TErr = unknown> = Readonly<{
 }>;
 
 export type InferSchema<S> = S extends {
-  safeParse(input: unknown): SafeParseResult<infer TOut, any>;
-}
-  ? TOut
+  safeParse(input: unknown): SafeParseResult<infer TOut, unknown>;
+} ? TOut
   : never;
 
 export type InferSchemaError<S> = S extends {
-  safeParse(input: unknown): SafeParseResult<any, infer TErr>;
-}
-  ? TErr
+  safeParse(input: unknown): SafeParseResult<unknown, infer TErr>;
+} ? TErr
   : unknown;
 
 // ------------------------------
