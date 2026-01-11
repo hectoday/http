@@ -7,6 +7,6 @@
     "start": "bun src/index.js"
   },
   "dependencies": {
-    "@hectoday/http": "file:../../packages/core"
+    "@hectoday/http": "file:../../packages/http"
   }
 }

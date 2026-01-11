@@ -7,7 +7,7 @@
     "start": "deno run --allow-net src/main.ts"
   },
   "imports": {
-    "@hectoday/http": "../../packages/core/mod.ts",
+    "@hectoday/http": "../../packages/http/mod.ts",
     "@hectoday/http-helpers": "../../packages/helpers/mod.ts",
     "zod": "npm:zod@^4.3.5"
   }

@@ -1,4 +1,4 @@
-import { route, setupHttp } from "../packages/core/mod.ts";
+import { route, setupHttp } from "../packages/http/mod.ts";
 
 // Simple routes for benchmarking
 const root = route.get("/", {
