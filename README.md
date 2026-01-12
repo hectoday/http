@@ -83,7 +83,7 @@ This project values **clarity over convenience**.
 
 ## Documentation
 
-Full docs: 👉 **[https://docs.hectoday.com](https://docs.hectoday.com)**
+Full docs: 👉 **[https://docs.hectoday.com](https://docs.hectoday.com)** (Coming soon.)
 
 Docs live in the repository and accept community contributions.
 
