@@ -25,11 +25,14 @@ Hectoday HTTP is built for:
 
 ### Design laws
 
-1. **One decision boundary** Only handlers and guards can end a request.
+1. **One decision boundary**
+   Only handlers and guards can end a request.
 
-2. **No hidden branching** Nothing auto-returns 400/401/403 for you.
+3. **No hidden branching**
+   Nothing auto-returns 400/401/403 for you.
 
-3. **Facts before decisions** The framework computes:
+5. **Facts before decisions**
+   The framework computes:
 
    - raw inputs
    - validation results
@@ -37,9 +40,11 @@ Hectoday HTTP is built for:
 
    You decide what they mean.
 
-4. **Errors are responses** Expected failures are returned explicitly.
+7. **Errors are responses**
+   Expected failures are returned explicitly.
 
-5. **Unexpected failures throw** Bugs go to one error boundary.
+9. **Unexpected failures throw**
+    Bugs go to one error boundary.
 
 ---
 
@@ -93,8 +98,22 @@ Facts → Gates → Decision
 
 # Installation
 
+npm:
+
 ```bash
-npm install @hectoday/http
+npx jsr add @hectoday/http
+```
+
+deno:
+
+```
+deno add jsr:@hectoday/http
+```
+
+bun:
+
+```bash
+bunx jsr add @hectoday/http
 ```
 
 ---
@@ -514,13 +533,13 @@ export function createZodValidator(): Validator<ZodTypeAny> {
 }
 ```
 
-See [`example/src/main.ts`](./example/src/main.ts) for full working example.
+See [`example/deno/src/main.ts`](https://github.com/hectoday/http/blob/main/example/deno/src/main.ts) for full working example.
 
 ### Why this design
 
 - Hectoday HTTP never depends on any schema library
 - Type inference comes from `safeParse()` typing
-- Runtime stays tiny (~3KB)
+- Runtime stays tiny
 - Users control error formatting
 - Easy to adapt any validation library
 
