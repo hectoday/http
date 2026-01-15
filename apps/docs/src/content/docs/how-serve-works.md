@@ -5,7 +5,9 @@ order: 3
 draft: true
 ---
 
-Both Deno and Bun provide high-performance HTTP server APIs through their respective `serve` functions. While they share similar interfaces, understanding how they work internally helps you write better server code.
+Both Deno and Bun provide high-performance HTTP server APIs through their
+respective `serve` functions. While they share similar interfaces, understanding
+how they work internally helps you write better server code.
 
 ## The Common Interface
 
@@ -25,11 +27,15 @@ Bun.serve({
 });
 ```
 
-The key insight: **handlers receive a standard `Request` and return a standard `Response`**. This is the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) brought to the server side.
+The key insight: **handlers receive a standard `Request` and return a standard
+`Response`**. This is the
+[Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) brought
+to the server side.
 
 ## How Deno.serve Works
 
-Deno's server implementation is built on top of **Hyper** (via Rust) and **Tokio** for async I/O.
+Deno's server implementation is built on top of **Hyper** (via Rust) and
+**Tokio** for async I/O.
 
 ### The Request Flow
 
@@ -41,11 +47,16 @@ Deno's server implementation is built on top of **Hyper** (via Rust) and **Tokio
 
 ### Key Implementation Details
 
-**Connection Pooling**: Deno.serve automatically handles HTTP keep-alive and connection reuse. Each connection can serve multiple requests sequentially.
+**Connection Pooling**: Deno.serve automatically handles HTTP keep-alive and
+connection reuse. Each connection can serve multiple requests sequentially.
 
-**Async Execution**: When your handler returns a Promise, Deno suspends that request's execution and can process other requests on the same thread. This is powered by Tokio's work-stealing scheduler.
+**Async Execution**: When your handler returns a Promise, Deno suspends that
+request's execution and can process other requests on the same thread. This is
+powered by Tokio's work-stealing scheduler.
 
-**Zero-copy Operations**: Deno tries to avoid copying data between Rust and JavaScript. When you read `req.body`, it's often a direct reference to Hyper's buffer.
+**Zero-copy Operations**: Deno tries to avoid copying data between Rust and
+JavaScript. When you read `req.body`, it's often a direct reference to Hyper's
+buffer.
 
 ```typescript
 Deno.serve(async (req) => {
@@ -71,7 +82,8 @@ Deno.serve({
 
 ## How Bun.serve Works
 
-Bun's server is built on **JavaScriptCore** (not V8) and uses **io_uring** on Linux for async I/O.
+Bun's server is built on **JavaScriptCore** (not V8) and uses **io_uring** on
+Linux for async I/O.
 
 ### The Request Flow
 
@@ -83,11 +95,15 @@ Bun's server is built on **JavaScriptCore** (not V8) and uses **io_uring** on Li
 
 ### Key Implementation Details
 
-**io_uring on Linux**: Bun uses io_uring for truly asynchronous I/O. Unlike epoll/kqueue, io_uring allows submitting read/write operations that complete without system call overhead.
+**io_uring on Linux**: Bun uses io_uring for truly asynchronous I/O. Unlike
+epoll/kqueue, io_uring allows submitting read/write operations that complete
+without system call overhead.
 
-**Zig-based Parser**: Bun's HTTP parser is written in Zig and is extremely fast. It's optimized for the common case (simple headers, small payloads).
+**Zig-based Parser**: Bun's HTTP parser is written in Zig and is extremely fast.
+It's optimized for the common case (simple headers, small payloads).
 
-**Built-in WebSockets**: Unlike Deno, Bun.serve has first-class WebSocket support:
+**Built-in WebSockets**: Unlike Deno, Bun.serve has first-class WebSocket
+support:
 
 ```typescript
 Bun.serve({
@@ -121,7 +137,8 @@ Bun.serve({
 });
 ```
 
-When you return `Bun.file()`, Bun uses the `sendfile()` system call to send the file directly from the kernel to the socket, bypassing userspace entirely.
+When you return `Bun.file()`, Bun uses the `sendfile()` system call to send the
+file directly from the kernel to the socket, bypassing userspace entirely.
 
 ## Performance Differences
 
@@ -150,20 +167,21 @@ Here's what happens when a request arrives:
 Deno.serve(async (req) => {
   // 4. Handler is running
   console.log(req.method, req.url);
-  
+
   // 5. Async operation (handler is suspended)
   const data = await fetch("https://api.example.com");
-  
+
   // 6. Handler resumes
   // 7. Response is constructed
   return new Response(data);
-  
+
   // 8. Response is streamed to client
   // 9. Connection may be kept alive for next request
 });
 ```
 
-During step 5, the runtime can process other incoming requests. This is **concurrency without threads**.
+During step 5, the runtime can process other incoming requests. This is
+**concurrency without threads**.
 
 ## Streaming Responses
 
@@ -180,12 +198,13 @@ Deno.serve((req) => {
       }, 1000);
     },
   });
-  
+
   return new Response(stream);
 });
 ```
 
-The runtime won't buffer the entire response. It sends chunks as they become available, which is crucial for:
+The runtime won't buffer the entire response. It sends chunks as they become
+available, which is crucial for:
 
 - Server-Sent Events (SSE)
 - Large file downloads
@@ -219,12 +238,14 @@ Deno.serve(async (req) => {
 ## Choosing Between Them
 
 **Use Deno.serve when:**
+
 - You need strict Web standards compliance
 - You're building for multiple platforms
 - You want TypeScript out of the box
 - You need mature HTTP/2 support
 
 **Use Bun.serve when:**
+
 - You need maximum throughput (especially on Linux)
 - You're building WebSocket-heavy applications
 - You're serving lots of static files
@@ -232,6 +253,11 @@ Deno.serve(async (req) => {
 
 ## Conclusion
 
-Both `Deno.serve` and `Bun.serve` represent the modern approach to server-side JavaScript: embrace Web standards, optimize for performance, and keep the API simple. Understanding their internals helps you make informed architectural decisions and debug issues when they arise.
+Both `Deno.serve` and `Bun.serve` represent the modern approach to server-side
+JavaScript: embrace Web standards, optimize for performance, and keep the API
+simple. Understanding their internals helps you make informed architectural
+decisions and debug issues when they arise.
 
-The future of JavaScript servers is converging on this pattern: a standards-based `Request`/`Response` API backed by high-performance system-level implementations.
+The future of JavaScript servers is converging on this pattern: a
+standards-based `Request`/`Response` API backed by high-performance system-level
+implementations.

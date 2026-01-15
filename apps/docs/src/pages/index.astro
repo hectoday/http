@@ -1,6 +1,7 @@
 ---
 import Layout from "~/layouts/Layout.astro";
 import { Code } from "astro:components";
+import WarningBanner from "~/components/WarningBanner.astro";
 
 const codeExample = `import { route, setup } from "@hectoday/http";
 
@@ -19,6 +20,9 @@ Deno.serve(app.fetch);`;
     title="@hectoday/http"
     description="An explicit, standards-first HTTP framework built for learning."
 >
+    <WarningBanner
+        message="This framework is under development and imperfections may occur."
+    />
     <header
         class="flex items-baseline justify-between mb-12 pb-6 border-b border-[--color-border]"
     >

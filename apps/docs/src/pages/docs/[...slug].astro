@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Layout from "~/layouts/Layout.astro";
+import WarningBanner from "~/components/WarningBanner.astro";
 
 const { slug } = Astro.params;
 
@@ -35,10 +36,10 @@ const { Content } = await render(doc);
 
     {
         doc.data.draft && (
-            <div class="draft-banner">
-                <strong>DRAFT:</strong> This document is a work in progress and
-                only visible in development mode.
-            </div>
+            <WarningBanner
+                type="draft"
+                message="This document is a work in progress and only visible in development mode."
+            />
         )
     }
 
@@ -51,17 +52,5 @@ const { Content } = await render(doc);
 <style>
     nav {
         margin-bottom: 2rem;
-    }
-
-    .draft-banner {
-        background: #fff3cd;
-        border: 2px solid #ffc107;
-        padding: 1rem;
-        margin-bottom: 2rem;
-        color: #856404;
-    }
-
-    .draft-banner strong {
-        font-weight: bold;
     }
 </style>
