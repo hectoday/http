@@ -2,10 +2,8 @@
 title: "Installation"
 description: "How to install @hectoday/http"
 order: 2
-draft: false
+draft: true
 ---
-
-# Installation
 
 Learn how to install and set up @hectoday/http in your project.
 

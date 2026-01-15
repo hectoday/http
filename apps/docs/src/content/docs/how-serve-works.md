@@ -2,10 +2,8 @@
 title: "How Deno.serve and Bun.serve Work"
 description: "Understanding the internals of modern JavaScript HTTP servers"
 order: 3
-draft: false
+draft: true
 ---
-
-# How Deno.serve and Bun.serve Work
 
 Both Deno and Bun provide high-performance HTTP server APIs through their respective `serve` functions. While they share similar interfaces, understanding how they work internally helps you write better server code.
 

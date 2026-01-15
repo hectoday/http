@@ -11,52 +11,36 @@ const sortedDocs = docs
 ---
 
 <Layout title="Documentation - @hectoday/http">
-    <nav>
-        <a href="/">← Home</a>
+    <nav class="mb-8">
+        <a href="/" class="hover:opacity-60 transition-opacity">← Home</a>
     </nav>
 
-    <h1>Documentation</h1>
+    <div class="prose">
+        <h1>Documentation</h1>
 
-    <ul>
-        {
-            sortedDocs.map((doc) => (
-                <li>
-                    <a href={`/docs/${doc.id}`}>
-                        {doc.data.title}
-                        {doc.data.draft && (
-                            <span class="draft-badge">[DRAFT]</span>
+        <ul class="list-none pl-0 space-y-6 mt-8">
+            {
+                sortedDocs.map((doc) => (
+                    <li>
+                        <a
+                            href={`/docs/${doc.id}`}
+                            class="text-lg font-semibold"
+                        >
+                            {doc.data.title}
+                            {doc.data.draft && (
+                                <span class="ml-2 text-xs font-bold text-black border-2 border-black px-2 py-1">
+                                    DRAFT
+                                </span>
+                            )}
+                        </a>
+                        {doc.data.description && (
+                            <p class="mt-1 mb-0 text-gray-700">
+                                {doc.data.description}
+                            </p>
                         )}
-                    </a>
-                    {doc.data.description && <p>{doc.data.description}</p>}
-                </li>
-            ))
-        }
-    </ul>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
 </Layout>
-
-<style>
-    nav {
-        margin-bottom: 2rem;
-    }
-
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    li {
-        margin-bottom: 1.5rem;
-    }
-
-    li p {
-        margin: 0.25rem 0 0 0;
-        color: #666;
-    }
-
-    .draft-badge {
-        margin-left: 0.5rem;
-        font-size: 0.75rem;
-        color: #ff6b6b;
-        font-weight: bold;
-    }
-</style>

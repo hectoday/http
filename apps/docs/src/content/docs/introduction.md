@@ -2,10 +2,8 @@
 title: "Introduction"
 description: "Getting started with @hectoday/http"
 order: 1
-draft: false
+draft: true
 ---
-
-# Introduction
 
 Welcome to the @hectoday/http documentation.
 

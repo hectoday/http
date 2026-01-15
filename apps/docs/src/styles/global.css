@@ -1,23 +1,69 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: "Mona Sans";
+    src: url("/fonts/MonaSansVF.woff2") format("woff2-variations");
+    font-weight: 200 900;
+    font-stretch: 75% 125%;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Hubot Sans";
+    src: url("/fonts/HubotSans.woff2") format("woff2-variations");
+    font-weight: 200 900;
+    font-stretch: 75% 125%;
+    font-style: normal;
+    font-display: swap;
+}
+
+@theme inline {
+    --font-sans: "Mona Sans", -apple-system, system-ui, sans-serif;
+    --font-display: "Hubot Sans", -apple-system, system-ui, sans-serif;
+    --font-mono:
+        ui-monospace, "SF Mono", Monaco, "Cascadia Code", "Courier New",
+        monospace;
+    --color-border: rgb(209 217 224);
+}
+
+body {
+    @apply font-sans;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @apply font-display;
+}
+
 .prose {
     @apply max-w-none;
 }
 
 .prose h1 {
-    @apply text-3xl font-bold mt-8 mb-4;
+    @apply text-6xl mt-0 mb-8;
+    font-weight: 800;
+    letter-spacing: -0.04em;
 }
 
 .prose h2 {
-    @apply text-2xl font-bold mt-6 mb-3;
+    @apply text-4xl mt-12 mb-6;
+    font-weight: 800;
+    letter-spacing: -0.03em;
 }
 
 .prose h3 {
-    @apply text-xl font-semibold mt-4 mb-2;
+    @apply text-2xl mt-4 mb-2;
+    font-weight: 800;
 }
 
 .prose h4 {
-    @apply text-lg font-semibold mt-3 mb-2;
+    @apply text-xl mt-3 mb-2;
+    font-weight: 800;
 }
 
 .prose p {
@@ -50,28 +96,38 @@
 }
 
 .prose pre {
-    @apply p-4 overflow-x-auto mb-4;
+    @apply p-4 overflow-x-auto mb-4 font-mono;
     background: white;
-    border: 1px solid black;
-    font-family: "Courier New", Courier, monospace;
+    border: 1px solid var(--color-border);
 }
 
 .prose code {
-    @apply px-2 py-1 text-sm;
+    @apply px-2 py-1 text-sm font-mono;
     background: white;
-    border: 1px solid black;
-    font-family: "Courier New", Courier, monospace;
+    border: 1px solid var(--color-border);
 }
 
 .prose pre code {
     @apply p-0;
-    background: transparent;
-    border: none;
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Override Shiki's default background and border */
+.prose pre.shiki,
+.prose pre.shiki code {
+    background: transparent !important;
+    border: none !important;
+}
+
+.prose div[class*="astro-code"] {
+    background: transparent !important;
+    border: none !important;
 }
 
 .prose blockquote {
-    @apply pl-4 italic my-4;
-    border-left: 4px solid black;
+    @apply pl-6 italic my-4 font-medium;
+    border-left: 3px solid var(--color-border);
 }
 
 .prose table {
@@ -79,19 +135,20 @@
 }
 
 .prose th {
-    @apply px-4 py-2 font-semibold text-left;
-    border: 1px solid black;
+    @apply px-4 py-2 font-bold text-left;
+    border: 1px solid var(--color-border);
     background: white;
 }
 
 .prose td {
     @apply px-4 py-2;
-    border: 1px solid black;
+    border: 1px solid var(--color-border);
 }
 
 .prose hr {
-    @apply my-8;
-    border-top: 1px solid black;
+    @apply my-12;
+    border: none;
+    border-top: 1px solid var(--color-border);
 }
 
 .prose img {

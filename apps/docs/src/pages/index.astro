@@ -19,17 +19,29 @@ Deno.serve(app.fetch);`;
     title="@hectoday/http"
     description="An explicit, standards-first HTTP framework built for learning."
 >
-    <header class="flex items-baseline justify-between mb-8">
-        <h1 class="text-black">@hectoday/http</h1>
-        <nav class="space-x-4 text-gray-600">
-            <a href="/docs">Docs</a>
-            <a href="https://github.com/hectoday/http">GitHub</a>
-            <a href="https://jsr.io/@hectoday/http">JSR</a>
+    <header
+        class="flex items-baseline justify-between mb-12 pb-6 border-b border-[--color-border]"
+    >
+        <h1 class="text-6xl" style="font-weight: 800; letter-spacing: -0.04em;">
+            @hectoday/http
+        </h1>
+        <nav class="space-x-6 text-base font-medium">
+            <a href="/docs" class="hover:opacity-60 transition-opacity">Docs</a>
+            <a
+                href="https://github.com/hectoday/http"
+                class="hover:opacity-60 transition-opacity">GitHub</a
+            >
+            <a
+                href="https://jsr.io/@hectoday/http"
+                class="hover:opacity-60 transition-opacity">JSR</a
+            >
         </nav>
     </header>
 
     <div class="prose">
-        <p>An explicit, standards-first HTTP framework built for learning.</p>
+        <p class="text-xl leading-relaxed mb-8 font-medium">
+            An explicit, standards-first HTTP framework built for learning.
+        </p>
 
         <hr />
 
@@ -55,15 +67,17 @@ Deno.serve(app.fetch);`;
 
         <h2>Example</h2>
 
-        <Code code={codeExample} lang="ts" theme="github-light" />
+        <div class="border border-[--color-border] rounded">
+            <Code code={codeExample} lang="ts" theme="github-light" />
+        </div>
 
-        <p>No wrappers. No custom response objects. Just HTTP.</p>
+        <p class="mt-4">No wrappers. No custom response objects. Just HTTP.</p>
 
         <hr />
 
         <h2>Principles</h2>
 
-        <ul>
+        <ul class="space-y-4">
             <li>
                 <strong>Web standards first</strong><br />
                 Built on the Fetch API
@@ -95,8 +109,10 @@ Deno.serve(app.fetch);`;
 
         <hr />
 
-        <blockquote>
-            <p>Learn the protocol. Then build the abstractions.</p>
+        <blockquote
+            class="border-l-[3px] border-[--color-border] pl-6 py-2 my-12 text-xl italic font-medium"
+        >
+            <p class="mb-0">Learn the protocol. Then build the abstractions.</p>
         </blockquote>
     </div>
 </Layout>
