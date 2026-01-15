@@ -1,38 +1,54 @@
 <style>
-    .full-width-header {
-        margin: -2rem -2rem 3rem -2rem;
-        width: calc(100% + 4rem);
-    }
-
-    @media (min-width: 768px) {
-        .full-width-header {
-            margin: -2rem calc(-50vw + 50%) 3rem calc(-50vw + 50%);
-            width: 100vw;
+    /* Star fade animations */
+    @keyframes starFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
         }
     }
 
-    .header-section {
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(180deg, #000000 51%, #3458d3 100%);
-        min-height: max(500px, 60vh);
-        height: 80vh;
-        max-height: 900px;
-        padding: clamp(3rem, 8vh, 6rem) 0 clamp(4rem, 10vh, 8rem) 0;
-        display: flex;
-        align-items: center;
-    }
-
-    @media (max-height: 600px) {
-        .header-section {
-            height: 70vh;
-            min-height: 450px;
+    @keyframes starFadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(0);
         }
     }
 
-    @media (min-height: 900px) {
-        .header-section {
-            height: 70vh;
+    .star-appear-sm {
+        animation: starFadeIn 0.5s ease-out forwards;
+    }
+
+    .star-appear-md {
+        animation: starFadeIn 0.5s ease-out forwards;
+    }
+
+    .star-appear-lg {
+        animation: starFadeIn 0.5s ease-out forwards;
+    }
+
+    @media (max-width: 639px) {
+        .star-appear-sm {
+            animation: starFadeOut 0.3s ease-in forwards;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .star-appear-md {
+            animation: starFadeOut 0.3s ease-in forwards;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .star-appear-lg {
+            animation: starFadeOut 0.3s ease-in forwards;
         }
     }
 
@@ -52,44 +68,12 @@
         pointer-events: none;
     }
 
-    .header-content {
-        position: relative;
-        z-index: 2;
-        margin: 0 auto;
-        padding: 0 2rem;
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        color: white;
-    }
-
-    .header-content h1 {
-        color: white;
-    }
-
-    .header-content nav a {
-        color: white;
-    }
-
-    .shooting-stars {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        pointer-events: none;
-        overflow: hidden;
-    }
-
     .static-star {
-        position: absolute;
-        width: 5px;
-        height: 5px;
         background-image: url("/star.svg");
-        background-size: contain;
-        background-repeat: no-repeat;
-        z-index: -1;
+    }
+
+    .star {
+        background-image: url("/falling_star.svg");
     }
 
     .static-star:nth-child(6) {
@@ -353,15 +337,6 @@
         }
     }
 
-    .star {
-        position: absolute;
-        background-image: url("/falling_star.svg");
-        background-size: contain;
-        background-repeat: no-repeat;
-        opacity: 0;
-        z-index: -1;
-    }
-
     .star:nth-child(1) {
         top: -80px;
         left: 20%;
@@ -493,53 +468,136 @@
     }
 </style>
 
-<div class="full-width-header">
-    <header class="header-section">
-        <div class="shooting-stars">
-            <span class="star"></span>
-            <span class="star"></span>
-            <span class="star"></span>
-            <span class="star"></span>
-            <span class="star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
-            <span class="static-star"></span>
+<div
+    class="-mx-8 -mt-8 mb-12 w-[calc(100%+4rem)] md:-mx-[calc(50vw-50%)] md:-mt-8 md:w-screen"
+>
+    <header
+        class="header-section relative overflow-hidden bg-gradient-to-b from-black via-black to-[#3458d3] flex items-center"
+        style="min-height: max(500px, 60vh); height: 80vh; max-height: 900px; padding: clamp(3rem, 8vh, 6rem) 0 clamp(4rem, 10vh, 8rem) 0;"
+    >
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <!-- Show 8 stars on mobile, 15 on sm, 25 on md, all 35 on lg+ -->
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
         </div>
-        <div class="header-content">
+        <div
+            class="relative z-20 mx-auto px-8 flex items-baseline justify-between text-white"
+        >
             <h1
-                class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter"
+                class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter text-white"
             >
                 @hectoday/http
             </h1>
