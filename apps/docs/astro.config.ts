@@ -14,9 +14,19 @@ export default defineConfig({
         allow: ["../.."],
       },
     },
-
+    resolve: {
+      alias: {
+        "~": "/src",
+      },
+    },
     plugins: [tailwindcss()],
   },
 
   integrations: [react()],
+
+  markdown: {
+    shikiConfig: {
+      theme: "github-dark",
+    },
+  },
 });

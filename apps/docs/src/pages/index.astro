@@ -1,32 +1,127 @@
 ---
-import "../styles/global.css";
+import Layout from "~/layouts/Layout.astro";
+import { Code } from "astro:components";
+import WarningBanner from "~/components/WarningBanner.astro";
+import Hero from "~/components/Hero.astro";
+
+const codeExample = `import { route, setup } from "@hectoday/http";
+
+const app = setup([
+  route.get("/", {
+    resolve: () => {
+      return new Response("Hello HTTP");
+    },
+  }),
+]);
+
+Deno.serve(app.fetch);`;
 ---
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <title>Astro</title>
-    </head>
-    <body class="container mx-auto py-12 px-4">
-        <p class="font-bold">hectoday/http docs</p>
-        <p>Useful links</p>
-        <ul>
+<Layout
+    title="@hectoday/http"
+    description="An explicit, standards-first HTTP framework built for learning."
+>
+    <Hero />
+
+    <div class="prose">
+        <WarningBanner
+            message="This framework is under development and imperfections may occur."
+        />
+
+        <p class="text-xl leading-relaxed mb-8 font-medium">
+            An explicit, standards-first HTTP framework built for learning.
+        </p>
+
+        <hr />
+
+        <h2>Why</h2>
+
+        <p>
+            Most frameworks abstract HTTP away. <strong
+                >@hectoday/http does the opposite.</strong
+            >
+        </p>
+
+        <p>
+            You work directly with <code>Request</code>, <code>Response</code>,
+            headers, status codes, routing, and guards.
+        </p>
+
+        <p>
+            So you actually learn <strong>how the web works</strong>, not just
+            how to use a framework.
+        </p>
+
+        <hr />
+
+        <h2>Example</h2>
+
+        <div class="border border-[--color-border] overflow-clip rounded">
+            <Code
+                code={codeExample}
+                lang="ts"
+                theme="github-light"
+                class="[&_pre]:m-0"
+            />
+        </div>
+
+        <p class="mt-4">No wrappers. No custom response objects. Just HTTP.</p>
+
+        <hr />
+
+        <h2>Principles</h2>
+
+        <ul class="space-y-4">
             <li>
-                <a
-                    class="underline text-blue-500 visited:text-purple-500 list-disc"
-                    href="https://github.com/hectoday/http">GitHub</a
-                >
+                <strong>Web standards first</strong><br />
+                Built on the Fetch API
             </li>
             <li>
-                <a
-                    class="underline text-blue-500 visited:text-purple-500 list-disc"
-                    href="https://jsr.io/@hectoday/http">JSR</a
-                >
+                <strong>Explicit control flow</strong><br />
+                You decide what happens
+            </li>
+            <li>
+                <strong>Minimal surface area</strong><br />
+                Small API, easy to reason about
+            </li>
+            <li>
+                <strong>Education-first</strong><br />
+                Clarity over convenience
             </li>
         </ul>
-        <p>Docs will be available in the coming months.</p>
-    </body>
-</html>
+
+        <hr />
+
+        <h2>Good for</h2>
+
+        <ul>
+            <li>Learning HTTP properly</li>
+            <li>Teaching web fundamentals</li>
+            <li>Understanding request lifecycles</li>
+            <li>Building APIs</li>
+        </ul>
+
+        <hr />
+
+        <blockquote
+            class="border-l-[3px] border-[--color-border] pl-6 py-2 my-12 text-xl italic font-medium"
+        >
+            <p class="mb-0!">
+                Learn the protocol. Then build the abstractions.
+            </p>
+        </blockquote>
+
+        <hr />
+        <nav class="space-x-6 text-base font-medium">
+            <a href="/docs" class="hover:opacity-60 transition-opacity">Docs</a>
+            <a
+                href="https://github.com/hectoday/http"
+                class="hover:opacity-60 transition-opacity">GitHub</a
+            >
+            <a
+                href="https://jsr.io/@hectoday/http"
+                class="hover:opacity-60 transition-opacity">JSR</a
+            >
+        </nav>
+    </div>
+</Layout>

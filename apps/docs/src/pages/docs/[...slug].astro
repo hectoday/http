@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "~/layouts/Layout.astro";
+import WarningBanner from "~/components/WarningBanner.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+    return Astro.redirect("/docs");
+}
+
+const isDev = import.meta.env.DEV;
+
+const allDocs = await getCollection("docs");
+const doc = allDocs.find((d) => d.id === slug);
+
+if (!doc) {
+    return Astro.redirect("/docs");
+}
+
+// Redirect to docs if trying to access draft in production
+if (!isDev && doc.data.draft) {
+    return Astro.redirect("/docs");
+}
+
+const { Content } = await render(doc);
+---
+
+<Layout
+    title={`${doc.data.title} - @hectoday/http`}
+    description={doc.data.description}
+>
+    <nav>
+        <a href="/docs">← Back to docs</a>
+    </nav>
+
+    {
+        doc.data.draft && (
+            <WarningBanner
+                type="draft"
+                message="This document is a work in progress and only visible in development mode."
+            />
+        )
+    }
+
+    <article class="prose">
+        <h1>{doc.data.title}</h1>
+        <Content />
+    </article>
+</Layout>
+
+<style>
+    nav {
+        margin-bottom: 2rem;
+    }
+</style>

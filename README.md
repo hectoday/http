@@ -83,7 +83,7 @@ This project values **clarity over convenience**.
 
 ## Documentation
 
-Full docs: 👉 **[https://http.hectoday.deno.net](https://http.hectoday.deno.net)** (Coming soon.)
+Full docs: **[https://http.hectoday.deno.net](https://http.hectoday.deno.net)** (Coming soon.)
 
 Docs live in the repository and accept community contributions.
 

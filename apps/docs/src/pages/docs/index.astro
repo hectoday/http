@@ -1,0 +1,18 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "~/layouts/Layout.astro";
+import DocsList from "~/components/DocsList.jsx";
+
+const isDev = import.meta.env.DEV;
+
+const docs = await getCollection("docs");
+const allDocs = docs.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+---
+
+<Layout title="Documentation - @hectoday/http">
+    <nav class="mb-8">
+        <a href="/" class="hover:opacity-60 transition-opacity">← Home</a>
+    </nav>
+
+    <DocsList client:load docs={allDocs} isDev={isDev} />
+</Layout>

@@ -1,0 +1,606 @@
+<style>
+    /* Star fade animations */
+    @keyframes starFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes starFadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(0);
+        }
+    }
+
+    .star-appear-sm {
+        animation: starFadeIn 0.5s ease-out forwards;
+    }
+
+    .star-appear-md {
+        animation: starFadeIn 0.5s ease-out forwards;
+    }
+
+    .star-appear-lg {
+        animation: starFadeIn 0.5s ease-out forwards;
+    }
+
+    @media (max-width: 639px) {
+        .star-appear-sm {
+            animation: starFadeOut 0.3s ease-in forwards;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .star-appear-md {
+            animation: starFadeOut 0.3s ease-in forwards;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .star-appear-lg {
+            animation: starFadeOut 0.3s ease-in forwards;
+        }
+    }
+
+    .header-section::after {
+        content: "";
+        position: absolute;
+        bottom: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1670px;
+        height: 244px;
+        background-image: url("/planet.svg");
+        background-size: contain;
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .static-star {
+        background-image: url("/star.svg");
+    }
+
+    .star {
+        background-image: url("/falling_star.svg");
+    }
+
+    .static-star:nth-child(6) {
+        left: 10%;
+        top: 15%;
+        animation: twinkle1 3s ease-in-out infinite;
+        animation-delay: 0s;
+    }
+    .static-star:nth-child(7) {
+        left: 25%;
+        top: 25%;
+        animation: twinkle2 3.5s ease-in-out infinite;
+        animation-delay: 0.5s;
+    }
+    .static-star:nth-child(8) {
+        left: 40%;
+        top: 10%;
+        animation: twinkle3 2.8s ease-in-out infinite;
+        animation-delay: 1s;
+    }
+    .static-star:nth-child(9) {
+        left: 55%;
+        top: 30%;
+        animation: twinkle4 3.2s ease-in-out infinite;
+        animation-delay: 1.5s;
+    }
+    .static-star:nth-child(10) {
+        left: 70%;
+        top: 20%;
+        animation: twinkle5 2.5s ease-in-out infinite;
+        animation-delay: 0.3s;
+    }
+    .static-star:nth-child(11) {
+        left: 85%;
+        top: 35%;
+        animation: twinkle1 3.8s ease-in-out infinite;
+        animation-delay: 0.8s;
+    }
+    .static-star:nth-child(12) {
+        left: 15%;
+        top: 45%;
+        animation: twinkle2 3.3s ease-in-out infinite;
+        animation-delay: 1.2s;
+    }
+    .static-star:nth-child(13) {
+        left: 30%;
+        top: 55%;
+        animation: twinkle3 2.9s ease-in-out infinite;
+        animation-delay: 1.7s;
+    }
+    .static-star:nth-child(14) {
+        left: 50%;
+        top: 50%;
+        animation: twinkle4 3.1s ease-in-out infinite;
+        animation-delay: 0.6s;
+    }
+    .static-star:nth-child(15) {
+        left: 65%;
+        top: 60%;
+        animation: twinkle5 2.7s ease-in-out infinite;
+        animation-delay: 1.4s;
+    }
+    .static-star:nth-child(16) {
+        left: 80%;
+        top: 50%;
+        animation: twinkle1 3.4s ease-in-out infinite;
+        animation-delay: 0.2s;
+    }
+    .static-star:nth-child(17) {
+        left: 12%;
+        top: 70%;
+        animation: twinkle2 2.6s ease-in-out infinite;
+        animation-delay: 1.9s;
+    }
+    .static-star:nth-child(18) {
+        left: 28%;
+        top: 75%;
+        animation: twinkle3 3.6s ease-in-out infinite;
+        animation-delay: 0.7s;
+    }
+    .static-star:nth-child(19) {
+        left: 45%;
+        top: 80%;
+        animation: twinkle4 2.9s ease-in-out infinite;
+        animation-delay: 1.3s;
+    }
+    .static-star:nth-child(20) {
+        left: 60%;
+        top: 85%;
+        animation: twinkle5 3.7s ease-in-out infinite;
+        animation-delay: 1.1s;
+    }
+    .static-star:nth-child(21) {
+        left: 75%;
+        top: 75%;
+        animation: twinkle1 2.8s ease-in-out infinite;
+        animation-delay: 0.4s;
+    }
+    .static-star:nth-child(22) {
+        left: 90%;
+        top: 80%;
+        animation: twinkle2 3.2s ease-in-out infinite;
+        animation-delay: 1.6s;
+    }
+    .static-star:nth-child(23) {
+        left: 20%;
+        top: 90%;
+        animation: twinkle3 3.5s ease-in-out infinite;
+        animation-delay: 0.9s;
+    }
+    .static-star:nth-child(24) {
+        left: 52%;
+        top: 95%;
+        animation: twinkle4 2.7s ease-in-out infinite;
+        animation-delay: 1.8s;
+    }
+    .static-star:nth-child(25) {
+        left: 82%;
+        top: 90%;
+        animation: twinkle5 3.3s ease-in-out infinite;
+        animation-delay: 0.1s;
+    }
+    .static-star:nth-child(26) {
+        left: 5%;
+        top: 12%;
+        animation: twinkle1 3.1s ease-in-out infinite;
+        animation-delay: 0.5s;
+    }
+    .static-star:nth-child(27) {
+        left: 35%;
+        top: 8%;
+        animation: twinkle2 2.9s ease-in-out infinite;
+        animation-delay: 1.1s;
+    }
+    .static-star:nth-child(28) {
+        left: 62%;
+        top: 18%;
+        animation: twinkle3 3.4s ease-in-out infinite;
+        animation-delay: 0.7s;
+    }
+    .static-star:nth-child(29) {
+        left: 78%;
+        top: 28%;
+        animation: twinkle4 2.8s ease-in-out infinite;
+        animation-delay: 1.5s;
+    }
+    .static-star:nth-child(30) {
+        left: 92%;
+        top: 15%;
+        animation: twinkle5 3.2s ease-in-out infinite;
+        animation-delay: 0.3s;
+    }
+    .static-star:nth-child(31) {
+        left: 8%;
+        top: 38%;
+        animation: twinkle1 2.7s ease-in-out infinite;
+        animation-delay: 1.8s;
+    }
+    .static-star:nth-child(32) {
+        left: 22%;
+        top: 48%;
+        animation: twinkle2 3.5s ease-in-out infinite;
+        animation-delay: 0.9s;
+    }
+    .static-star:nth-child(33) {
+        left: 48%;
+        top: 42%;
+        animation: twinkle3 3s ease-in-out infinite;
+        animation-delay: 1.3s;
+    }
+    .static-star:nth-child(34) {
+        left: 72%;
+        top: 55%;
+        animation: twinkle4 2.6s ease-in-out infinite;
+        animation-delay: 0.6s;
+    }
+    .static-star:nth-child(35) {
+        left: 88%;
+        top: 45%;
+        animation: twinkle5 3.3s ease-in-out infinite;
+        animation-delay: 1.4s;
+    }
+    .static-star:nth-child(36) {
+        left: 18%;
+        top: 62%;
+        animation: twinkle1 2.9s ease-in-out infinite;
+        animation-delay: 0.8s;
+    }
+    .static-star:nth-child(37) {
+        left: 38%;
+        top: 68%;
+        animation: twinkle2 3.1s ease-in-out infinite;
+        animation-delay: 1.6s;
+    }
+    .static-star:nth-child(38) {
+        left: 58%;
+        top: 72%;
+        animation: twinkle3 2.8s ease-in-out infinite;
+        animation-delay: 1s;
+    }
+    .static-star:nth-child(39) {
+        left: 68%;
+        top: 65%;
+        animation: twinkle4 3.4s ease-in-out infinite;
+        animation-delay: 0.4s;
+    }
+    .static-star:nth-child(40) {
+        left: 95%;
+        top: 70%;
+        animation: twinkle5 2.7s ease-in-out infinite;
+        animation-delay: 1.7s;
+    }
+
+    @keyframes twinkle1 {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.3;
+        }
+    }
+
+    @keyframes twinkle2 {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        45% {
+            opacity: 0.2;
+        }
+    }
+
+    @keyframes twinkle3 {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        55% {
+            opacity: 0.4;
+        }
+    }
+
+    @keyframes twinkle4 {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        48% {
+            opacity: 0.25;
+        }
+    }
+
+    @keyframes twinkle5 {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        52% {
+            opacity: 0.35;
+        }
+    }
+
+    .star:nth-child(1) {
+        top: -80px;
+        left: 20%;
+        width: 80px;
+        height: 83px;
+        animation: shooting1 3s linear infinite;
+        animation-delay: 0s;
+    }
+
+    .star:nth-child(2) {
+        top: -120px;
+        left: 50%;
+        width: 120px;
+        height: 124px;
+        animation: shooting2 5s linear infinite;
+        animation-delay: 8s;
+    }
+
+    .star:nth-child(3) {
+        top: -60px;
+        left: 70%;
+        width: 60px;
+        height: 62px;
+        animation: shooting3 3.5s linear infinite;
+        animation-delay: 15s;
+    }
+
+    .star:nth-child(4) {
+        top: -100px;
+        left: 35%;
+        width: 95px;
+        height: 98px;
+        animation: shooting4 4.5s linear infinite;
+        animation-delay: 4s;
+    }
+
+    .star:nth-child(5) {
+        top: -70px;
+        left: 85%;
+        width: 70px;
+        height: 72px;
+        animation: shooting5 4s linear infinite;
+        animation-delay: 12s;
+    }
+
+    @keyframes shooting1 {
+        0% {
+            transform: translate(0, 0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-280px, 280px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes shooting2 {
+        0% {
+            transform: translate(0, 0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-450px, 450px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes shooting3 {
+        0% {
+            transform: translate(0, 0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-260px, 260px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes shooting4 {
+        0% {
+            transform: translate(0, 0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-380px, 380px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes shooting5 {
+        0% {
+            transform: translate(0, 0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-320px, 320px);
+            opacity: 0;
+        }
+    }
+</style>
+
+<div
+    class="-mx-8 -mt-8 mb-12 w-[calc(100%+4rem)] md:-mx-[calc(50vw-50%)] md:-mt-8 md:w-screen"
+>
+    <header
+        class="header-section relative overflow-hidden bg-gradient-to-b from-black via-black to-[#3458d3] flex items-center"
+        style="min-height: max(500px, 60vh); height: 80vh; max-height: 900px; padding: clamp(3rem, 8vh, 6rem) 0 clamp(4rem, 10vh, 8rem) 0;"
+    >
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span class="star absolute opacity-0 bg-contain bg-no-repeat -z-10"
+            ></span>
+            <!-- Show 8 stars on mobile, 15 on sm, 25 on md, all 35 on lg+ -->
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden sm:block star-appear-sm"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden md:block star-appear-md"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+            <span
+                class="static-star absolute w-[5px] h-[5px] bg-contain bg-no-repeat -z-10 hidden lg:block star-appear-lg"
+            ></span>
+        </div>
+        <div
+            class="relative z-20 mx-auto px-8 flex items-baseline justify-between text-white"
+        >
+            <h1
+                class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter text-white"
+            >
+                @hectoday/http
+            </h1>
+        </div>
+    </header>
+</div>

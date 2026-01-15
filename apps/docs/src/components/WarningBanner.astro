@@ -1,0 +1,17 @@
+---
+interface Props {
+    message: string;
+    type?: "warning" | "draft";
+}
+
+const { message, type = "warning" } = Astro.props;
+const label = type === "draft" ? "DRAFT:" : "WARNING:";
+---
+
+<div
+    class="bg-[#fff3cd] border-2 border-[#ffc107] p-4 mb-8 text-[#856404]"
+    style="border-style: solid;"
+>
+    <strong class="font-bold">{label}</strong>
+    {message}
+</div>
