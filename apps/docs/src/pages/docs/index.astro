@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import "../../styles/global.css";
+
+const docs = await getCollection("docs");
+const sortedDocs = docs
+    .filter((doc) => !doc.data.draft)
+    .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Documentation - @hectoday/http</title>
+    </head>
+    <body class="container mx-auto py-12 px-4">
+        <nav class="mb-8">
+            <a href="/" class="text-blue-500 hover:underline">← Home</a>
+        </nav>
+
+        <h1 class="text-4xl font-bold mb-8">Documentation</h1>
+
+        <div class="space-y-4">
+            {
+                sortedDocs.map((doc) => (
+                    <article class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                        <a href={`/docs/${doc.id}`} class="block">
+                            <h2 class="text-2xl font-semibold mb-2 text-blue-600 hover:text-blue-800">
+                                {doc.data.title}
+                            </h2>
+                            {doc.data.description && (
+                                <p class="text-gray-600">
+                                    {doc.data.description}
+                                </p>
+                            )}
+                        </a>
+                    </article>
+                ))
+            }
+        </div>
+    </body>
+</html>

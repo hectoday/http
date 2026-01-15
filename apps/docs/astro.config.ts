@@ -19,4 +19,10 @@ export default defineConfig({
   },
 
   integrations: [react()],
+
+  markdown: {
+    shikiConfig: {
+      theme: "github-dark",
+    },
+  },
 });
