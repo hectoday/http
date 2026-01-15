@@ -1,13 +1,12 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "~/layouts/Layout.astro";
+import DocsList from "~/components/DocsList.jsx";
 
 const isDev = import.meta.env.DEV;
 
 const docs = await getCollection("docs");
-const sortedDocs = docs
-    .filter((doc) => isDev || !doc.data.draft)
-    .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+const allDocs = docs.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 ---
 
 <Layout title="Documentation - @hectoday/http">
@@ -15,32 +14,5 @@ const sortedDocs = docs
         <a href="/" class="hover:opacity-60 transition-opacity">← Home</a>
     </nav>
 
-    <div class="prose">
-        <h1>Documentation</h1>
-
-        <ul class="list-none pl-0 space-y-6 mt-8">
-            {
-                sortedDocs.map((doc) => (
-                    <li>
-                        <a
-                            href={`/docs/${doc.id}`}
-                            class="text-lg font-semibold"
-                        >
-                            {doc.data.title}
-                            {doc.data.draft && (
-                                <span class="ml-2 text-xs font-bold text-black border-2 border-black px-2 py-1">
-                                    DRAFT
-                                </span>
-                            )}
-                        </a>
-                        {doc.data.description && (
-                            <p class="mt-1 mb-0 text-gray-700">
-                                {doc.data.description}
-                            </p>
-                        )}
-                    </li>
-                ))
-            }
-        </ul>
-    </div>
+    <DocsList client:load docs={allDocs} isDev={isDev} />
 </Layout>

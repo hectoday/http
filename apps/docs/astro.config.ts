@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import deno from "@deno/astro-adapter";
@@ -8,9 +8,6 @@ import deno from "@deno/astro-adapter";
 export default defineConfig({
   output: "server",
   adapter: deno(),
-  experimental: {
-    fonts: [],
-  },
   vite: {
     server: {
       fs: {
