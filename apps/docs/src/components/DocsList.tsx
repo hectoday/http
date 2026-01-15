@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface DocData {
   title: string;
   description?: string;
@@ -17,24 +15,15 @@ interface DocsListProps {
 }
 
 export default function DocsList({ docs, isDev }: DocsListProps) {
-  const [showDrafts, setShowDrafts] = useState(isDev);
+  const showDrafts = isDev ||
+    (typeof window !== "undefined" &&
+      new URLSearchParams(globalThis.location.search).has("drafts"));
 
   const visibleDocs = showDrafts ? docs : docs.filter((doc) => !doc.data.draft);
 
   return (
     <div className="prose">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="mb-0">Documentation</h1>
-        <label className="flex items-center gap-2 cursor-pointer text-sm">
-          <input
-            type="checkbox"
-            checked={showDrafts}
-            onChange={(e) => setShowDrafts(e.target.checked)}
-            className="cursor-pointer"
-          />
-          <span>Show drafts</span>
-        </label>
-      </div>
+      <h1>Documentation</h1>
 
       {visibleDocs.length === 0
         ? (

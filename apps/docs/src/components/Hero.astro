@@ -466,7 +466,399 @@
             opacity: 0;
         }
     }
+
+    /* Disable animations for users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .star {
+            animation: none !important;
+            position: absolute;
+        }
+
+        /* Position shooting stars statically along their trajectory - pointing downwards */
+        .star:nth-child(1) {
+            top: calc(-80px + 180px);
+            left: calc(20% - 180px);
+            transform: rotate(0deg);
+            opacity: 0.7 !important;
+        }
+
+        .star:nth-child(2) {
+            top: calc(-120px + 300px);
+            left: calc(50% - 300px);
+            transform: rotate(0deg);
+            opacity: 0.9 !important;
+        }
+
+        .star:nth-child(3) {
+            top: calc(-60px + 100px);
+            left: calc(70% - 100px);
+            transform: rotate(0deg);
+            opacity: 0.6 !important;
+        }
+
+        .star:nth-child(4) {
+            top: calc(-100px + 240px);
+            left: calc(35% - 240px);
+            transform: rotate(0deg);
+            opacity: 0.8 !important;
+        }
+
+        .star:nth-child(5) {
+            top: calc(-70px + 200px);
+            left: calc(85% - 200px);
+            transform: rotate(0deg);
+            opacity: 0.75 !important;
+        }
+
+        .static-star {
+            animation: none !important;
+        }
+
+        /* Vary static star opacity */
+        .static-star:nth-child(6) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(7) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(8) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(9) {
+            opacity: 0.6 !important;
+        }
+        .static-star:nth-child(10) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(11) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(12) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(13) {
+            opacity: 0.95 !important;
+        }
+        .static-star:nth-child(14) {
+            opacity: 0.65 !important;
+        }
+        .static-star:nth-child(15) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(16) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(17) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(18) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(19) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(20) {
+            opacity: 0.6 !important;
+        }
+        .static-star:nth-child(21) {
+            opacity: 0.95 !important;
+        }
+        .static-star:nth-child(22) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(23) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(24) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(25) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(26) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(27) {
+            opacity: 0.65 !important;
+        }
+        .static-star:nth-child(28) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(29) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(30) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(31) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(32) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(33) {
+            opacity: 0.95 !important;
+        }
+        .static-star:nth-child(34) {
+            opacity: 0.6 !important;
+        }
+        .static-star:nth-child(35) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(36) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(37) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(38) {
+            opacity: 0.65 !important;
+        }
+        .static-star:nth-child(39) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(40) {
+            opacity: 0.85 !important;
+        }
+    }
+
+    /* Debug mode: Add ?debug-reduced-motion to URL to test reduced motion styles */
+    .debug-reduced-motion .star {
+        animation: none !important;
+        position: absolute;
+    }
+
+    .debug-reduced-motion .star:nth-child(1) {
+        top: calc(-80px + 180px);
+        left: calc(20% - 180px);
+        transform: rotate(0deg);
+        opacity: 0.7 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(2) {
+        top: calc(-120px + 300px);
+        left: calc(50% - 300px);
+        transform: rotate(0deg);
+        opacity: 0.9 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(3) {
+        top: calc(-60px + 100px);
+        left: calc(70% - 100px);
+        transform: rotate(0deg);
+        opacity: 0.6 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(4) {
+        top: calc(-100px + 240px);
+        left: calc(35% - 240px);
+        transform: rotate(0deg);
+        opacity: 0.8 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(5) {
+        top: calc(-70px + 200px);
+        left: calc(85% - 200px);
+        transform: rotate(0deg);
+        opacity: 0.75 !important;
+    }
+
+    .debug-reduced-motion .static-star {
+        animation: none !important;
+    }
+
+    /* Vary static star opacity in debug mode */
+    .debug-reduced-motion .static-star:nth-child(6) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(7) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(8) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(9) {
+        opacity: 0.6 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(10) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(11) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(12) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(13) {
+        opacity: 0.95 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(14) {
+        opacity: 0.65 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(15) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(16) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(17) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(18) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(19) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(20) {
+        opacity: 0.6 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(21) {
+        opacity: 0.95 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(22) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(23) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(24) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(25) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(26) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(27) {
+        opacity: 0.65 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(28) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(29) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(30) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(31) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(32) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(33) {
+        opacity: 0.95 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(34) {
+        opacity: 0.6 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(35) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(36) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(37) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(38) {
+        opacity: 0.65 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(39) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(40) {
+        opacity: 0.85 !important;
+    }
 </style>
+
+<script>
+    // Randomize falling star positions and static star twinkling
+    if (typeof window !== "undefined") {
+        document.addEventListener("DOMContentLoaded", () => {
+            const header = document.querySelector(".header-section");
+            if (!header) return;
+
+            // ===== FALLING STAR CONFIGURATION =====
+            const FALLING_STAR_CONFIG = {
+                // Spread distance - vertical range where stars can start (pixels)
+                // Stars will start between -200px and (-200 + spreadDistance)px
+                spreadDistance: 300, // Higher = more vertical variation in starting positions
+
+                // Frequency - total seconds to distribute all stars within
+                // Stars will be evenly spaced across this time window
+                frequency: 20, // Higher = more time between stars, Lower = stars closer together
+            };
+
+            // Randomize falling star starting positions
+            const fallingStars = header.querySelectorAll(
+                ".star:not(.static-star)",
+            );
+
+            // Shuffle stars so they don't appear in DOM order
+            const starArray = Array.from(fallingStars) as HTMLElement[];
+            const shuffledStars = starArray.sort(() => Math.random() - 0.5);
+
+            shuffledStars.forEach((star, index) => {
+                // Random horizontal position across full width
+                const left = Math.random() * 100;
+
+                // Random vertical position based on spread distance
+                const top =
+                    -200 + Math.random() * FALLING_STAR_CONFIG.spreadDistance;
+
+                // Evenly distribute stars across the frequency window
+                // Each star gets its own time slot with small random variation
+                const timeSlot =
+                    (FALLING_STAR_CONFIG.frequency / shuffledStars.length) *
+                    index;
+                const randomVariation =
+                    (Math.random() - 0.5) *
+                    (FALLING_STAR_CONFIG.frequency / shuffledStars.length) *
+                    0.4;
+                const delay = timeSlot + randomVariation;
+
+                star.style.left = `${left}%`;
+                star.style.top = `${top}px`;
+                star.style.animationDelay = `${delay}s`;
+            });
+
+            // Randomize static star twinkle animation and size
+            const staticStars = Array.from(
+                header.querySelectorAll(".static-star"),
+            ) as HTMLElement[];
+            staticStars.forEach((star) => {
+                const duration = 2.5 + Math.random() * 1.5; // 2.5-4s
+                const delay = -(Math.random() * 4); // Negative delay to start at random point in cycle
+                const twinkleType = Math.floor(Math.random() * 5) + 1; // 1-5
+                const scale = 1 + Math.random() * 0.3; // 1.0-1.3x size
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                star.style.animationName = `twinkle${twinkleType}`;
+                star.style.transform = `scale(${scale})`;
+            });
+        });
+    }
+</script>
+
+<script>
+    // Debug mode for testing reduced motion styles
+    if (typeof window !== "undefined") {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("debug-reduced-motion")) {
+            document.addEventListener("DOMContentLoaded", () => {
+                const header = document.querySelector(".header-section");
+                if (header) {
+                    header.classList.add("debug-reduced-motion");
+                    console.log("🎨 Debug: Reduced motion styles enabled");
+                }
+            });
+        }
+    }
+</script>
 
 <div
     class="-mx-8 -mt-8 mb-12 w-[calc(100%+4rem)] md:-mx-[calc(50vw-50%)] md:-mt-8 md:w-screen"
@@ -594,13 +986,22 @@
             ></span>
         </div>
         <div
-            class="relative z-20 mx-auto px-8 flex items-baseline justify-between text-white"
+            class="relative z-20 mx-auto px-8 flex flex-col items-start text-white max-w-7xl"
         >
             <h1
-                class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter text-white"
+                class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter text-white font-stretch-semi-condensedcondensed"
             >
                 @hectoday/http
             </h1>
+            <p
+                class="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-3xl"
+            >
+                Every request has a path. With Hectoday HTTP, every step is
+                explicit.<br />
+                Outbound request. Inbound response.<br />
+                Nothing hidden. Nothing assumed.<br />
+                From here, it makes sense.
+            </p>
         </div>
     </header>
 </div>
