@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-
 interface DocData {
   title: string;
   description?: string;
@@ -17,15 +15,10 @@ interface DocsListProps {
 }
 
 export default function DocsList({ docs, isDev }: DocsListProps) {
-  const [showDrafts, setShowDrafts] = useState(() => {
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has("drafts")) {
-        return true;
-      }
-    }
-    return isDev;
-  });
+  const showDrafts =
+    isDev ||
+    (typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).has("drafts"));
 
   const visibleDocs = showDrafts ? docs : docs.filter((doc) => !doc.data.draft);
 
