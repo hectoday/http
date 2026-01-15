@@ -8,10 +8,17 @@ if (!slug) {
     return Astro.redirect("/docs");
 }
 
+const isDev = import.meta.env.DEV;
+
 const allDocs = await getCollection("docs");
 const doc = allDocs.find((d) => d.id === slug);
 
 if (!doc) {
+    return Astro.redirect("/docs");
+}
+
+// Redirect to docs if trying to access draft in production
+if (!isDev && doc.data.draft) {
     return Astro.redirect("/docs");
 }
 
@@ -26,6 +33,15 @@ const { Content } = await render(doc);
         <a href="/docs">← Back to docs</a>
     </nav>
 
+    {
+        doc.data.draft && (
+            <div class="draft-banner">
+                <strong>DRAFT:</strong> This document is a work in progress and
+                only visible in development mode.
+            </div>
+        )
+    }
+
     <article class="prose">
         <h1>{doc.data.title}</h1>
         <Content />
@@ -35,5 +51,17 @@ const { Content } = await render(doc);
 <style>
     nav {
         margin-bottom: 2rem;
+    }
+
+    .draft-banner {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        color: #856404;
+    }
+
+    .draft-banner strong {
+        font-weight: bold;
     }
 </style>

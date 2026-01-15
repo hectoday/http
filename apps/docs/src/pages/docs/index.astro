@@ -2,9 +2,11 @@
 import { getCollection } from "astro:content";
 import Layout from "~/layouts/Layout.astro";
 
+const isDev = import.meta.env.DEV;
+
 const docs = await getCollection("docs");
 const sortedDocs = docs
-    .filter((doc) => !doc.data.draft)
+    .filter((doc) => isDev || !doc.data.draft)
     .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 ---
 
@@ -19,7 +21,12 @@ const sortedDocs = docs
         {
             sortedDocs.map((doc) => (
                 <li>
-                    <a href={`/docs/${doc.id}`}>{doc.data.title}</a>
+                    <a href={`/docs/${doc.id}`}>
+                        {doc.data.title}
+                        {doc.data.draft && (
+                            <span class="draft-badge">[DRAFT]</span>
+                        )}
+                    </a>
                     {doc.data.description && <p>{doc.data.description}</p>}
                 </li>
             ))
@@ -44,5 +51,12 @@ const sortedDocs = docs
     li p {
         margin: 0.25rem 0 0 0;
         color: #666;
+    }
+
+    .draft-badge {
+        margin-left: 0.5rem;
+        font-size: 0.75rem;
+        color: #ff6b6b;
+        font-weight: bold;
     }
 </style>

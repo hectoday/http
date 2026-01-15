@@ -2,6 +2,7 @@
 title: "Installation"
 description: "How to install @hectoday/http"
 order: 2
+draft: false
 ---
 
 # Installation
