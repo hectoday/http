@@ -58,7 +58,6 @@ Deno.serve(app.fetch);`;
     .header-content {
         position: relative;
         z-index: 2;
-        max-width: 48rem;
         margin: 0 auto;
         padding: 0 2rem;
         display: flex;
@@ -409,9 +408,6 @@ Deno.serve(app.fetch);`;
     description="An explicit, standards-first HTTP framework built for learning."
 >
     <div class="full-width-header">
-        <WarningBanner
-            message="This framework is under development and imperfections may occur."
-        />
         <header class="header-section">
             <div class="shooting-stars">
                 <span class="star"></span>
@@ -457,29 +453,19 @@ Deno.serve(app.fetch);`;
             </div>
             <div class="header-content">
                 <h1
-                    class="text-6xl"
-                    style="font-weight: 800; letter-spacing: -0.04em;"
+                    class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter"
                 >
                     @hectoday/http
                 </h1>
-                <nav class="space-x-6 text-base font-medium">
-                    <a href="/docs" class="hover:opacity-60 transition-opacity"
-                        >Docs</a
-                    >
-                    <a
-                        href="https://github.com/hectoday/http"
-                        class="hover:opacity-60 transition-opacity">GitHub</a
-                    >
-                    <a
-                        href="https://jsr.io/@hectoday/http"
-                        class="hover:opacity-60 transition-opacity">JSR</a
-                    >
-                </nav>
             </div>
         </header>
     </div>
 
     <div class="prose">
+        <WarningBanner
+            message="This framework is under development and imperfections may occur."
+        />
+
         <p class="text-xl leading-relaxed mb-8 font-medium">
             An explicit, standards-first HTTP framework built for learning.
         </p>
@@ -562,5 +548,18 @@ Deno.serve(app.fetch);`;
                 Learn the protocol. Then build the abstractions.
             </p>
         </blockquote>
+
+        <hr />
+        <nav class="space-x-6 text-base font-medium">
+            <a href="/docs" class="hover:opacity-60 transition-opacity">Docs</a>
+            <a
+                href="https://github.com/hectoday/http"
+                class="hover:opacity-60 transition-opacity">GitHub</a
+            >
+            <a
+                href="https://jsr.io/@hectoday/http"
+                class="hover:opacity-60 transition-opacity">JSR</a
+            >
+        </nav>
     </div>
 </Layout>
