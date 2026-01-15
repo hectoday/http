@@ -776,6 +776,75 @@
 </style>
 
 <script>
+    // Randomize falling star positions and static star twinkling
+    if (typeof window !== "undefined") {
+        document.addEventListener("DOMContentLoaded", () => {
+            const header = document.querySelector(".header-section");
+            if (!header) return;
+
+            // ===== FALLING STAR CONFIGURATION =====
+            const FALLING_STAR_CONFIG = {
+                // Spread distance - vertical range where stars can start (pixels)
+                // Stars will start between -200px and (-200 + spreadDistance)px
+                spreadDistance: 300, // Higher = more vertical variation in starting positions
+
+                // Frequency - total seconds to distribute all stars within
+                // Stars will be evenly spaced across this time window
+                frequency: 20, // Higher = more time between stars, Lower = stars closer together
+            };
+
+            // Randomize falling star starting positions
+            const fallingStars = header.querySelectorAll(
+                ".star:not(.static-star)",
+            );
+
+            // Shuffle stars so they don't appear in DOM order
+            const starArray = Array.from(fallingStars) as HTMLElement[];
+            const shuffledStars = starArray.sort(() => Math.random() - 0.5);
+
+            shuffledStars.forEach((star, index) => {
+                // Random horizontal position across full width
+                const left = Math.random() * 100;
+
+                // Random vertical position based on spread distance
+                const top =
+                    -200 + Math.random() * FALLING_STAR_CONFIG.spreadDistance;
+
+                // Evenly distribute stars across the frequency window
+                // Each star gets its own time slot with small random variation
+                const timeSlot =
+                    (FALLING_STAR_CONFIG.frequency / shuffledStars.length) *
+                    index;
+                const randomVariation =
+                    (Math.random() - 0.5) *
+                    (FALLING_STAR_CONFIG.frequency / shuffledStars.length) *
+                    0.4;
+                const delay = timeSlot + randomVariation;
+
+                star.style.left = `${left}%`;
+                star.style.top = `${top}px`;
+                star.style.animationDelay = `${delay}s`;
+            });
+
+            // Randomize static star twinkle animation and size
+            const staticStars = Array.from(
+                header.querySelectorAll(".static-star"),
+            ) as HTMLElement[];
+            staticStars.forEach((star) => {
+                const duration = 2.5 + Math.random() * 1.5; // 2.5-4s
+                const delay = -(Math.random() * 4); // Negative delay to start at random point in cycle
+                const twinkleType = Math.floor(Math.random() * 5) + 1; // 1-5
+                const scale = 1 + Math.random() * 0.3; // 1.0-1.3x size
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                star.style.animationName = `twinkle${twinkleType}`;
+                star.style.transform = `scale(${scale})`;
+            });
+        });
+    }
+</script>
+
+<script>
     // Debug mode for testing reduced motion styles
     if (typeof window !== "undefined") {
         const urlParams = new URLSearchParams(window.location.search);
@@ -917,13 +986,22 @@
             ></span>
         </div>
         <div
-            class="relative z-20 mx-auto px-8 flex items-baseline justify-between text-white"
+            class="relative z-20 mx-auto px-8 flex flex-col items-start text-white max-w-7xl"
         >
             <h1
                 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter text-white"
             >
                 @hectoday/http
             </h1>
+            <p
+                class="mt-8 text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl"
+            >
+                Every request has a path. With Hectoday HTTP, each step is
+                explicit.<br />
+                Outbound request. Inbound response.<br />
+                Nothing hidden. Nothing assumed.<br />
+                From here, it makes sense.
+            </p>
         </div>
     </header>
 </div>
