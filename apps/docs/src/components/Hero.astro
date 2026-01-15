@@ -466,7 +466,330 @@
             opacity: 0;
         }
     }
+
+    /* Disable animations for users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .star {
+            animation: none !important;
+            position: absolute;
+        }
+
+        /* Position shooting stars statically along their trajectory - pointing downwards */
+        .star:nth-child(1) {
+            top: calc(-80px + 180px);
+            left: calc(20% - 180px);
+            transform: rotate(0deg);
+            opacity: 0.7 !important;
+        }
+
+        .star:nth-child(2) {
+            top: calc(-120px + 300px);
+            left: calc(50% - 300px);
+            transform: rotate(0deg);
+            opacity: 0.9 !important;
+        }
+
+        .star:nth-child(3) {
+            top: calc(-60px + 100px);
+            left: calc(70% - 100px);
+            transform: rotate(0deg);
+            opacity: 0.6 !important;
+        }
+
+        .star:nth-child(4) {
+            top: calc(-100px + 240px);
+            left: calc(35% - 240px);
+            transform: rotate(0deg);
+            opacity: 0.8 !important;
+        }
+
+        .star:nth-child(5) {
+            top: calc(-70px + 200px);
+            left: calc(85% - 200px);
+            transform: rotate(0deg);
+            opacity: 0.75 !important;
+        }
+
+        .static-star {
+            animation: none !important;
+        }
+
+        /* Vary static star opacity */
+        .static-star:nth-child(6) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(7) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(8) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(9) {
+            opacity: 0.6 !important;
+        }
+        .static-star:nth-child(10) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(11) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(12) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(13) {
+            opacity: 0.95 !important;
+        }
+        .static-star:nth-child(14) {
+            opacity: 0.65 !important;
+        }
+        .static-star:nth-child(15) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(16) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(17) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(18) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(19) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(20) {
+            opacity: 0.6 !important;
+        }
+        .static-star:nth-child(21) {
+            opacity: 0.95 !important;
+        }
+        .static-star:nth-child(22) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(23) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(24) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(25) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(26) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(27) {
+            opacity: 0.65 !important;
+        }
+        .static-star:nth-child(28) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(29) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(30) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(31) {
+            opacity: 0.7 !important;
+        }
+        .static-star:nth-child(32) {
+            opacity: 0.85 !important;
+        }
+        .static-star:nth-child(33) {
+            opacity: 0.95 !important;
+        }
+        .static-star:nth-child(34) {
+            opacity: 0.6 !important;
+        }
+        .static-star:nth-child(35) {
+            opacity: 0.8 !important;
+        }
+        .static-star:nth-child(36) {
+            opacity: 0.9 !important;
+        }
+        .static-star:nth-child(37) {
+            opacity: 0.75 !important;
+        }
+        .static-star:nth-child(38) {
+            opacity: 0.65 !important;
+        }
+        .static-star:nth-child(39) {
+            opacity: 1 !important;
+        }
+        .static-star:nth-child(40) {
+            opacity: 0.85 !important;
+        }
+    }
+
+    /* Debug mode: Add ?debug-reduced-motion to URL to test reduced motion styles */
+    .debug-reduced-motion .star {
+        animation: none !important;
+        position: absolute;
+    }
+
+    .debug-reduced-motion .star:nth-child(1) {
+        top: calc(-80px + 180px);
+        left: calc(20% - 180px);
+        transform: rotate(0deg);
+        opacity: 0.7 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(2) {
+        top: calc(-120px + 300px);
+        left: calc(50% - 300px);
+        transform: rotate(0deg);
+        opacity: 0.9 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(3) {
+        top: calc(-60px + 100px);
+        left: calc(70% - 100px);
+        transform: rotate(0deg);
+        opacity: 0.6 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(4) {
+        top: calc(-100px + 240px);
+        left: calc(35% - 240px);
+        transform: rotate(0deg);
+        opacity: 0.8 !important;
+    }
+
+    .debug-reduced-motion .star:nth-child(5) {
+        top: calc(-70px + 200px);
+        left: calc(85% - 200px);
+        transform: rotate(0deg);
+        opacity: 0.75 !important;
+    }
+
+    .debug-reduced-motion .static-star {
+        animation: none !important;
+    }
+
+    /* Vary static star opacity in debug mode */
+    .debug-reduced-motion .static-star:nth-child(6) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(7) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(8) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(9) {
+        opacity: 0.6 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(10) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(11) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(12) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(13) {
+        opacity: 0.95 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(14) {
+        opacity: 0.65 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(15) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(16) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(17) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(18) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(19) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(20) {
+        opacity: 0.6 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(21) {
+        opacity: 0.95 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(22) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(23) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(24) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(25) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(26) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(27) {
+        opacity: 0.65 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(28) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(29) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(30) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(31) {
+        opacity: 0.7 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(32) {
+        opacity: 0.85 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(33) {
+        opacity: 0.95 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(34) {
+        opacity: 0.6 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(35) {
+        opacity: 0.8 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(36) {
+        opacity: 0.9 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(37) {
+        opacity: 0.75 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(38) {
+        opacity: 0.65 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(39) {
+        opacity: 1 !important;
+    }
+    .debug-reduced-motion .static-star:nth-child(40) {
+        opacity: 0.85 !important;
+    }
 </style>
+
+<script>
+    // Debug mode for testing reduced motion styles
+    if (typeof window !== "undefined") {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("debug-reduced-motion")) {
+            document.addEventListener("DOMContentLoaded", () => {
+                const header = document.querySelector(".header-section");
+                if (header) {
+                    header.classList.add("debug-reduced-motion");
+                    console.log("🎨 Debug: Reduced motion styles enabled");
+                }
+            });
+        }
+    }
+</script>
 
 <div
     class="-mx-8 -mt-8 mb-12 w-[calc(100%+4rem)] md:-mx-[calc(50vw-50%)] md:-mt-8 md:w-screen"
