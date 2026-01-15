@@ -26,6 +26,7 @@ if (doc.data.draft && !showDrafts) {
 }
 
 const { Content } = await render(doc);
+const backLink = showDrafts && !isDev ? "/docs?drafts" : "/docs";
 ---
 
 <Layout
@@ -33,7 +34,7 @@ const { Content } = await render(doc);
     description={doc.data.description}
 >
     <nav>
-        <a href="/docs">← Back to docs</a>
+        <a href={backLink}>← Back to docs</a>
     </nav>
 
     {
