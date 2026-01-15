@@ -1,13 +1,102 @@
 ---
 import Layout from "~/layouts/Layout.astro";
+import { Code } from "astro:components";
+
+const codeExample = `import { route, setup } from "@hectoday/http";
+
+const app = setup([
+  route.get("/", {
+    resolve: () => {
+      return new Response("Hello HTTP");
+    },
+  }),
+]);
+
+Deno.serve(app.fetch);`;
 ---
 
-<Layout title="@hectoday/http">
-    <h1>hectoday/http</h1>
-    <p>Useful links</p>
-    <ul>
-        <li><a href="/docs">Documentation</a></li>
-        <li><a href="https://github.com/hectoday/http">GitHub</a></li>
-        <li><a href="https://jsr.io/@hectoday/http">JSR</a></li>
-    </ul>
+<Layout
+    title="@hectoday/http"
+    description="An explicit, standards-first HTTP framework built for learning."
+>
+    <header class="flex items-baseline justify-between mb-8">
+        <h1 class="text-black">@hectoday/http</h1>
+        <nav class="space-x-4 text-gray-600">
+            <a href="/docs">Docs</a>
+            <a href="https://github.com/hectoday/http">GitHub</a>
+            <a href="https://jsr.io/@hectoday/http">JSR</a>
+        </nav>
+    </header>
+
+    <div class="prose">
+        <p>An explicit, standards-first HTTP framework built for learning.</p>
+
+        <hr />
+
+        <h2>Why</h2>
+
+        <p>
+            Most frameworks abstract HTTP away. <strong
+                >@hectoday/http does the opposite.</strong
+            >
+        </p>
+
+        <p>
+            You work directly with <code>Request</code>, <code>Response</code>,
+            headers, status codes, routing, and guards.
+        </p>
+
+        <p>
+            So you actually learn <strong>how the web works</strong>, not just
+            how to use a framework.
+        </p>
+
+        <hr />
+
+        <h2>Example</h2>
+
+        <Code code={codeExample} lang="ts" theme="github-light" />
+
+        <p>No wrappers. No custom response objects. Just HTTP.</p>
+
+        <hr />
+
+        <h2>Principles</h2>
+
+        <ul>
+            <li>
+                <strong>Web standards first</strong><br />
+                Built on the Fetch API
+            </li>
+            <li>
+                <strong>Explicit control flow</strong><br />
+                You decide what happens
+            </li>
+            <li>
+                <strong>Minimal surface area</strong><br />
+                Small API, easy to reason about
+            </li>
+            <li>
+                <strong>Education-first</strong><br />
+                Clarity over convenience
+            </li>
+        </ul>
+
+        <hr />
+
+        <h2>Good for</h2>
+
+        <ul>
+            <li>Learning HTTP properly</li>
+            <li>Teaching web fundamentals</li>
+            <li>Understanding request lifecycles</li>
+            <li>Building APIs</li>
+        </ul>
+
+        <hr />
+
+        <blockquote>
+            <p>Learn the protocol. Then build the abstractions.</p>
+        </blockquote>
+    </div>
 </Layout>
