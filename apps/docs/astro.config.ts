@@ -14,7 +14,11 @@ export default defineConfig({
         allow: ["../.."],
       },
     },
-
+    resolve: {
+      alias: {
+        "~": "/src",
+      },
+    },
     plugins: [tailwindcss()],
   },
 

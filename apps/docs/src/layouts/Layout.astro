@@ -1,0 +1,78 @@
+---
+import "~/styles/global.css";
+
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        {description && <meta name="description" content={description} />}
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>
+
+<style is:global>
+    body {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        font-family:
+            system-ui,
+            -apple-system,
+            sans-serif;
+        line-height: 1.6;
+        background: white;
+        color: black;
+    }
+
+    a {
+        color: #0000ee;
+        text-decoration: underline;
+    }
+
+    a:visited {
+        color: #551a8b;
+    }
+
+    a:hover {
+        color: #0000cc;
+    }
+
+    h1 {
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+    }
+
+    pre {
+        background: white;
+        border: 1px solid black;
+        padding: 1rem;
+        overflow-x: auto;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    code {
+        background: white;
+        border: 1px solid black;
+        padding: 0.2rem 0.4rem;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    pre code {
+        background: none;
+        border: none;
+        padding: 0;
+    }
+</style>
