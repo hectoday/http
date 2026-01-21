@@ -3,6 +3,8 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import deno from "@deno/astro-adapter";
+import type { ThemeRegistration } from "shiki";
+import hectodayTheme from "./src/styles/hectoday.shiki.json";
 
 // https://astro.build/config
 export default defineConfig({
@@ -26,7 +28,7 @@ export default defineConfig({
 
   markdown: {
     shikiConfig: {
-      theme: "github-dark",
+      theme: hectodayTheme as ThemeRegistration,
     },
   },
 });

@@ -3,6 +3,8 @@ import Layout from "~/layouts/Layout.astro";
 import { Code } from "astro:components";
 import WarningBanner from "~/components/WarningBanner.astro";
 import Hero from "~/components/Hero.astro";
+import type { ThemeRegistration } from "shiki";
+import hectodayTheme from "~/styles/hectoday.shiki.json";
 
 const codeExample = `import { route, setup } from "@hectoday/http";
 
@@ -60,7 +62,7 @@ Deno.serve(app.fetch);`;
             <Code
                 code={codeExample}
                 lang="ts"
-                theme="github-light"
+                theme={hectodayTheme as ThemeRegistration}
                 class="[&_pre]:m-0"
             />
         </div>
