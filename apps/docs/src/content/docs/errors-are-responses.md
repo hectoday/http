@@ -1,7 +1,8 @@
 ---
 title: "Errors Are Responses"
 description: "Handling failures explicitly without exceptions"
-order: 9
+order: 3
+part: 3
 draft: true
 ---
 

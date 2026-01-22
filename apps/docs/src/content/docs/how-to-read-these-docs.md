@@ -1,7 +1,8 @@
 ---
 title: "How to Read These Docs"
 description: "A guide to understanding Hectoday HTTP's documentation structure"
-order: 1
+order: 2
+part: 1
 draft: true
 ---
 

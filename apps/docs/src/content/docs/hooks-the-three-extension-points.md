@@ -1,7 +1,8 @@
 ---
 title: "Hooks: The Three Extension Points"
 description: "Understanding onRequest, onResponse, and onError hooks"
-order: 8.5
+order: 2
+part: 3
 draft: true
 ---
 

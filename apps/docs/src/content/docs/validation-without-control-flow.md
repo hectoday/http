@@ -1,7 +1,8 @@
 ---
 title: "Validation Without Control Flow"
 description: "Using validation to describe data, not control requests"
-order: 6
+order: 4
+part: 2
 draft: true
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: "A Mental Model of HTTP"
 description: "Understanding HTTP from first principles"
-order: 2
+order: 3
+part: 1
 draft: true
 ---
 

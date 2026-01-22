@@ -1,7 +1,8 @@
 ---
 title: "The Web Standard Foundation"
 description: "How Web Standards provide the primitives for HTTP servers"
-order: 3
+order: 1
+part: 2
 draft: true
 ---
 

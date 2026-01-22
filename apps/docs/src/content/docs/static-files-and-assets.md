@@ -1,7 +1,8 @@
 ---
 title: "Static Files and Assets"
 description: "Serving static files explicitly without magic conventions"
-order: 12
+order: 2
+part: 4
 draft: true
 ---
 

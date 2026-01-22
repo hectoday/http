@@ -1,7 +1,8 @@
 ---
 title: "What This Is"
 description: "Understanding Hectoday HTTP's purpose and philosophy"
-order: 0
+order: 1
+part: 1
 draft: true
 ---
 

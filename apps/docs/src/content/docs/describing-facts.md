@@ -1,7 +1,8 @@
 ---
 title: "Describing Facts"
 description: "Extracting request data without making decisions"
-order: 5
+order: 3
+part: 2
 draft: true
 ---
 

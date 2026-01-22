@@ -1,7 +1,8 @@
 ---
 title: "Your First Server"
 description: "Building your first Hectoday HTTP server"
-order: 4
+order: 2
+part: 2
 draft: true
 ---
 

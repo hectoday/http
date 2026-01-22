@@ -1,7 +1,8 @@
 ---
 title: "Philosophy (Revisited)"
 description: "Why Hectoday HTTP makes these design choices"
-order: 16
+order: 3
+part: 5
 draft: true
 ---
 
