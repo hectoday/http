@@ -902,6 +902,7 @@ Common helper patterns available as copy-paste recipes in the documentation.
 
 ### Available Helpers
 
+- **[Zod Validator](./helpers/zod-validator)** — Validator adapter for Zod schemas
 - **[maxBodyBytes](./helpers/max-body-bytes)** — Limit request body size (guard)
 - **[CORS](./helpers/cors)** — Add CORS headers to responses
 - **[Request ID](./helpers/request-id)** — Generate and track request IDs

@@ -507,6 +507,7 @@ Hectoday HTTP has a minimal core. Everything else is helpers—copy-paste recipe
 **That's it.** ~500 lines of code.
 
 **Everything else is in the docs as recipes**:
+- [Zod Validator](./helpers/zod-validator) - Validator adapter for Zod schemas
 - [Body size limits](./helpers/max-body-bytes) - `maxBodyBytes` guard
 - [CORS headers](./helpers/cors) - `corsHeaders` response helper
 - [Request ID tracking](./helpers/request-id) - Request ID generation and headers
