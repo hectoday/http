@@ -479,7 +479,9 @@ You can validate manually when needed. Hectoday HTTP doesn't force you into one 
 
 Hectoday HTTP is validator-agnostic. Bring your own:
 
-**Zod**:
+**For a complete, copy-paste ready Zod validator adapter**, see the [Zod Validator helper documentation](./helpers/zod-validator).
+
+**Zod** (simplified example):
 
 ```typescript
 import { z } from "zod";

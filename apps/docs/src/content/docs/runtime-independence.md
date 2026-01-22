@@ -499,9 +499,9 @@ const userSchema = z.object({
 const app = setup({
   handlers: [...],
   validator: zodValidator,
-  onRequest: (request) => ({ requestId: crypto.randomUUID() }),
-  onResponse: (c, response) => addHeaders(response),
-  onError: (error, c) => handleError(error)
+  onRequest: ({ request }) => ({ requestId: crypto.randomUUID() }),
+  onResponse: ({ context, response }) => addHeaders(response),
+  onError: ({ error, context }) => handleError(error)
 });
 ```
 

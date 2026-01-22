@@ -1,10 +1,5 @@
 {
-  "workspace": [
-    "./packages/http",
-    "./packages/helpers",
-    "./example/deno",
-    "./apps/docs"
-  ],
+  "workspace": ["./packages/http", "./example/deno", "./apps/docs"],
   "nodeModulesDir": "auto",
   "imports": {
     "@std/assert": "jsr:@std/assert@1"

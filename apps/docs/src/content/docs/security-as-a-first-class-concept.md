@@ -755,7 +755,7 @@ For any request, you can trace exactly what happened:
 const app = setup({
   handlers: [...],
   
-  onRequest: (request) => {
+  onRequest: ({ request }) => {
     return {
       requestId: crypto.randomUUID(),
       securityLog: []
@@ -784,12 +784,12 @@ const app = setup({
     })
   })),
   
-  onResponse: (c, response) => {
+  onResponse: ({ context, response }) => {
     console.log({
-      requestId: c.locals.requestId,
-      path: new URL(c.request.url).pathname,
+      requestId: context.locals.requestId,
+      path: new URL(context.request.url).pathname,
       status: response.status,
-      securityLog: c.locals.securityLog
+      securityLog: context.locals.securityLog
     });
     
     return response;

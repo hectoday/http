@@ -959,28 +959,33 @@ type InferInput<T> = T extends SchemaLike<infer TOut, any>
 
 Infer input type from schema (for type-safe handlers).
 
-## Helper Utilities
+## Helper Recipes
 
-Common helpers available in `@hectoday/http-helpers` (separate package).
+Common helper patterns available as copy-paste recipes in the documentation.
 
-### maxBodyBytes()
+### Available Helpers
 
-Limit request body size.
+- **[Zod Validator](./helpers/zod-validator)** — Validator adapter for Zod schemas
+- **[maxBodyBytes](./helpers/max-body-bytes)** — Limit request body size (guard)
+- **[CORS](./helpers/cors)** — Add CORS headers to responses
+- **[Request ID](./helpers/request-id)** — Generate and track request IDs
+- **[Rate Limiting](./helpers/rate-limit)** — Limit requests per client
+
+### Usage Pattern
+
+Helpers are **copy-paste recipes**, not dependencies:
+
+1. Visit the helper documentation page
+2. Copy the code to your project (e.g., `helpers/maxBodyBytes.ts`)
+3. Import from your project
+4. Modify as needed
+
+**Example:**
 
 ```typescript
-function maxBodyBytes(limit: number): GuardFn
-```
-
-**Parameters**:
-
-- `limit: number` — Maximum bytes allowed
-
-**Returns**: Guard function
-
-**Example**:
-
-```typescript
-import { maxBodyBytes, SIZES } from "@hectoday/http-helpers";
+// 1. Copy code from docs to helpers/maxBodyBytes.ts
+// 2. Import from YOUR project
+import { maxBodyBytes, SIZES } from "./helpers/maxBodyBytes.ts";
 
 route.post("/upload", {
   guards: [maxBodyBytes(10 * SIZES.MB)],
@@ -988,83 +993,17 @@ route.post("/upload", {
     const data = await c.request.arrayBuffer();
     return Response.json({ size: data.byteLength });
   }
-})
-```
-
-### SIZES
-
-Size constants:
-
-```typescript
-const SIZES = {
-  KB: 1024,
-  MB: 1024 * 1024,
-  GB: 1024 * 1024 * 1024
-};
-```
-
-### zodValidator
-
-Pre-built Zod validator adapter.
-
-```typescript
-import { zodValidator } from "@hectoday/http-helpers";
-
-const app = setup({
-  validator: zodValidator,
-  handlers: [...]
 });
 ```
 
-### corsHeaders()
+### Why Copy-Paste?
 
-Generate CORS headers.
+- **You own the code** — No external dependencies
+- **No version conflicts** — No need to track updates
+- **Modify freely** — Change without forking
+- **Copy only what you need** — No bloat
 
-```typescript
-function corsHeaders(options: CorsOptions): Headers
-```
-
-**Parameters**:
-
-```typescript
-interface CorsOptions {
-  origin: string | string[] | "*";
-  methods?: string[];
-  allowedHeaders?: string[];
-  exposedHeaders?: string[];
-  credentials?: boolean;
-  maxAge?: number;
-}
-```
-
-**Returns**: Headers object with CORS headers
-
-**Example**:
-
-```typescript
-import { corsHeaders } from "@hectoday/http-helpers";
-
-const app = setup({
-  handlers: [...],
-  onResponse: ({ context, response }) => {
-    const cors = corsHeaders({
-      origin: "*",
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      allowedHeaders: ["Content-Type", "Authorization"]
-    });
-    
-    const headers = new Headers(response.headers);
-    for (const [key, value] of cors.entries()) {
-      headers.set(key, value);
-    }
-    
-    return new Response(response.body, {
-      status: response.status,
-      headers
-    });
-  }
-});
-```
+See [Composition Over Configuration](./composition-over-configuration#helpers-as-copy-paste-recipes) for more details.
 
 ## Constants
 
