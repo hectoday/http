@@ -134,14 +134,23 @@ jobs:
         with:
           ref: "v${{ inputs.version }}"
 
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Publish to npm
+      - name: Build npm package
         working-directory: ./packages/http
+        run: deno run -A scripts/build-npm.ts ${{ inputs.version }}
+
+      - name: Publish to npm
+        working-directory: ./packages/http/dist
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
@@ -177,9 +186,14 @@ jobs:
           echo "Would publish to JSR with version ${{ inputs.version }}"
           deno publish --dry-run
 
-      - name: Dry run npm publish
+      - name: Build npm package
         if: inputs.publish-npm == true
         working-directory: ./packages/http
+        run: deno run -A scripts/build-npm.ts ${{ inputs.version }}
+
+      - name: Dry run npm publish
+        if: inputs.publish-npm == true
+        working-directory: ./packages/http/dist
         run: |
           echo "Would publish to npm with version ${{ inputs.version }}"
           npm publish --dry-run --access public

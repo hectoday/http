@@ -1,0 +1,8 @@
+{
+  "name": "@hectoday/http",
+  "version": "0.1.3",
+  "exports": "./mod.ts",
+  "publish": {
+    "include": ["mod.ts", "src/**/*.ts", "README.md", "LICENSE"]
+  }
+}
