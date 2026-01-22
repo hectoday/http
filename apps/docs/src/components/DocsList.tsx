@@ -60,22 +60,31 @@ export default function DocsList({ docs, helpers, isDev }: DocsListProps) {
   }, {} as Record<number, Doc[]>);
 
   const renderDocList = (docList: Doc[]) => (
-    <ul className="list-none pl-0 space-y-4">
+    <ul className="list-none pl-0 space-y-4" role="list">
       {docList.map((doc) => (
         <li key={doc.id}>
           <a
             href={`/docs/${doc.id}${draftsParam}`}
             className="text-lg font-semibold"
+            aria-describedby={doc.data.description
+              ? `desc-${doc.id.replace(/\//g, "-")}`
+              : undefined}
           >
             {doc.data.title}
             {doc.data.draft && (
-              <span className="ml-2 text-xs font-bold text-black border-2 border-black px-2 py-1">
+              <span
+                className="ml-2 text-xs font-bold text-black border-2 border-black px-2 py-1"
+                aria-label="Draft document"
+              >
                 DRAFT
               </span>
             )}
           </a>
           {doc.data.description && (
-            <p className="mt-1 mb-0 text-gray-700">
+            <p
+              id={`desc-${doc.id.replace(/\//g, "-")}`}
+              className="mt-1 mb-0 text-gray-700"
+            >
               {doc.data.description}
             </p>
           )}
@@ -91,19 +100,22 @@ export default function DocsList({ docs, helpers, isDev }: DocsListProps) {
     .sort((a, b) => a - b);
 
   return (
-    <div className="prose">
+    <article className="prose">
       <h1>Documentation</h1>
 
       {hasNoDocs
         ? (
-          <div className="mt-8 p-6 border-2 border-black bg-gray-50">
+          <section
+            aria-label="Empty state"
+            className="mt-8 p-6 border-2 border-black bg-gray-50"
+          >
             <p className="text-lg font-semibold mb-1!">
               Documentation is currently being worked on
             </p>
             <p className="mb-0!">
               Check back soon for comprehensive documentation.
             </p>
-          </div>
+          </section>
         )
         : (
           <>
@@ -113,12 +125,20 @@ export default function DocsList({ docs, helpers, isDev }: DocsListProps) {
 
               if (!partDocs || partDocs.length === 0) return null;
 
+              const sectionTitle = partInfo
+                ? `Part ${partNum}: ${partInfo.title}`
+                : "Other";
+
               return (
-                <div key={partNum} className="mt-10 first:mt-8">
+                <section
+                  key={partNum}
+                  aria-labelledby={`part-${partNum}-heading`}
+                  className="mt-10 first:mt-8"
+                >
                   {partInfo
                     ? (
                       <>
-                        <h2 className="mb-1">
+                        <h2 id={`part-${partNum}-heading`} className="mb-1">
                           Part {partNum}: {partInfo.title}
                         </h2>
                         <p className="mt-0 mb-4 text-gray-600">
@@ -126,24 +146,28 @@ export default function DocsList({ docs, helpers, isDev }: DocsListProps) {
                         </p>
                       </>
                     )
-                    : <h2 className="mb-4">Other</h2>}
+                    : (
+                      <h2 id={`part-${partNum}-heading`} className="mb-4">
+                        Other
+                      </h2>
+                    )}
                   {renderDocList(partDocs)}
-                </div>
+                </section>
               );
             })}
 
             {visibleHelpers.length > 0 && (
-              <div className="mt-12">
-                <h2>Helpers</h2>
+              <section aria-labelledby="helpers-heading" className="mt-12">
+                <h2 id="helpers-heading">Helpers</h2>
                 <p className="text-gray-700">
                   Copy-paste patterns for common tasks. Not built-in—customize
                   for your needs.
                 </p>
                 {renderDocList(visibleHelpers)}
-              </div>
+              </section>
             )}
           </>
         )}
-    </div>
+    </article>
   );
 }
