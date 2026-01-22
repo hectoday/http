@@ -21,7 +21,7 @@ await build({
     lib: ["ES2022", "DOM", "DOM.Iterable"],
   },
   test: false,
-  skipNpmInstall: true,
+  skipNpmInstall: false,
   skipSourceOutput: true,
   declaration: "inline",
   declarationMap: false,
