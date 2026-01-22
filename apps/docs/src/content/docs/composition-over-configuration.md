@@ -492,11 +492,11 @@ src/
 
 **Choose what works for your team.** Hectoday HTTP doesn't enforce structure.
 
-## Helpers as Recipes
+## Helpers as Copy-Paste Recipes
 
-Hectoday HTTP has a minimal core. Everything else is helpers—optional, composable utilities.
+Hectoday HTTP has a minimal core. Everything else is helpers—copy-paste recipes you can use, modify, or ignore.
 
-### Why Helpers Live Outside the Core
+### Why Helpers Are Documentation, Not Dependencies
 
 **Core framework**:
 - Route matching
@@ -506,74 +506,73 @@ Hectoday HTTP has a minimal core. Everything else is helpers—optional, composa
 
 **That's it.** ~500 lines of code.
 
-**Everything else is helpers**:
-- Error response builders
-- Body size limits
-- Rate limiting
-- CORS headers
-- Request ID generation
-- Logging utilities
+**Everything else is in the docs as recipes**:
+- [Body size limits](./helpers/max-body-bytes) - `maxBodyBytes` guard
+- [CORS headers](./helpers/cors) - `corsHeaders` response helper
+- [Request ID tracking](./helpers/request-id) - Request ID generation and headers
+- [Rate limiting](./helpers/rate-limit) - Rate limit guards
 
-These are **recipes, not features**. They're patterns you can use, modify, or ignore.
+These are **recipes, not packages**. Copy the code, paste it into your project, modify it for your needs.
+
+**Why not a package?**
+- No dependency to maintain
+- No version conflicts
+- No "tree-shaking" concerns
+- You own the code
+- Modify without forking
+- Copy only what you need
 
 ### Example: maxBodyBytes Helper
 
+See the [full documentation](./helpers/max-body-bytes) for the complete code.
+
+**Quick version:**
+
 ```typescript
-// @hectoday/http-helpers/maxBodyBytes.ts
+// helpers/maxBodyBytes.ts - copied from docs
 import type { GuardFn } from "@hectoday/http";
 
-export const SIZES = {
+const SIZES = {
   KB: 1024,
   MB: 1024 * 1024,
   GB: 1024 * 1024 * 1024
 };
 
-export const maxBodyBytes = (limit: number): GuardFn => {
-  return async (c) => {
+function maxBodyBytes(limit: number): GuardFn {
+  return (c) => {
     const contentLength = c.request.headers.get("content-length");
-    
-    if (!contentLength) {
-      return { allow: true };
-    }
+    if (!contentLength) return { allow: true };
     
     const size = parseInt(contentLength, 10);
-    
     if (size > limit) {
       return {
         deny: Response.json(
-          {
-            error: "Request body too large",
-            limit,
-            received: size
-          },
-          { status: 413 } // Payload Too Large
+          { error: "Request body too large", limit, received: size },
+          { status: 413 }
         )
       };
     }
-    
     return { allow: true };
   };
-};
+}
 ```
 
-**This is just a guard factory.** Nothing special. You could write this yourself.
-
-Use it:
+**Use it:**
 
 ```typescript
-import { maxBodyBytes, SIZES } from "@hectoday/http-helpers";
+// Import from YOUR project (you copied it)
+import { maxBodyBytes, SIZES } from "./helpers/maxBodyBytes.ts";
 
 route.post("/upload", {
   guards: [maxBodyBytes(10 * SIZES.MB)],
   resolve: async (c) => {
     const data = await c.request.arrayBuffer();
-    // Process upload...
     return Response.json({ size: data.byteLength });
   }
 });
 ```
 
-**Or modify it**:
+**Modify it for your needs:**
 
 ```typescript
 // Your custom version
@@ -607,145 +606,59 @@ const maxBodyBytesCustom = (limit: number): GuardFn => {
 
 **Or don't use it at all**. It's optional.
 
-### Example: CORS Helper
+### More Helper Examples
+
+**CORS Headers** - See [full docs](./helpers/cors)
 
 ```typescript
-// @hectoday/http-helpers/cors.ts
-export interface CorsOptions {
-  origin: string | string[] | "*";
-  methods?: string[];
-  allowedHeaders?: string[];
-  exposedHeaders?: string[];
-  credentials?: boolean;
-  maxAge?: number;
-}
-
-export function corsHeaders(options: CorsOptions): Headers {
-  const headers = new Headers();
-  
-  // Origin
-  if (typeof options.origin === "string") {
-    headers.set("Access-Control-Allow-Origin", options.origin);
-  } else if (Array.isArray(options.origin)) {
-    headers.set("Access-Control-Allow-Origin", options.origin.join(", "));
-  }
-  
-  // Methods
-  if (options.methods) {
-    headers.set("Access-Control-Allow-Methods", options.methods.join(", "));
-  }
-  
-  // Headers
-  if (options.allowedHeaders) {
-    headers.set("Access-Control-Allow-Headers", options.allowedHeaders.join(", "));
-  }
-  
-  if (options.exposedHeaders) {
-    headers.set("Access-Control-Expose-Headers", options.exposedHeaders.join(", "));
-  }
-  
-  // Credentials
-  if (options.credentials) {
-    headers.set("Access-Control-Allow-Credentials", "true");
-  }
-  
-  // Max age
-  if (options.maxAge) {
-    headers.set("Access-Control-Max-Age", String(options.maxAge));
-  }
-  
-  return headers;
-}
-```
-
-Use in `onResponse`:
-
-```typescript
-const app = setup({
-  handlers: [...],
-  
-  onResponse: ({ context, response }) => {
-    const cors = corsHeaders({
-      origin: "*",
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      allowedHeaders: ["Content-Type", "Authorization"]
-    });
-    
-    // Merge CORS headers into response
-    const headers = new Headers(response.headers);
-    for (const [key, value] of cors.entries()) {
-      headers.set(key, value);
-    }
-    
-    return new Response(response.body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers
-    });
-  }
-});
-```
-
-**It's just a function that returns headers.** You control where and how to use them.
-
-### Example: Request ID Helper
-
-```typescript
-// @hectoday/http-helpers/requestId.ts
-export function generateRequestId(): string {
-  return crypto.randomUUID();
-}
-
-export function addRequestId(response: Response, requestId: string): Response {
+// Copy from docs, use in onResponse
+onResponse: ({ response }) => {
   const headers = new Headers(response.headers);
-  headers.set("X-Request-Id", requestId);
-  
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers
-  });
+  headers.set("Access-Control-Allow-Origin", "*");
+  headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  return new Response(response.body, { status: response.status, headers });
 }
 ```
 
-Use in hooks:
+**Request ID Tracking** - See [full docs](./helpers/request-id)
 
 ```typescript
-const app = setup({
-  handlers: [...],
-  
-  onRequest: ({ request }) => {
-    const requestId = request.headers.get("x-request-id") || generateRequestId();
-    return { requestId };
-  },
-  
-  onResponse: ({ context, response }) => {
-    return addRequestId(response, context.locals.requestId as string);
-  }
-});
+// Copy from docs, use in onRequest + onResponse
+onRequest: ({ request }) => ({
+  requestId: crypto.randomUUID()
+}),
+
+onResponse: ({ context, response }) => {
+  const headers = new Headers(response.headers);
+  headers.set("X-Request-ID", context.locals.requestId);
+  return new Response(response.body, { status: response.status, headers });
+}
 ```
 
-**Helpers are recipes.** Copy them, modify them, or write your own.
-
-### Tree-Shakable Utilities
-
-Because helpers are separate modules, bundlers can tree-shake unused code:
+**Rate Limiting** - See [full docs](./helpers/rate-limit)
 
 ```typescript
-// You import only what you use
-import { maxBodyBytes, SIZES } from "@hectoday/http-helpers";
-
-// maxBodyBytes is included in bundle
-// corsHeaders is NOT included (you didn't import it)
-// generateRequestId is NOT included (you didn't import it)
+// Copy from docs, use as guard
+guards: [rateLimit({ maxRequests: 100, windowMs: 60_000 })]
 ```
 
-**No bloat.** Only pay for what you use.
+### Why Copy-Paste?
 
-Compare to monolithic frameworks:
+**No dependency bloat:**
 
 ```typescript
-// Framework includes everything
+// Your project
+import { maxBodyBytes } from "./helpers/maxBodyBytes.ts";
+
+// You copied only what you need
+// No external dependencies
+// No version conflicts
+// No tree-shaking concerns
+```
+
+**Compare to monolithic frameworks:**
+
+```typescript
 import { Framework } from "big-framework";
 
 // Bundle includes:
@@ -753,11 +666,17 @@ import { Framework } from "big-framework";
 // - Session middleware (you don't use)
 // - Cookie parser (you don't use)
 // - Static file server (you don't use)
-// - Template engine (you don't use)
 // - 50 other things you don't use
 ```
 
-Hectoday HTTP: **core is ~500 lines, helpers are opt-in**.
+**With copy-paste helpers:**
+- You own the code
+- Modify without forking
+- No dependency updates to track
+- No breaking changes from maintainers
+- Copy only what you need
+
+Hectoday HTTP: **core is ~500 lines, helpers are documentation**.
 
 ### Writing Your Own Helpers
 

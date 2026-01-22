@@ -733,4 +733,4 @@ const app = setup({
 
 ---
 
-Next: [Errors Are Responses](./errors-are-responses) — handling expected and unexpected failures.
+Next: [Hooks: The Three Extension Points](./hooks-the-three-extension-points) — understanding onRequest, onResponse, and onError in depth.
