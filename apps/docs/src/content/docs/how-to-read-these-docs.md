@@ -12,7 +12,7 @@ Each chapter builds on the previous one, adding a single idea. You can stop at a
 
 ## The Structure
 
-### Part 1: Mental Models (Chapters 1-2)
+### Part 1: Mental Models
 
 Before you write code, you need a way to **think about HTTP**. These chapters build a mental model:
 
@@ -22,7 +22,7 @@ Before you write code, you need a way to **think about HTTP**. These chapters bu
 
 **Read these even if you're impatient.** The framework's API only makes sense with this model.
 
-### Part 2: Core Concepts (Chapters 3-6)
+### Part 2: Core Concepts
 
 These chapters introduce the framework's primitives:
 
@@ -32,7 +32,7 @@ These chapters introduce the framework's primitives:
 
 Each concept gets its own chapter. **Nothing is assumed.** If you read linearly, you'll never encounter an unexplained term.
 
-### Part 3: Composition (Chapters 7-9)
+### Part 3: Composition
 
 Once you understand the pieces, you'll see how they compose:
 
@@ -42,7 +42,7 @@ Once you understand the pieces, you'll see how they compose:
 
 This is where the framework's constraints start to feel like leverage.
 
-### Part 4: Real Concerns (Chapters 10-12)
+### Part 4: Real Concerns
 
 Practical chapters about:
 
@@ -52,7 +52,7 @@ Practical chapters about:
 
 These apply the mental model to real problems.
 
-### Part 5: Reference (Chapters 13-15)
+### Part 5: Reference
 
 - Testing strategies
 - Complete API reference
