@@ -103,7 +103,7 @@ route.get("/files/:filename", {
 const app = setup({
   handlers: [...],
   
-  onRequest: () => {
+  onRequest: ({ request }) => {
     const dbUrl = Deno.env.get("DATABASE_URL");
     const debug = Deno.env.get("DEBUG") === "true";
     
@@ -256,7 +256,7 @@ Bun has first-class WebSocket support (separate from HTTP routes).
 const app = setup({
   handlers: [...],
   
-  onRequest: () => {
+  onRequest: ({ request }) => {
     const dbUrl = process.env.DATABASE_URL;
     const debug = process.env.DEBUG === "true";
     
@@ -348,7 +348,7 @@ export default {
     // Attach env to locals via onRequest
     const appWithEnv = setup({
       handlers: app.handlers,
-      onRequest: () => ({ env })
+      onRequest: ({ request }) => ({ env })
     });
     
     return appWithEnv.fetch(request);
@@ -499,9 +499,9 @@ const userSchema = z.object({
 const app = setup({
   handlers: [...],
   validator: zodValidator,
-  onRequest: (request) => ({ requestId: crypto.randomUUID() }),
-  onResponse: (c, response) => addHeaders(response),
-  onError: (error, c) => handleError(error)
+  onRequest: ({ request }) => ({ requestId: crypto.randomUUID() }),
+  onResponse: ({ context, response }) => addHeaders(response),
+  onError: ({ error, context }) => handleError(error)
 });
 ```
 
@@ -603,7 +603,7 @@ Use in handlers:
 const app = setup({
   handlers: [...],
   
-  onRequest: () => ({
+  onRequest: ({ request }) => ({
     runtime: denoAdapter // or bunAdapter, or workersAdapter
   })
 });

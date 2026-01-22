@@ -608,24 +608,24 @@ export const attachRequestId: GuardFn = (c) => {
 const app = setup({
   handlers: [...],
   
-  onRequest: (request) => {
+  onRequest: ({ request }) => {
     const requestId = request.headers.get("x-request-id") ||
                       crypto.randomUUID();
     return { requestId, startTime: Date.now() };
   },
   
-  onResponse: (c, response) => {
+  onResponse: ({ context, response }) => {
     const headers = new Headers(response.headers);
-    headers.set("X-Request-Id", String(c.locals.requestId));
+    headers.set("X-Request-Id", String(context.locals.requestId));
     
     // Log for audit trail
     console.log({
-      requestId: c.locals.requestId,
-      method: c.request.method,
-      path: new URL(c.request.url).pathname,
+      requestId: context.locals.requestId,
+      method: context.request.method,
+      path: new URL(context.request.url).pathname,
       status: response.status,
-      duration: Date.now() - (c.locals.startTime as number),
-      userId: c.locals.user?.id
+      duration: Date.now() - (context.locals.startTime as number),
+      userId: context.locals.user?.id
     });
     
     return new Response(response.body, {
@@ -755,7 +755,7 @@ For any request, you can trace exactly what happened:
 const app = setup({
   handlers: [...],
   
-  onRequest: (request) => {
+  onRequest: ({ request }) => {
     return {
       requestId: crypto.randomUUID(),
       securityLog: []
@@ -784,12 +784,12 @@ const app = setup({
     })
   })),
   
-  onResponse: (c, response) => {
+  onResponse: ({ context, response }) => {
     console.log({
-      requestId: c.locals.requestId,
-      path: new URL(c.request.url).pathname,
+      requestId: context.locals.requestId,
+      path: new URL(context.request.url).pathname,
       status: response.status,
-      securityLog: c.locals.securityLog
+      securityLog: context.locals.securityLog
     });
     
     return response;

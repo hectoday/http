@@ -431,9 +431,9 @@ Bootstrap the Hectoday HTTP application.
 const app = setup({
   handlers: [...],
   validator: zodValidator,
-  onRequest: (req) => ({ requestId: crypto.randomUUID() }),
-  onResponse: (c, res) => res,
-  onError: (err, c) => Response.json({ error: "Internal error" }, { status: 500 })
+  onRequest: ({ request }) => ({ requestId: crypto.randomUUID() }),
+  onResponse: ({ context, response }) => response,
+  onError: ({ error, context }) => Response.json({ error: "Internal error" }, { status: 500 })
 });
 ```
 
@@ -461,7 +461,7 @@ interface Config {
 
 ```typescript
 type OnRequestHandler = (
-  request: Request
+  params: { request: Request }
 ) => void | Record<string, unknown> | Promise<void | Record<string, unknown>>;
 ```
 
@@ -469,7 +469,7 @@ Runs **before routing**, receives the raw Request.
 
 **Parameters**:
 
-- `request: Request` — The incoming request
+- `params.request: Request` — The incoming request
 
 **Returns**:
 
@@ -486,7 +486,7 @@ Runs **before routing**, receives the raw Request.
 **Example**:
 
 ```typescript
-onRequest: (request) => {
+onRequest: ({ request }) => {
   return {
     requestId: crypto.randomUUID(),
     startTime: Date.now()
@@ -498,8 +498,7 @@ onRequest: (request) => {
 
 ```typescript
 type OnResponseHandler = (
-  c: Context,
-  response: Response
+  params: { context: Context, response: Response }
 ) => Response | Promise<Response>;
 ```
 
@@ -507,8 +506,8 @@ Runs **after handler**, can modify the response.
 
 **Parameters**:
 
-- `c: Context` — The request context
-- `response: Response` — The response from handler
+- `params.context: Context` — The request context
+- `params.response: Response` — The response from handler
 
 **Returns**:
 
@@ -517,9 +516,9 @@ Runs **after handler**, can modify the response.
 **Example**:
 
 ```typescript
-onResponse: (c, response) => {
+onResponse: ({ context, response }) => {
   const headers = new Headers(response.headers);
-  headers.set("X-Request-Id", String(c.locals.requestId));
+  headers.set("X-Request-Id", String(context.locals.requestId));
   
   return new Response(response.body, {
     status: response.status,
@@ -533,8 +532,7 @@ onResponse: (c, response) => {
 
 ```typescript
 type OnErrorHandler = (
-  error: unknown,
-  c: Context
+  params: { error: unknown, context: Context }
 ) => Response | Promise<Response>;
 ```
 
@@ -542,8 +540,8 @@ Handles **unexpected errors** that escape handlers.
 
 **Parameters**:
 
-- `error: unknown` — The thrown error
-- `c: Context` — Minimal context (might not have full data)
+- `params.error: unknown` — The thrown error
+- `params.context: Context` — Minimal context (might not have full data)
 
 **Returns**:
 
@@ -558,11 +556,11 @@ Handles **unexpected errors** that escape handlers.
 **Example**:
 
 ```typescript
-onError: (error, c) => {
+onError: ({ error, context }) => {
   console.error("Unexpected error:", {
     error,
-    requestId: c.locals.requestId,
-    path: c.request.url
+    requestId: context.locals.requestId,
+    path: context.request.url
   });
   
   return Response.json(
@@ -985,7 +983,7 @@ import { corsHeaders } from "@hectoday/http-helpers";
 
 const app = setup({
   handlers: [...],
-  onResponse: (c, response) => {
+  onResponse: ({ context, response }) => {
     const cors = corsHeaders({
       origin: "*",
       methods: ["GET", "POST", "PUT", "DELETE"],

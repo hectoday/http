@@ -361,22 +361,22 @@ const createUserRoute = route.post("/orgs/:orgId/users", {
 const app = setup({
   handlers: [createUserRoute],
   
-  onRequest: (request) => {
+  onRequest: ({ request }) => {
     return { requestId: crypto.randomUUID(), startTime: Date.now() };
   },
   
-  onResponse: (c, response) => {
-    const duration = Date.now() - (c.locals.startTime as number);
+  onResponse: ({ context, response }) => {
+    const duration = Date.now() - (context.locals.startTime as number);
     console.log({
-      requestId: c.locals.requestId,
-      method: c.request.method,
-      path: new URL(c.request.url).pathname,
+      requestId: context.locals.requestId,
+      method: context.request.method,
+      path: new URL(context.request.url).pathname,
       status: response.status,
       duration
     });
     
     const headers = new Headers(response.headers);
-    headers.set("X-Request-Id", String(c.locals.requestId));
+    headers.set("X-Request-Id", String(context.locals.requestId));
     
     return new Response(response.body, {
       status: response.status,
@@ -385,15 +385,15 @@ const app = setup({
     });
   },
   
-  onError: (error, c) => {
+  onError: ({ error, context }) => {
     console.error("Unexpected error:", {
-      requestId: c.locals.requestId,
+      requestId: context.locals.requestId,
       error,
-      path: new URL(c.request.url).pathname
+      path: new URL(context.request.url).pathname
     });
     
     return Response.json(
-      { error: "Internal server error", requestId: c.locals.requestId },
+      { error: "Internal server error", requestId: context.locals.requestId },
       { status: 500 }
     );
   }
@@ -702,18 +702,18 @@ route.get("/users/:id", {
 const app = setup({
   handlers: [...],
   
-  onRequest: (request) => {
+  onRequest: ({ request }) => {
     console.log(`→ ${request.method} ${new URL(request.url).pathname}`);
     return { startTime: Date.now() };
   },
   
-  onResponse: (c, response) => {
-    const duration = Date.now() - (c.locals.startTime as number);
+  onResponse: ({ context, response }) => {
+    const duration = Date.now() - (context.locals.startTime as number);
     console.log(`← ${response.status} (${duration}ms)`);
     return response;
   },
   
-  onError: (error, c) => {
+  onError: ({ error, context }) => {
     console.error(`✗ ${error}`);
     return Response.json({ error: "Internal error" }, { status: 500 });
   }

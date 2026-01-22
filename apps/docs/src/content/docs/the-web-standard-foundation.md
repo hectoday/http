@@ -425,10 +425,10 @@ if (!authorized) {
 
 // Instead: explicit hooks with clear jobs
 setup({
-  onRequest: (req) => ({ requestId: crypto.randomUUID() }), // Before routing
+  onRequest: ({ request }) => ({ requestId: crypto.randomUUID() }), // Before routing
   handlers: [...],
-  onResponse: (c, res) => addHeaders(res), // After handler
-  onError: (err, c) => handleError(err) // On throw
+  onResponse: ({ context, response }) => addHeaders(response), // After handler
+  onError: ({ error, context }) => handleError(error) // On throw
 });
 ```
 

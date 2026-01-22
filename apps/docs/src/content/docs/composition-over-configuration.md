@@ -664,7 +664,7 @@ Use in `onResponse`:
 const app = setup({
   handlers: [...],
   
-  onResponse: (c, response) => {
+  onResponse: ({ context, response }) => {
     const cors = corsHeaders({
       origin: "*",
       methods: ["GET", "POST", "PUT", "DELETE"],
@@ -714,13 +714,13 @@ Use in hooks:
 const app = setup({
   handlers: [...],
   
-  onRequest: (request) => {
+  onRequest: ({ request }) => {
     const requestId = request.headers.get("x-request-id") || generateRequestId();
     return { requestId };
   },
   
-  onResponse: (c, response) => {
-    return addRequestId(response, c.locals.requestId as string);
+  onResponse: ({ context, response }) => {
+    return addRequestId(response, context.locals.requestId as string);
   }
 });
 ```
