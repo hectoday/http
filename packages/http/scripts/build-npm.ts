@@ -15,7 +15,15 @@ await build({
   shims: {
     deno: false,
     undici: true,
-    urlPattern: true,
+    custom: [
+      {
+        package: {
+          name: "urlpattern-polyfill",
+          version: "^10.0.0",
+        },
+        globalNames: ["URLPattern"],
+      },
+    ],
   },
   compilerOptions: {
     lib: ["ES2022", "DOM", "DOM.Iterable"],
