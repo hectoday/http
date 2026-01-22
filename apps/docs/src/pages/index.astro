@@ -58,14 +58,11 @@ Deno.serve(app.fetch);`;
 
         <h2>Example</h2>
 
-        <div class="border border-[--color-border] overflow-clip rounded">
-            <Code
-                code={codeExample}
-                lang="ts"
-                theme={hectodayTheme as ThemeRegistration}
-                class="[&_pre]:m-0"
-            />
-        </div>
+        <Code
+            code={codeExample}
+            lang="ts"
+            theme={hectodayTheme as ThemeRegistration}
+        />
 
         <p class="mt-4">No wrappers. No custom response objects. Just HTTP.</p>
 
