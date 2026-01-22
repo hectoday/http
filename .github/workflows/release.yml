@@ -1,0 +1,185 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g., 0.2.0)"
+        required: true
+        type: string
+      publish-jsr:
+        description: "Publish to JSR"
+        required: false
+        type: boolean
+        default: true
+      publish-npm:
+        description: "Publish to npm"
+        required: false
+        type: boolean
+        default: true
+      dry-run:
+        description: "Run in dry-run mode (no actual publish)"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Run http package tests
+        working-directory: ./packages/http
+        run: deno test --allow-net
+
+      - name: Verify no slow types
+        working-directory: ./packages/http
+        run: deno publish --dry-run --allow-dirty
+
+  update-version:
+    name: Update Version
+    needs: test
+    if: inputs.dry-run == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Update deno.jsonc version
+        working-directory: ./packages/http
+        run: |
+          deno eval "
+            const config = JSON.parse(Deno.readTextFileSync('./deno.jsonc'));
+            config.version = '${{ inputs.version }}';
+            Deno.writeTextFileSync('./deno.jsonc', JSON.stringify(config, null, 2) + '\n');
+          "
+
+      - name: Update package.json version
+        working-directory: ./packages/http
+        run: |
+          deno eval "
+            const pkg = JSON.parse(Deno.readTextFileSync('./package.json'));
+            pkg.version = '${{ inputs.version }}';
+            Deno.writeTextFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+      - name: Commit version bump
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add packages/http/deno.jsonc packages/http/package.json
+          git commit -m "chore: bump version to ${{ inputs.version }}"
+          git push
+
+      - name: Create Git Tag
+        run: |
+          git tag "v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"
+
+  publish-jsr:
+    name: Publish to JSR
+    needs: update-version
+    if: inputs.publish-jsr == true && inputs.dry-run == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: "v${{ inputs.version }}"
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Publish to JSR
+        working-directory: ./packages/http
+        run: deno publish
+
+  publish-npm:
+    name: Publish to npm
+    needs: update-version
+    if: inputs.publish-npm == true && inputs.dry-run == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: "v${{ inputs.version }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Publish to npm
+        working-directory: ./packages/http
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+
+  dry-run:
+    name: Dry Run
+    needs: test
+    if: inputs.dry-run == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Dry run JSR publish
+        if: inputs.publish-jsr == true
+        working-directory: ./packages/http
+        run: |
+          echo "Would publish to JSR with version ${{ inputs.version }}"
+          deno publish --dry-run
+
+      - name: Dry run npm publish
+        if: inputs.publish-npm == true
+        working-directory: ./packages/http
+        run: |
+          echo "Would publish to npm with version ${{ inputs.version }}"
+          npm publish --dry-run --access public
