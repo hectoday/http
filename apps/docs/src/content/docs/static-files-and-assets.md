@@ -3,7 +3,7 @@ title: "Static Files and Assets"
 description: "Serving static files explicitly without magic conventions"
 order: 2
 part: 4
-draft: true
+draft: false
 ---
 
 Your API might need to serve static files: HTML pages, images, CSS, JavaScript bundles, or other assets.

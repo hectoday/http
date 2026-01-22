@@ -3,7 +3,7 @@ title: "Validation Without Control Flow"
 description: "Using validation to describe data, not control requests"
 order: 4
 part: 2
-draft: true
+draft: false
 ---
 
 You've extracted facts from the request. Now you need to know: **does this data match what you expect?**

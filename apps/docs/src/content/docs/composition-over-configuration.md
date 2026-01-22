@@ -3,7 +3,7 @@ title: "Composition Over Configuration"
 description: "Building larger APIs from small, reusable pieces"
 order: 4
 part: 3
-draft: true
+draft: false
 ---
 
 Small APIs are easy. One file, a few routes, done.

@@ -3,7 +3,7 @@ title: "The Request Lifecycle (Fully Explicit)"
 description: "Understanding the complete path of every request"
 order: 1
 part: 3
-draft: true
+draft: false
 ---
 
 You've seen the pieces. Now see how they fit together.

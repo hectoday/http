@@ -1,7 +1,7 @@
 ---
-title: "Zod Validator - Schema Validation Adapter"
+title: "Zod Validator: Schema Validation Adapter"
 description: "Validator adapter for using Zod schemas with Hectoday HTTP"
-draft: true
+draft: false
 ---
 
 A validator adapter that integrates Zod schemas with Hectoday HTTP's validation system.

@@ -3,7 +3,7 @@ title: "Security as a First-Class Concept"
 description: "Designing secure APIs with explicit security controls"
 order: 1
 part: 4
-draft: true
+draft: false
 ---
 
 Security isn't an afterthought. It's not middleware you add later. It's a core part of your API design.

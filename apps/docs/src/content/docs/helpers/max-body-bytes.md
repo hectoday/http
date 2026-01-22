@@ -1,7 +1,7 @@
 ---
-title: "maxBodyBytes - Limit Request Body Size"
+title: "maxBodyBytes: Limit Request Body Size"
 description: "Guard helper to limit request body size"
-draft: true
+draft: false
 ---
 
 A guard helper that limits request body size, protecting against large payloads.

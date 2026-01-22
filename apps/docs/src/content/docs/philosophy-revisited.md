@@ -3,7 +3,7 @@ title: "Philosophy (Revisited)"
 description: "Why Hectoday HTTP makes these design choices"
 order: 3
 part: 5
-draft: true
+draft: false
 ---
 
 You've read the concepts. You've seen the examples. You've studied the reference.

@@ -3,7 +3,7 @@ title: "Errors Are Responses"
 description: "Handling failures explicitly without exceptions"
 order: 3
 part: 3
-draft: true
+draft: false
 ---
 
 Not all requests succeed. Some fail because of invalid input. Some fail because of authorization. Some fail because of bugs.
