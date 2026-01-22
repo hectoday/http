@@ -460,20 +460,20 @@ route.get("/users", {
 const app = setup({
   handlers: [...],
   
-  onError: (error, c) => {
+  onError: ({ error, context }) => {
     // Log with context
     console.error("Unexpected error:", {
       error,
-      method: c.request.method,
-      url: c.request.url,
-      user: c.locals.user?.id
+      method: context.request.method,
+      url: context.request.url,
+      user: context.locals.user?.id
     });
     
     // Return sanitized error to client
     return Response.json(
       {
         error: "Internal server error",
-        requestId: c.locals.requestId
+        requestId: context.locals.requestId
       },
       { status: 500 }
     );

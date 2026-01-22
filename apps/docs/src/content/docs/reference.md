@@ -431,9 +431,9 @@ Bootstrap the Hectoday HTTP application.
 const app = setup({
   handlers: [...],
   validator: zodValidator,
-  onRequest: (req) => ({ requestId: crypto.randomUUID() }),
-  onResponse: (c, res) => res,
-  onError: (err, c) => Response.json({ error: "Internal error" }, { status: 500 })
+  onRequest: ({ request }) => ({ requestId: crypto.randomUUID() }),
+  onResponse: ({ context, response }) => response,
+  onError: ({ error, context }) => Response.json({ error: "Internal error" }, { status: 500 })
 });
 ```
 
@@ -461,7 +461,7 @@ interface Config {
 
 ```typescript
 type OnRequestHandler = (
-  request: Request
+  info: { request: Request }
 ) => void | Record<string, unknown> | Promise<void | Record<string, unknown>>;
 ```
 
@@ -469,13 +469,30 @@ Runs **before routing**, receives the raw Request.
 
 **Parameters**:
 
-- `request: Request` — The incoming request
+- `info.request: Request` — The incoming request
 
 **Returns**:
 
 - `void` — No locals to add
 - `Record<string, unknown>` — Locals to merge into context
 - `Promise` — Async version of above
+
+**Parameter Styles**:
+
+You can use either style:
+
+```typescript
+// Destructured (concise)
+onRequest: ({ request }) => {
+  return { requestId: crypto.randomUUID() };
+}
+
+// Named parameter (explicit)
+onRequest: (info) => {
+  const { request } = info;
+  return { requestId: crypto.randomUUID() };
+}
+```
 
 **Notes**:
 
@@ -486,7 +503,7 @@ Runs **before routing**, receives the raw Request.
 **Example**:
 
 ```typescript
-onRequest: (request) => {
+onRequest: ({ request }) => {
   return {
     requestId: crypto.randomUUID(),
     startTime: Date.now()
@@ -498,8 +515,7 @@ onRequest: (request) => {
 
 ```typescript
 type OnResponseHandler = (
-  c: Context,
-  response: Response
+  info: { context: Context; response: Response }
 ) => Response | Promise<Response>;
 ```
 
@@ -507,19 +523,40 @@ Runs **after handler**, can modify the response.
 
 **Parameters**:
 
-- `c: Context` — The request context
-- `response: Response` — The response from handler
+- `info.context: Context` — The request context
+- `info.response: Response` — The response from handler
 
 **Returns**:
 
 - `Response` — Modified or original response
 
+**Parameter Styles**:
+
+You can use either style:
+
+```typescript
+// Destructured (concise) - use only what you need
+onResponse: ({ response }) => {
+  const headers = new Headers(response.headers);
+  headers.set("x-powered-by", "hectoday");
+  return new Response(response.body, { status: response.status, headers });
+}
+
+// Named parameter (explicit)
+onResponse: (info) => {
+  const { context, response } = info;
+  const headers = new Headers(response.headers);
+  headers.set("x-request-id", context.locals.requestId);
+  return new Response(response.body, { status: response.status, headers });
+}
+```
+
 **Example**:
 
 ```typescript
-onResponse: (c, response) => {
+onResponse: ({ context, response }) => {
   const headers = new Headers(response.headers);
-  headers.set("X-Request-Id", String(c.locals.requestId));
+  headers.set("X-Request-Id", String(context.locals.requestId));
   
   return new Response(response.body, {
     status: response.status,
@@ -533,8 +570,7 @@ onResponse: (c, response) => {
 
 ```typescript
 type OnErrorHandler = (
-  error: unknown,
-  c: Context
+  info: { error: unknown; context: Context }
 ) => Response | Promise<Response>;
 ```
 
@@ -542,12 +578,37 @@ Handles **unexpected errors** that escape handlers.
 
 **Parameters**:
 
-- `error: unknown` — The thrown error
-- `c: Context` — Minimal context (might not have full data)
+- `info.error: unknown` — The thrown error
+- `info.context: Context` — Minimal context (might not have full data)
 
 **Returns**:
 
 - `Response` — Error response to send to client
+
+**Parameter Styles**:
+
+You can use either style:
+
+```typescript
+// Destructured (concise)
+onError: ({ error, context }) => {
+  console.error("Error:", error);
+  return Response.json({ error: "Internal Error" }, { status: 500 });
+}
+
+// Named parameter (explicit)
+onError: (info) => {
+  const { error, context } = info;
+  console.error(`Error for ${context.request.url}:`, error);
+  return Response.json({ error: "Internal Error" }, { status: 500 });
+}
+
+// Only need one property? Just destructure that
+onError: ({ error }) => {
+  console.error(error);
+  return Response.json({ error: "Internal Error" }, { status: 500 });
+}
+```
 
 **Notes**:
 
@@ -558,11 +619,11 @@ Handles **unexpected errors** that escape handlers.
 **Example**:
 
 ```typescript
-onError: (error, c) => {
+onError: ({ error, context }) => {
   console.error("Unexpected error:", {
     error,
-    requestId: c.locals.requestId,
-    path: c.request.url
+    requestId: context.locals.requestId,
+    path: context.request.url
   });
   
   return Response.json(
@@ -985,7 +1046,7 @@ import { corsHeaders } from "@hectoday/http-helpers";
 
 const app = setup({
   handlers: [...],
-  onResponse: (c, response) => {
+  onResponse: ({ context, response }) => {
     const cors = corsHeaders({
       origin: "*",
       methods: ["GET", "POST", "PUT", "DELETE"],

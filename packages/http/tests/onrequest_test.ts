@@ -136,10 +136,10 @@ Deno.test("onRequest: receives only Request, not full context", async () => {
         },
       }),
     ],
-    onRequest: (req) => {
-      const url = new URL(req.url);
+    onRequest: ({ request }) => {
+      const url = new URL(request.url);
       return {
-        method: req.method,
+        method: request.method,
         pathname: url.pathname,
         // Cannot access params - they don't exist yet
       };

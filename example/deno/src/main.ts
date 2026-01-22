@@ -204,20 +204,20 @@ const app = setup({
   validator: zodValidator,
   handlers: [...publicRoutes, ...protectedRoutes],
 
-  onRequest: (request) => {
+  onRequest: ({ request }) => {
     const requestId = request.headers.get("x-request-id") ||
       crypto.randomUUID();
     return { requestId };
   },
 
-  onResponse: (c, res) => {
+  onResponse: ({ context, response }) => {
     // Use requestId from locals (set by onRequest)
-    const requestId = String(c.locals.requestId);
-    const headers = new Headers(res.headers);
+    const requestId = String(context.locals.requestId);
+    const headers = new Headers(response.headers);
     headers.set("x-request-id", requestId);
-    return new Response(res.body, {
-      status: res.status,
-      statusText: res.statusText,
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
       headers,
     });
   },
