@@ -1,4 +1,4 @@
-import { route, setupHttp } from "../packages/http/mod.ts";
+import { route, setup } from "../packages/http/mod.ts";
 
 // Simple routes for benchmarking
 const root = route.get("/", {
@@ -17,7 +17,7 @@ const params = route.get("/users/:id", {
 });
 
 // Setup app
-const app = setupHttp({
+const app = setup({
   handlers: [root, json, params],
 });
 

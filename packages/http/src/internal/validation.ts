@@ -115,7 +115,7 @@ export function validateInputs(
   if (!validator) {
     throw new Error(
       "Validator is required when route defines request schemas. " +
-        "Please provide a validator in setupHttp() configuration.",
+        "Please provide a validator in setup() configuration.",
     );
   }
 

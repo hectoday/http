@@ -1,4 +1,4 @@
-import { route, setupHttp } from "@hectoday/http";
+import { route, setup } from "@hectoday/http";
 
 // Basic routes
 const health = route.get("/health", {
@@ -26,7 +26,7 @@ const echo = route.post("/echo", {
 });
 
 // Setup Hectoday HTTP app
-const app = setupHttp({
+const app = setup({
   handlers: [health, hello, echo],
 });
 

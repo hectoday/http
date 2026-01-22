@@ -4,7 +4,7 @@ import {
   type InferSchemaError,
   route,
   type SchemaLike,
-  setupHttp,
+  setup,
   type ValidateResult,
   type ValidationPart,
   type Validator,
@@ -91,7 +91,7 @@ function createMockValidator(): Validator<MockSchema<unknown>> {
 Deno.test(
   "validation: no schemas means c.input.ok is always true",
   async () => {
-    const app = setupHttp({
+    const app = setup({
       handlers: [
         route.get("/test", {
           resolve: (c) => {
@@ -114,7 +114,7 @@ Deno.test("validation: successful params validation", async () => {
     return { id: d.id };
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.get("/users/:id", {
@@ -149,7 +149,7 @@ Deno.test("validation: failed params validation", async () => {
     return { id: parseInt(d.id) };
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.get("/users/:id", {
@@ -190,7 +190,7 @@ Deno.test("validation: successful query validation", async () => {
     return { limit: parseInt(d.limit) };
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.get("/posts", {
@@ -219,7 +219,7 @@ Deno.test("validation: successful query validation", async () => {
 });
 
 Deno.test("validation: query handles arrays", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/search", {
         resolve: (c) => {
@@ -244,7 +244,7 @@ Deno.test("validation: successful body validation", async () => {
     return { name: d.name, age: d.age };
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.post("/users", {
@@ -284,7 +284,7 @@ Deno.test("validation: failed body validation", async () => {
     return { name: d.name, age: d.age };
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.post("/users", {
@@ -324,7 +324,7 @@ Deno.test(
       return data;
     });
 
-    const app = setupHttp({
+    const app = setup({
       validator: createMockValidator(),
       handlers: [
         route.post("/data", {
@@ -376,7 +376,7 @@ Deno.test("validation: multiple schema validations", async () => {
     return { include: d.include };
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.get("/posts/:id", {
@@ -414,7 +414,7 @@ Deno.test(
   async () => {
     const paramsSchema = createMockSchema(() => null);
 
-    const app = setupHttp({
+    const app = setup({
       validator: createMockValidator(),
       handlers: [
         route.get("/test/:id", {
@@ -443,7 +443,7 @@ Deno.test(
 );
 
 Deno.test("validation: body only parsed when body schema exists", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.post("/data", {
         // No body schema - body should NOT be parsed
@@ -474,7 +474,7 @@ Deno.test("validation: body parsed when body schema defined", async () => {
     return data;
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.post("/data", {
@@ -510,7 +510,7 @@ Deno.test("validation: empty body treated as undefined", async () => {
     return data;
   });
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.post("/data", {
@@ -541,7 +541,7 @@ Deno.test("validation: empty body treated as undefined", async () => {
 Deno.test("validation: validator required when schemas exist", async () => {
   const bodySchema = createMockSchema((data: unknown) => data);
 
-  const app = setupHttp({
+  const app = setup({
     // No validator provided!
     handlers: [
       route.post("/data", {
@@ -572,7 +572,7 @@ Deno.test("validation: multiple parts fail accumulates issues", async () => {
   const querySchema = createMockSchema(() => null);
   const bodySchema = createMockSchema(() => null);
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.post("/test/:id", {
@@ -622,7 +622,7 @@ Deno.test(
       return { id: d.id };
     });
 
-    const app = setupHttp({
+    const app = setup({
       validator: createMockValidator(),
       handlers: [
         route.get("/users/:id", {
@@ -656,7 +656,7 @@ Deno.test("validation: guards run after validation", async () => {
 
   let guardCalled = false;
 
-  const app = setupHttp({
+  const app = setup({
     validator: createMockValidator(),
     handlers: [
       route.post("/data", {

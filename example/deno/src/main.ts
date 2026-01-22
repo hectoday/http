@@ -1,4 +1,4 @@
-import { group, type GuardFn, route, setupHttp } from "@hectoday/http";
+import { group, type GuardFn, route, setup } from "@hectoday/http";
 import { zodValidator } from "@hectoday/http-helpers";
 import { maxBodyBytes, SIZES } from "@hectoday/http-helpers";
 import { z } from "zod";
@@ -200,7 +200,7 @@ const protectedRoutes = group({
   handlers: [protectedHandler, createUserHandler],
 });
 
-const app = setupHttp({
+const app = setup({
   validator: zodValidator,
   handlers: [...publicRoutes, ...protectedRoutes],
 

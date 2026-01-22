@@ -31,7 +31,7 @@ const defaultOnError: OnErrorHandler = (error, _c) => {
   return Response.json({ error: "Internal Server Error" }, { status: 500 });
 };
 
-// Configuration options for setupHttp
+// Configuration options for setup
 export interface Config {
   /** Route handlers to register */
   handlers: Handler[];
@@ -55,7 +55,7 @@ export interface Config {
  *
  * @example
  * ```ts
- * const app = setupHttp({
+ * const app = setup({
  *   handlers: [
  *     route.get("/hello", {
  *       resolve: () => new Response("Hello world"),
@@ -66,7 +66,7 @@ export interface Config {
  * Deno.serve(app.fetch);
  * ```
  */
-export function setupHttp(config: Handler[] | Config): {
+export function setup(config: Handler[] | Config): {
   fetch: (req: Request) => Promise<Response>;
 } {
   // Support both array of handlers (legacy) and config object
