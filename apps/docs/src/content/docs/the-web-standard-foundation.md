@@ -3,7 +3,7 @@ title: "The Web Standard Foundation"
 description: "How Web Standards provide the primitives for HTTP servers"
 order: 1
 part: 2
-draft: true
+draft: false
 ---
 
 The mental model from Chapter 1 needs concrete primitives. Fortunately, they already exist: the **Fetch API**.

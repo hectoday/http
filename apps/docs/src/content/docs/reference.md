@@ -3,7 +3,7 @@ title: "Reference"
 description: "Complete API reference for Hectoday HTTP"
 order: 2
 part: 5
-draft: true
+draft: false
 ---
 
 This is the complete API reference. Use it when you need exact details about types, signatures, and behavior.

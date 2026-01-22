@@ -75,9 +75,11 @@ jobs:
         working-directory: ./packages/http
         run: |
           deno eval "
-            const config = JSON.parse(Deno.readTextFileSync('./deno.jsonc'));
+            import { parse, stringify } from 'jsr:@std/jsonc';
+            const content = Deno.readTextFileSync('./deno.jsonc');
+            const config = parse(content);
             config.version = '${{ inputs.version }}';
-            Deno.writeTextFileSync('./deno.jsonc', JSON.stringify(config, null, 2) + '\n');
+            Deno.writeTextFileSync('./deno.jsonc', stringify(config, { space: 2 }) + '\n');
           "
 
       - name: Update jsr.json version

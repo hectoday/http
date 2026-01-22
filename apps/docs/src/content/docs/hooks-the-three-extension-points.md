@@ -3,7 +3,7 @@ title: "Hooks: The Three Extension Points"
 description: "Understanding onRequest, onResponse, and onError hooks"
 order: 2
 part: 3
-draft: true
+draft: false
 ---
 
 Hectoday HTTP has exactly three hooks. Not middleware chains. Not plugins. Three specific extension points with clear jobs.
