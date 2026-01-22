@@ -25,13 +25,28 @@ Deno.serve(app.fetch);`;
 >
     <Hero />
 
-    <article class="prose">
-        <WarningBanner
-            message="This framework is under development and imperfections may occur."
-        />
+    <WarningBanner
+        message="This framework is under development and imperfections may occur."
+    />
 
-        <p class="text-xl leading-relaxed mb-8 font-medium">
-            An explicit, standards-first HTTP framework built for learning.
+    <article class="prose">
+        <h2>Install</h2>
+
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-black/50 w-12">npm</span>
+                <code class="flex-1 text-sm">npm install @hectoday/http</code>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-black/50 w-12">deno</span>
+                <code class="flex-1 text-sm">deno add jsr:@hectoday/http</code>
+            </div>
+        </div>
+
+        <p class="mt-4">
+            Runs on <strong>Deno</strong>, <strong>Bun</strong>, and <strong
+                >Cloudflare Workers</strong
+            >.
         </p>
 
         <hr />
