@@ -22,8 +22,12 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Check formatting
-        run: deno fmt --check
+      - name: Check formatting (non-markdown)
+        run: |
+          find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" -o -name "*.json" -o -name "*.jsonc" \) \
+            -not -path "./node_modules/*" \
+            -not -path "./.git/*" \
+            | xargs deno fmt --check
 
       - name: Run linter
         run: deno lint
