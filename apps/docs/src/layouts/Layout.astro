@@ -1,5 +1,6 @@
 ---
 import "~/styles/global.css";
+import Footer from "~/components/Footer.astro";
 
 interface Props {
     title: string;
@@ -35,6 +36,9 @@ const { title, description } = Astro.props;
     <body
         class="max-w-3xl mx-auto px-8 py-8 bg-white text-black leading-relaxed"
     >
-        <slot />
+        <main>
+            <slot />
+        </main>
+        <Footer />
     </body>
 </html>

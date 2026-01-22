@@ -4,7 +4,9 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import deno from "@deno/astro-adapter";
 import type { ThemeRegistration } from "shiki";
-import hectodayTheme from "./src/styles/hectoday.shiki.json";
+import hectodayTheme from "./src/styles/hectoday.shiki.json" with {
+  type: "json",
+};
 
 // https://astro.build/config
 export default defineConfig({

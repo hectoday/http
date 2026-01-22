@@ -1,0 +1,26 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="mt-16 pt-8 border-t border-[--color-border]">
+    <nav
+        aria-label="Footer"
+        class="flex flex-wrap gap-x-6 gap-y-2 text-base font-medium mb-6"
+    >
+        <a href="/docs" class="hover:opacity-60 transition-opacity">Docs</a>
+        <a
+            href="https://github.com/hectoday/http"
+            rel="noopener noreferrer"
+            class="hover:opacity-60 transition-opacity">GitHub</a
+        >
+        <a
+            href="https://jsr.io/@hectoday/http"
+            rel="noopener noreferrer"
+            class="hover:opacity-60 transition-opacity">JSR</a
+        >
+    </nav>
+    <p class="text-sm text-black/60">
+        <span aria-label="Copyright">&copy;</span>
+        {currentYear} Hectoday. MIT License.
+    </p>
+</footer>

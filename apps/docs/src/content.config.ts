@@ -8,6 +8,7 @@ const docs = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     order: z.number().optional(),
+    part: z.number().optional(),
     draft: z.boolean().default(true),
   }),
 });

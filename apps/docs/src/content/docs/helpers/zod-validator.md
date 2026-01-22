@@ -9,28 +9,39 @@ A validator adapter that integrates Zod schemas with Hectoday HTTP's validation 
 ## The Code
 
 ```typescript
-import type { Validator } from "@hectoday/http";
-import type { ZodSchema } from "zod";
+import type {
+  InferSchema,
+  InferSchemaError,
+  ValidateResult,
+  ValidationIssue,
+  ValidationPart,
+  Validator,
+} from "@hectoday/http";
+import type { ZodType } from "zod";
 
-export const zodValidator: Validator<ZodSchema> = {
-  safeParse: (schema: ZodSchema, data: unknown) => {
-    const result = schema.safeParse(data);
-    
+export const zodValidator: Validator<ZodType> = {
+  validate<S extends ZodType>(
+    schema: S,
+    input: unknown,
+    part: ValidationPart,
+  ): ValidateResult<InferSchema<S>, InferSchemaError<S>> {
+    const result = schema.safeParse(input);
+
     if (result.success) {
-      return {
-        success: true,
-        data: result.data,
-      };
+      return { ok: true, value: result.data as InferSchema<S> };
     }
-    
+
+    const issues: ValidationIssue[] = result.error.issues.map((issue) => ({
+      part,
+      path: issue.path.map(String),
+      message: issue.message,
+      code: issue.code,
+    }));
+
     return {
-      success: false,
-      error: {
-        issues: result.error.issues.map((issue) => ({
-          path: issue.path,
-          message: issue.message,
-        })),
-      },
+      ok: false,
+      issues,
+      error: result.error as InferSchemaError<S>,
     };
   },
 };
@@ -378,19 +389,24 @@ The validator adapter implements the `Validator` interface:
 
 ```typescript
 interface Validator<TSchema> {
-  safeParse: (
-    schema: TSchema,
-    data: unknown
-  ) => SafeParseResult;
+  validate<S extends TSchema>(
+    schema: S,
+    input: unknown,
+    part: ValidationPart,
+  ): ValidateResult<InferSchema<S>, InferSchemaError<S>>;
 }
 
-type SafeParseResult =
-  | { success: true; data: unknown }
-  | { success: false; error: { issues: ValidationIssue[] } };
+type ValidationPart = "params" | "query" | "body";
+
+type ValidateResult<T, TRawErr = unknown> =
+  | { ok: true; value: T }
+  | { ok: false; issues: readonly ValidationIssue[]; error?: TRawErr };
 
 interface ValidationIssue {
-  path: (string | number)[];
+  part: ValidationPart;
+  path: readonly string[];
   message: string;
+  code?: string;
 }
 ```
 
@@ -401,28 +417,25 @@ You can create adapters for other validation libraries:
 ### Valibot
 
 ```typescript
-import type { Validator } from "@hectoday/http";
+import type { ValidationPart, Validator } from "@hectoday/http";
 import * as v from "valibot";
 
 export const valibotValidator: Validator<v.BaseSchema> = {
-  safeParse: (schema, data) => {
-    const result = v.safeParse(schema, data);
-    
+  validate<S extends v.BaseSchema>(schema: S, input: unknown, part: ValidationPart) {
+    const result = v.safeParse(schema, input);
+
     if (result.success) {
-      return {
-        success: true,
-        data: result.output,
-      };
+      return { ok: true as const, value: result.output };
     }
-    
+
     return {
-      success: false,
-      error: {
-        issues: result.issues.map((issue) => ({
-          path: issue.path?.map((p) => p.key) ?? [],
-          message: issue.message,
-        })),
-      },
+      ok: false as const,
+      issues: result.issues.map((issue) => ({
+        part,
+        path: issue.path?.map((p) => String(p.key)) ?? [],
+        message: issue.message,
+      })),
+      error: result.issues,
     };
   },
 };
@@ -431,27 +444,25 @@ export const valibotValidator: Validator<v.BaseSchema> = {
 ### Yup
 
 ```typescript
-import type { Validator } from "@hectoday/http";
-import type { AnySchema } from "yup";
+import type { ValidationPart, Validator } from "@hectoday/http";
+import type { AnySchema, ValidationError } from "yup";
 
 export const yupValidator: Validator<AnySchema> = {
-  safeParse: async (schema, data) => {
+  validate<S extends AnySchema>(schema: S, input: unknown, part: ValidationPart) {
     try {
-      const validated = await schema.validate(data, { abortEarly: false });
-      return {
-        success: true,
-        data: validated,
-      };
+      const validated = schema.validateSync(input, { abortEarly: false });
+      return { ok: true as const, value: validated };
     } catch (error) {
-      if (error.name === "ValidationError") {
+      if ((error as ValidationError).name === "ValidationError") {
+        const validationError = error as ValidationError;
         return {
-          success: false,
-          error: {
-            issues: error.inner.map((err) => ({
-              path: err.path?.split(".") ?? [],
-              message: err.message,
-            })),
-          },
+          ok: false as const,
+          issues: validationError.inner.map((err) => ({
+            part,
+            path: err.path?.split(".") ?? [],
+            message: err.message,
+          })),
+          error: validationError,
         };
       }
       throw error;

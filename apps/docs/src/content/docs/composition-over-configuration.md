@@ -1,7 +1,8 @@
 ---
 title: "Composition Over Configuration"
 description: "Building larger APIs from small, reusable pieces"
-order: 10
+order: 4
+part: 3
 draft: true
 ---
 

@@ -1,7 +1,80 @@
-import { group, type GuardFn, route, setup } from "@hectoday/http";
-import { zodValidator } from "@hectoday/http-helpers";
-import { maxBodyBytes, SIZES } from "@hectoday/http-helpers";
-import { z } from "zod";
+import {
+  group,
+  type GuardFn,
+  type InferSchema,
+  type InferSchemaError,
+  route,
+  setup,
+  type ValidateResult,
+  type ValidationIssue,
+  type ValidationPart,
+  type Validator,
+} from "@hectoday/http";
+import { z, type ZodType } from "zod";
+
+// ============================================================================
+// Helpers (copy-paste patterns from docs)
+// ============================================================================
+
+const zodValidator: Validator<ZodType> = {
+  validate<S extends ZodType>(
+    schema: S,
+    input: unknown,
+    part: ValidationPart,
+  ): ValidateResult<InferSchema<S>, InferSchemaError<S>> {
+    const result = schema.safeParse(input);
+
+    if (result.success) {
+      return { ok: true, value: result.data as InferSchema<S> };
+    }
+
+    const issues: ValidationIssue[] = result.error.issues.map((issue) => ({
+      part,
+      path: issue.path.map(String),
+      message: issue.message,
+      code: issue.code,
+    }));
+
+    return {
+      ok: false,
+      issues,
+      error: result.error as InferSchemaError<S>,
+    };
+  },
+};
+
+const SIZES = {
+  KB: 1024,
+  MB: 1024 * 1024,
+  GB: 1024 * 1024 * 1024,
+};
+
+function maxBodyBytes(max: number): GuardFn {
+  return (c) => {
+    const contentLength = c.request.headers.get("content-length");
+
+    if (!contentLength) {
+      return { allow: true };
+    }
+
+    const size = parseInt(contentLength, 10);
+
+    if (size > max) {
+      return {
+        deny: Response.json(
+          {
+            error: "Request body too large",
+            maxBytes: max,
+            receivedBytes: size,
+          },
+          { status: 413 },
+        ),
+      };
+    }
+
+    return { allow: true };
+  };
+}
 
 // ============================================================================
 // Guards

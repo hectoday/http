@@ -1,7 +1,8 @@
 ---
 title: "Security as a First-Class Concept"
 description: "Designing secure APIs with explicit security controls"
-order: 11
+order: 1
+part: 4
 draft: true
 ---
 

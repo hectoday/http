@@ -1,7 +1,8 @@
 ---
 title: "Guards: Making Decisions Explicit"
 description: "Using guards to control request flow explicitly"
-order: 7
+order: 5
+part: 2
 draft: true
 ---
 

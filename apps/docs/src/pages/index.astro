@@ -8,13 +8,13 @@ import hectodayTheme from "~/styles/hectoday.shiki.json";
 
 const codeExample = `import { route, setup } from "@hectoday/http";
 
-const app = setup([
-  route.get("/", {
-    resolve: () => {
-      return new Response("Hello HTTP");
-    },
-  }),
-]);
+const app = setup({
+  handlers: [
+    route.get("/", {
+      resolve: () => new Response("Hello HTTP"),
+    }),
+  ],
+});
 
 Deno.serve(app.fetch);`;
 ---
@@ -25,13 +25,28 @@ Deno.serve(app.fetch);`;
 >
     <Hero />
 
-    <div class="prose">
-        <WarningBanner
-            message="This framework is under development and imperfections may occur."
-        />
+    <WarningBanner
+        message="This framework is under development and imperfections may occur."
+    />
 
-        <p class="text-xl leading-relaxed mb-8 font-medium">
-            An explicit, standards-first HTTP framework built for learning.
+    <article class="prose">
+        <h2>Install</h2>
+
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-black/50 w-12">npm</span>
+                <code class="flex-1 text-sm">npm install @hectoday/http</code>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-black/50 w-12">deno</span>
+                <code class="flex-1 text-sm">deno add jsr:@hectoday/http</code>
+            </div>
+        </div>
+
+        <p class="mt-4">
+            Runs on <strong>Deno</strong>, <strong>Bun</strong>, and <strong
+                >Cloudflare Workers</strong
+            >.
         </p>
 
         <hr />
@@ -58,14 +73,11 @@ Deno.serve(app.fetch);`;
 
         <h2>Example</h2>
 
-        <div class="border border-[--color-border] overflow-clip rounded">
-            <Code
-                code={codeExample}
-                lang="ts"
-                theme={hectodayTheme as ThemeRegistration}
-                class="[&_pre]:m-0"
-            />
-        </div>
+        <Code
+            code={codeExample}
+            lang="ts"
+            theme={hectodayTheme as ThemeRegistration}
+        />
 
         <p class="mt-4">No wrappers. No custom response objects. Just HTTP.</p>
 
@@ -112,18 +124,5 @@ Deno.serve(app.fetch);`;
                 Learn the protocol. Then build the abstractions.
             </p>
         </blockquote>
-
-        <hr />
-        <nav class="space-x-6 text-base font-medium">
-            <a href="/docs" class="hover:opacity-60 transition-opacity">Docs</a>
-            <a
-                href="https://github.com/hectoday/http"
-                class="hover:opacity-60 transition-opacity">GitHub</a
-            >
-            <a
-                href="https://jsr.io/@hectoday/http"
-                class="hover:opacity-60 transition-opacity">JSR</a
-            >
-        </nav>
-    </div>
+    </article>
 </Layout>

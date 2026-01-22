@@ -33,8 +33,10 @@ const backLink = showDrafts && !isDev ? "/docs?drafts" : "/docs";
     title={`${doc.data.title} - @hectoday/http`}
     description={doc.data.description}
 >
-    <nav>
-        <a href={backLink}>← Back to docs</a>
+    <nav aria-label="Breadcrumb" class="mb-8">
+        <a href={backLink} class="hover:opacity-60 transition-opacity"
+            >← Back to docs</a
+        >
     </nav>
 
     {
@@ -51,9 +53,3 @@ const backLink = showDrafts && !isDev ? "/docs?drafts" : "/docs";
         <Content />
     </article>
 </Layout>
-
-<style>
-    nav {
-        margin-bottom: 2rem;
-    }
-</style>

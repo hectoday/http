@@ -5,13 +5,15 @@ interface Props {
 }
 
 const { message, type = "warning" } = Astro.props;
-const label = type === "draft" ? "DRAFT:" : "WARNING:";
+const label = type === "draft" ? "Draft" : "Warning";
 ---
 
-<div
-    class="bg-[#fff3cd] border-2 border-[#ffc107] p-4 mb-8 text-[#856404]"
+<aside
+    role="note"
+    aria-label={label}
+    class="bg-[#fff3cd] border-2 border-[#ffc107] p-4 mb-8 text-[#6d5514]"
     style="border-style: solid;"
 >
-    <strong class="font-bold">{label}</strong>
+    <strong class="font-bold">{label}:</strong>
     {message}
-</div>
+</aside>

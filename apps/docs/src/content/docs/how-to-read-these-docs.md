@@ -1,7 +1,8 @@
 ---
 title: "How to Read These Docs"
 description: "A guide to understanding Hectoday HTTP's documentation structure"
-order: 1
+order: 2
+part: 1
 draft: true
 ---
 
@@ -89,7 +90,7 @@ Once you understand the model, tasks become obvious.
 
 You won't find recipes like "how to handle file uploads" or "how to add CORS." Instead, you'll learn the primitives, and recipes become trivial.
 
-(We do provide helpers for common patterns, but they're documented as **examples of composition**, not magical solutions.)
+(We do provide helpers for common patterns—listed separately at the bottom of the documentation index—but they're documented as **examples of composition**, not magical solutions.)
 
 ### Not Comprehensive on First Read
 
