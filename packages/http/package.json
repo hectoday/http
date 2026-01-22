@@ -1,25 +1,10 @@
 {
   "name": "@hectoday/http",
   "version": "0.1.3",
+  "private": true,
   "description": "A minimal, explicit web framework built on Web Standards with deterministic control flow and no magic responses",
-  "type": "module",
-  "main": "./mod.ts",
-  "module": "./mod.ts",
-  "types": "./mod.ts",
-  "exports": {
-    ".": "./mod.ts"
-  },
-  "files": [
-    "mod.ts",
-    "src/**/*.ts",
-    "README.md",
-    "LICENSE"
-  ],
   "scripts": {
-    "test": "deno test --allow-net",
-    "lint": "deno lint",
-    "fmt": "deno fmt",
-    "fmt:check": "deno fmt --check"
+    "build": "deno run -A scripts/build-npm.ts"
   },
   "keywords": [
     "http",

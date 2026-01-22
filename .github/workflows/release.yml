@@ -45,13 +45,14 @@ jobs:
         working-directory: ./packages/http
         run: deno publish --dry-run --allow-dirty
 
-  update-version:
-    name: Update Version
+  publish:
+    name: Publish
     needs: test
     if: inputs.dry-run == false
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
 
     steps:
       - name: Checkout code
@@ -64,6 +65,12 @@ jobs:
         with:
           deno-version: v2.x
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
       - name: Update deno.jsonc version
         working-directory: ./packages/http
         run: |
@@ -71,6 +78,15 @@ jobs:
             const config = JSON.parse(Deno.readTextFileSync('./deno.jsonc'));
             config.version = '${{ inputs.version }}';
             Deno.writeTextFileSync('./deno.jsonc', JSON.stringify(config, null, 2) + '\n');
+          "
+
+      - name: Update jsr.json version
+        working-directory: ./packages/http
+        run: |
+          deno eval "
+            const config = JSON.parse(Deno.readTextFileSync('./jsr.json'));
+            config.version = '${{ inputs.version }}';
+            Deno.writeTextFileSync('./jsr.json', JSON.stringify(config, null, 2) + '\n');
           "
 
       - name: Update package.json version
@@ -82,11 +98,27 @@ jobs:
             Deno.writeTextFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
           "
 
+      - name: Build npm package
+        working-directory: ./packages/http
+        run: deno run -A scripts/build-npm.ts ${{ inputs.version }}
+
+      - name: Publish to JSR
+        if: inputs.publish-jsr == true
+        working-directory: ./packages/http
+        run: deno publish --allow-dirty
+
+      - name: Publish to npm
+        if: inputs.publish-npm == true
+        working-directory: ./packages/http/dist
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+
       - name: Commit version bump
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add packages/http/deno.jsonc packages/http/package.json
+          git add packages/http/deno.jsonc packages/http/jsr.json packages/http/package.json
           git commit -m "chore: bump version to ${{ inputs.version }}"
           git push
 
@@ -94,57 +126,6 @@ jobs:
         run: |
           git tag "v${{ inputs.version }}"
           git push origin "v${{ inputs.version }}"
-
-  publish-jsr:
-    name: Publish to JSR
-    needs: update-version
-    if: inputs.publish-jsr == true && inputs.dry-run == false
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          ref: "v${{ inputs.version }}"
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-
-      - name: Publish to JSR
-        working-directory: ./packages/http
-        run: deno publish
-
-  publish-npm:
-    name: Publish to npm
-    needs: update-version
-    if: inputs.publish-npm == true && inputs.dry-run == false
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          ref: "v${{ inputs.version }}"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Publish to npm
-        working-directory: ./packages/http
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
 
   dry-run:
     name: Dry Run
@@ -177,9 +158,14 @@ jobs:
           echo "Would publish to JSR with version ${{ inputs.version }}"
           deno publish --dry-run
 
-      - name: Dry run npm publish
+      - name: Build npm package
         if: inputs.publish-npm == true
         working-directory: ./packages/http
+        run: deno run -A scripts/build-npm.ts ${{ inputs.version }}
+
+      - name: Dry run npm publish
+        if: inputs.publish-npm == true
+        working-directory: ./packages/http/dist
         run: |
           echo "Would publish to npm with version ${{ inputs.version }}"
           npm publish --dry-run --access public
