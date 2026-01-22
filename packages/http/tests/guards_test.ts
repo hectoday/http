@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { group, type GuardFn, route, setupHttp } from "../mod.ts";
+import { group, type GuardFn, route, setup } from "../mod.ts";
 
 Deno.test("guard allows request when returning null", async () => {
   const authGuard: GuardFn = () => ({ allow: true });
@@ -13,7 +13,7 @@ Deno.test("guard allows request when returning null", async () => {
     guards: [authGuard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   const response = await app.fetch(new Request("http://localhost/protected"));
 
   assertEquals(response.status, 200);
@@ -32,7 +32,7 @@ Deno.test("guard allows request when returning undefined", async () => {
     guards: [authGuard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   const response = await app.fetch(new Request("http://localhost/protected"));
 
   assertEquals(response.status, 200);
@@ -53,7 +53,7 @@ Deno.test("guard rejects request when returning Response", async () => {
     guards: [authGuard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   const response = await app.fetch(new Request("http://localhost/protected"));
 
   assertEquals(response.status, 401);
@@ -78,7 +78,7 @@ Deno.test("guard has access to request headers", async () => {
     guards: [authGuard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
 
   // Without auth header
   const response1 = await app.fetch(new Request("http://localhost/protected"));
@@ -111,7 +111,7 @@ Deno.test("guard has access to request params", async () => {
     guards: [paramGuard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   await app.fetch(new Request("http://localhost/users/123"));
 
   assertEquals(capturedUserId, "123");
@@ -134,7 +134,7 @@ Deno.test("guard has access to request object", async () => {
     guards: [methodGuard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
 
   const getResponse = await app.fetch(new Request("http://localhost/test"));
   assertEquals(getResponse.status, 200);
@@ -172,7 +172,7 @@ Deno.test("multiple guards execute in order", async () => {
     guards: [guard1, guard2, guard3],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   await app.fetch(new Request("http://localhost/test"));
 
   assertEquals(executionOrder, [1, 2, 3]);
@@ -205,7 +205,7 @@ Deno.test("guards stop execution on first rejection", async () => {
     guards: [guard1, guard2, guard3],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   const response = await app.fetch(new Request("http://localhost/test"));
 
   assertEquals(response.status, 403);
@@ -231,7 +231,7 @@ Deno.test("handler not executed if guard rejects", async () => {
     guards: [guard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   await app.fetch(new Request("http://localhost/test"));
 
   assertEquals(handlerExecuted, false);
@@ -264,7 +264,7 @@ Deno.test("nested group guards execute outer-first", async () => {
     guards: [outerGuard],
   });
 
-  const app = setupHttp(outerHandlers);
+  const app = setup(outerHandlers);
   await app.fetch(new Request("http://localhost/api/users"));
 
   assertEquals(executionOrder, ["outer", "inner"]);
@@ -290,7 +290,7 @@ Deno.test("async guards work correctly", async () => {
     guards: [asyncGuard],
   });
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
 
   const response1 = await app.fetch(new Request("http://localhost/protected"));
   assertEquals(response1.status, 401);
@@ -320,7 +320,7 @@ Deno.test(
       guards: [authGuard],
     };
 
-    const app = setupHttp([
+    const app = setup([
       route.get("/public", {
         resolve: () => new Response("Public"),
       }),
@@ -370,7 +370,7 @@ Deno.test("guard can attach locals via allow result", async () => {
     }),
   ];
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   const response = await app.fetch(new Request("http://localhost/profile"));
 
   assertEquals(response.status, 200);
@@ -408,7 +408,7 @@ Deno.test("multiple guards merge locals in order", async () => {
     }),
   ];
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   const response = await app.fetch(new Request("http://localhost/admin"));
 
   assertEquals(response.status, 200);
@@ -450,7 +450,7 @@ Deno.test("later guard locals override earlier ones", async () => {
     }),
   ];
 
-  const app = setupHttp(handlers);
+  const app = setup(handlers);
   const response = await app.fetch(new Request("http://localhost/test"));
 
   assertEquals(response.status, 200);

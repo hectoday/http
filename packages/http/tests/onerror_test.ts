@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
-import { route, setupHttp } from "../mod.ts";
+import { route, setup } from "../mod.ts";
 
 Deno.test("onError: receives error and context", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {
@@ -30,7 +30,7 @@ Deno.test("onError: receives error and context", async () => {
 });
 
 Deno.test("onError: can access locals from context", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {
@@ -59,7 +59,7 @@ Deno.test("onError: can access locals from context", async () => {
 });
 
 Deno.test("onError: can access route params from context", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/users/:id/fail", {
         resolve: () => {
@@ -85,7 +85,7 @@ Deno.test("onError: can access route params from context", async () => {
 });
 
 Deno.test("onError: default handler logs and returns 500", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {
@@ -103,7 +103,7 @@ Deno.test("onError: default handler logs and returns 500", async () => {
 });
 
 Deno.test("onError: async handler works", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {
@@ -130,7 +130,7 @@ Deno.test("onError: async handler works", async () => {
 });
 
 Deno.test("onError: handles errors from guards", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         guards: [

@@ -1,15 +1,15 @@
 // runtime_test.ts
 
 import { assertEquals } from "@std/assert";
-import { route, setupHttp, type Validator } from "../mod.ts";
+import { route, setup, type Validator } from "../mod.ts";
 
-Deno.test("setupHttp returns object with fetch method", () => {
-  const app = setupHttp([]);
+Deno.test("setup returns object with fetch method", () => {
+  const app = setup([]);
   assertEquals(typeof app.fetch, "function");
 });
 
-Deno.test("setupHttp.fetch matches GET route", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch matches GET route", async () => {
+  const app = setup([
     route.get("/hello", {
       resolve: () => new Response("Hello World"),
     }),
@@ -22,8 +22,8 @@ Deno.test("setupHttp.fetch matches GET route", async () => {
   assertEquals(await res.text(), "Hello World");
 });
 
-Deno.test("setupHttp.fetch matches POST route", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch matches POST route", async () => {
+  const app = setup([
     route.post("/data", {
       resolve: () => new Response("Posted"),
     }),
@@ -36,8 +36,8 @@ Deno.test("setupHttp.fetch matches POST route", async () => {
   assertEquals(await res.text(), "Posted");
 });
 
-Deno.test("setupHttp.fetch returns 404 for unmatched path", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch returns 404 for unmatched path", async () => {
+  const app = setup([
     route.get("/exists", {
       resolve: () => new Response("OK"),
     }),
@@ -50,8 +50,8 @@ Deno.test("setupHttp.fetch returns 404 for unmatched path", async () => {
   assertEquals(await res.text(), "Not Found");
 });
 
-Deno.test("setupHttp.fetch returns 404 for unmatched method", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch returns 404 for unmatched method", async () => {
+  const app = setup([
     route.get("/test", {
       resolve: () => new Response("OK"),
     }),
@@ -63,7 +63,7 @@ Deno.test("setupHttp.fetch returns 404 for unmatched method", async () => {
   assertEquals(res.status, 404);
 });
 
-Deno.test("setupHttp.fetch handler receives request and body", async () => {
+Deno.test("setup.fetch handler receives request and body", async () => {
   // Simple schema that accepts anything
   const bodySchema = {
     safeParse: (data: unknown) =>
@@ -83,7 +83,7 @@ Deno.test("setupHttp.fetch handler receives request and body", async () => {
     },
   } as Validator<typeof bodySchema>;
 
-  const app = setupHttp({
+  const app = setup({
     validator,
     handlers: [
       route.post("/echo", {
@@ -109,8 +109,8 @@ Deno.test("setupHttp.fetch handler receives request and body", async () => {
   assertEquals(await res.json(), { message: "test body" });
 });
 
-Deno.test("setupHttp.fetch matches HEAD route", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch matches HEAD route", async () => {
+  const app = setup([
     route.head("/resource", {
       resolve: () =>
         new Response(null, {
@@ -126,8 +126,8 @@ Deno.test("setupHttp.fetch matches HEAD route", async () => {
   assertEquals(res.headers.get("Content-Length"), "100");
 });
 
-Deno.test("setupHttp.fetch matches PATCH route", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch matches PATCH route", async () => {
+  const app = setup([
     route.patch("/users/1", {
       resolve: () => new Response("Patched"),
     }),
@@ -140,8 +140,8 @@ Deno.test("setupHttp.fetch matches PATCH route", async () => {
   assertEquals(await res.text(), "Patched");
 });
 
-Deno.test("setupHttp.fetch matches OPTIONS route", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch matches OPTIONS route", async () => {
+  const app = setup([
     route.options("/api", {
       resolve: () =>
         new Response(null, {
@@ -157,8 +157,8 @@ Deno.test("setupHttp.fetch matches OPTIONS route", async () => {
   assertEquals(res.headers.get("Allow"), "GET, POST, OPTIONS");
 });
 
-Deno.test("setupHttp.fetch matches route.all for any method", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch matches route.all for any method", async () => {
+  const app = setup([
     route.all("/wildcard", {
       resolve: () => new Response("Any method"),
     }),
@@ -176,8 +176,8 @@ Deno.test("setupHttp.fetch matches route.all for any method", async () => {
   }
 });
 
-Deno.test("setupHttp.fetch matches custom method with route.on", async () => {
-  const app = setupHttp([
+Deno.test("setup.fetch matches custom method with route.on", async () => {
+  const app = setup([
     route.on("PROPFIND", "/webdav", {
       resolve: () => new Response("PROPFIND response"),
     }),
@@ -191,9 +191,9 @@ Deno.test("setupHttp.fetch matches custom method with route.on", async () => {
 });
 
 Deno.test(
-  "setupHttp.fetch route.all doesn't interfere with specific routes",
+  "setup.fetch route.all doesn't interfere with specific routes",
   async () => {
-    const app = setupHttp([
+    const app = setup([
       route.get("/test", {
         resolve: () => new Response("GET specific"),
       }),

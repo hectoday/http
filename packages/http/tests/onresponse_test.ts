@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
-import { route, setupHttp } from "../mod.ts";
+import { route, setup } from "../mod.ts";
 
 Deno.test("onResponse: receives context and response", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {
@@ -27,7 +27,7 @@ Deno.test("onResponse: receives context and response", async () => {
 });
 
 Deno.test("onResponse: can access locals from context", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {
@@ -54,7 +54,7 @@ Deno.test("onResponse: can access locals from context", async () => {
 });
 
 Deno.test("onResponse: can access route params from context", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/users/:id", {
         resolve: () => {
@@ -78,7 +78,7 @@ Deno.test("onResponse: can access route params from context", async () => {
 });
 
 Deno.test("onResponse: can modify response status", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {
@@ -100,7 +100,7 @@ Deno.test("onResponse: can modify response status", async () => {
 });
 
 Deno.test("onResponse: async handler works", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: () => {

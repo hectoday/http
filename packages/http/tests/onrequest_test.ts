@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
-import { route, setupHttp } from "../mod.ts";
+import { route, setup } from "../mod.ts";
 
 Deno.test("onRequest: returns locals patch that gets merged", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: (c) => {
@@ -26,7 +26,7 @@ Deno.test("onRequest: returns locals patch that gets merged", async () => {
 });
 
 Deno.test("onRequest: async function works", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         resolve: (c) => {
@@ -50,7 +50,7 @@ Deno.test("onRequest: async function works", async () => {
 });
 
 Deno.test("onRequest: locals merge with guard locals", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         guards: [
@@ -81,7 +81,7 @@ Deno.test("onRequest: locals merge with guard locals", async () => {
 });
 
 Deno.test("onRequest: guard locals override onRequest locals", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test", {
         guards: [
@@ -112,7 +112,7 @@ Deno.test("onRequest: guard locals override onRequest locals", async () => {
 });
 
 Deno.test("onRequest: no onRequest means empty initial locals", async () => {
-  const app = setupHttp([
+  const app = setup([
     route.get("/test", {
       resolve: (c) => {
         return Response.json({
@@ -128,7 +128,7 @@ Deno.test("onRequest: no onRequest means empty initial locals", async () => {
 });
 
 Deno.test("onRequest: receives only Request, not full context", async () => {
-  const app = setupHttp({
+  const app = setup({
     handlers: [
       route.get("/test/:id", {
         resolve: (c) => {

@@ -41,5 +41,5 @@ export {
   type OnErrorHandler,
   type OnRequestHandler,
   type OnResponseHandler,
-  setupHttp,
+  setup,
 } from "./src/runtime.ts";

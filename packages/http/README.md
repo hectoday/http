@@ -121,9 +121,9 @@ bunx jsr add @hectoday/http
 # Basic example
 
 ```ts
-import { route, setupHttp } from "@hectoday/http";
+import { route, setup } from "@hectoday/http";
 
-const app = setupHttp({
+const app = setup({
   handlers: [
     route.get("/hello", {
       resolve: () => new Response("Hello world"),
@@ -138,10 +138,10 @@ Deno.serve(app.fetch);
 
 # Core API
 
-## `setupHttp()`
+## `setup()`
 
 ```ts
-const handler = setupHttp({
+const handler = setup({
   handlers,
   validator,
   onRequest,
@@ -472,7 +472,7 @@ Then:
 Hectoday HTTP requires a **validator adapter** to use validation.
 
 ```ts
-const app = setupHttp({
+const app = setup({
   validator: myValidator,
   handlers: [...]
 });
@@ -550,7 +550,7 @@ See [`example/deno/src/main.ts`](https://github.com/hectoday/http/blob/main/exam
 ```ts
 import { z } from "zod";
 
-const app = setupHttp({
+const app = setup({
   validator: createZodValidator(),
   handlers: [
     route.post("/users", {
