@@ -461,7 +461,7 @@ interface Config {
 
 ```typescript
 type OnRequestHandler = (
-  params: { request: Request }
+  info: { request: Request }
 ) => void | Record<string, unknown> | Promise<void | Record<string, unknown>>;
 ```
 
@@ -469,13 +469,30 @@ Runs **before routing**, receives the raw Request.
 
 **Parameters**:
 
-- `params.request: Request` — The incoming request
+- `info.request: Request` — The incoming request
 
 **Returns**:
 
 - `void` — No locals to add
 - `Record<string, unknown>` — Locals to merge into context
 - `Promise` — Async version of above
+
+**Parameter Styles**:
+
+You can use either style:
+
+```typescript
+// Destructured (concise)
+onRequest: ({ request }) => {
+  return { requestId: crypto.randomUUID() };
+}
+
+// Named parameter (explicit)
+onRequest: (info) => {
+  const { request } = info;
+  return { requestId: crypto.randomUUID() };
+}
+```
 
 **Notes**:
 
@@ -498,7 +515,7 @@ onRequest: ({ request }) => {
 
 ```typescript
 type OnResponseHandler = (
-  params: { context: Context, response: Response }
+  info: { context: Context; response: Response }
 ) => Response | Promise<Response>;
 ```
 
@@ -506,12 +523,33 @@ Runs **after handler**, can modify the response.
 
 **Parameters**:
 
-- `params.context: Context` — The request context
-- `params.response: Response` — The response from handler
+- `info.context: Context` — The request context
+- `info.response: Response` — The response from handler
 
 **Returns**:
 
 - `Response` — Modified or original response
+
+**Parameter Styles**:
+
+You can use either style:
+
+```typescript
+// Destructured (concise) - use only what you need
+onResponse: ({ response }) => {
+  const headers = new Headers(response.headers);
+  headers.set("x-powered-by", "hectoday");
+  return new Response(response.body, { status: response.status, headers });
+}
+
+// Named parameter (explicit)
+onResponse: (info) => {
+  const { context, response } = info;
+  const headers = new Headers(response.headers);
+  headers.set("x-request-id", context.locals.requestId);
+  return new Response(response.body, { status: response.status, headers });
+}
+```
 
 **Example**:
 
@@ -532,7 +570,7 @@ onResponse: ({ context, response }) => {
 
 ```typescript
 type OnErrorHandler = (
-  params: { error: unknown, context: Context }
+  info: { error: unknown; context: Context }
 ) => Response | Promise<Response>;
 ```
 
@@ -540,12 +578,37 @@ Handles **unexpected errors** that escape handlers.
 
 **Parameters**:
 
-- `params.error: unknown` — The thrown error
-- `params.context: Context` — Minimal context (might not have full data)
+- `info.error: unknown` — The thrown error
+- `info.context: Context` — Minimal context (might not have full data)
 
 **Returns**:
 
 - `Response` — Error response to send to client
+
+**Parameter Styles**:
+
+You can use either style:
+
+```typescript
+// Destructured (concise)
+onError: ({ error, context }) => {
+  console.error("Error:", error);
+  return Response.json({ error: "Internal Error" }, { status: 500 });
+}
+
+// Named parameter (explicit)
+onError: (info) => {
+  const { error, context } = info;
+  console.error(`Error for ${context.request.url}:`, error);
+  return Response.json({ error: "Internal Error" }, { status: 500 });
+}
+
+// Only need one property? Just destructure that
+onError: ({ error }) => {
+  console.error(error);
+  return Response.json({ error: "Internal Error" }, { status: 500 });
+}
+```
 
 **Notes**:
 

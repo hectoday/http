@@ -10,12 +10,12 @@ Deno.test("onError: receives error and context", async () => {
         },
       }),
     ],
-    onError: (error, c) => {
+    onError: ({ error, context }) => {
       const err = error as Error;
       return Response.json(
         {
           error: err.message,
-          method: c.request.method,
+          method: context.request.method,
         },
         { status: 500 },
       );
@@ -41,10 +41,10 @@ Deno.test("onError: can access locals from context", async () => {
     onRequest: () => ({
       requestId: "req-789",
     }),
-    onError: (_error, c) => {
+    onError: ({ context }) => {
       return Response.json(
         {
-          requestId: c.locals.requestId,
+          requestId: context.locals.requestId,
           error: "Internal error",
         },
         { status: 500 },
@@ -67,10 +67,10 @@ Deno.test("onError: can access route params from context", async () => {
         },
       }),
     ],
-    onError: (_error, c) => {
+    onError: ({ context }) => {
       return Response.json(
         {
-          userId: c.raw.params.id,
+          userId: context.raw.params.id,
           error: "Failed to process user",
         },
         { status: 500 },
@@ -111,7 +111,7 @@ Deno.test("onError: async handler works", async () => {
         },
       }),
     ],
-    onError: async (_error, _c) => {
+    onError: async () => {
       // Simulate async error logging
       await new Promise((resolve) => setTimeout(resolve, 1));
       return Response.json(
@@ -141,8 +141,8 @@ Deno.test("onError: handles errors from guards", async () => {
         resolve: () => new Response("Should not reach here"),
       }),
     ],
-    onError: (_error, _c) => {
-      const err = _error as Error;
+    onError: ({ error }) => {
+      const err = error as Error;
       return Response.json(
         {
           error: err.message,
