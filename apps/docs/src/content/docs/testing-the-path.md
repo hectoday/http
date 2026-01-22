@@ -659,7 +659,7 @@ Deno.test("onRequest adds request ID", async () => {
         }
       })
     ],
-    onRequest: () => {
+    onRequest: ({ request }) => {
       return { requestId: "test-123" };
     }
   });
@@ -677,7 +677,7 @@ Deno.test("onResponse adds custom header", async () => {
         resolve: () => new Response("Hello")
       })
     ],
-    onResponse: (c, response) => {
+    onResponse: ({ context, response }) => {
       const headers = new Headers(response.headers);
       headers.set("X-Custom", "value");
       
@@ -703,7 +703,7 @@ Deno.test("onError handles exceptions", async () => {
         }
       })
     ],
-    onError: (error) => {
+    onError: ({ error, context }) => {
       return Response.json(
         { error: "Internal error" },
         { status: 500 }

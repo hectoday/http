@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { type Context, route, setup } from "../mod.ts";
+import { route, setup } from "../mod.ts";
 
 Deno.test("onResponse: receives context and response", async () => {
   const app = setup({
@@ -10,11 +10,11 @@ Deno.test("onResponse: receives context and response", async () => {
         },
       }),
     ],
-    onResponse: (c: Context, res: Response) => {
-      const headers = new Headers(res.headers);
-      headers.set("x-method", c.request.method);
-      return new Response(res.body, {
-        status: res.status,
+    onResponse: ({ context, response }) => {
+      const headers = new Headers(response.headers);
+      headers.set("x-method", context.request.method);
+      return new Response(response.body, {
+        status: response.status,
         headers,
       });
     },
@@ -38,11 +38,11 @@ Deno.test("onResponse: can access locals from context", async () => {
     onRequest: () => ({
       requestId: "req-123",
     }),
-    onResponse: (c: Context, res: Response) => {
-      const headers = new Headers(res.headers);
-      headers.set("x-request-id", String(c.locals.requestId));
-      return new Response(res.body, {
-        status: res.status,
+    onResponse: ({ context, response }) => {
+      const headers = new Headers(response.headers);
+      headers.set("x-request-id", String(context.locals.requestId));
+      return new Response(response.body, {
+        status: response.status,
         headers,
       });
     },
@@ -62,11 +62,11 @@ Deno.test("onResponse: can access route params from context", async () => {
         },
       }),
     ],
-    onResponse: (c: Context, res: Response) => {
-      const headers = new Headers(res.headers);
-      headers.set("x-user-id", String(c.raw.params.id));
-      return new Response(res.body, {
-        status: res.status,
+    onResponse: ({ context, response }) => {
+      const headers = new Headers(response.headers);
+      headers.set("x-user-id", String(context.raw.params.id));
+      return new Response(response.body, {
+        status: response.status,
         headers,
       });
     },
@@ -86,11 +86,11 @@ Deno.test("onResponse: can modify response status", async () => {
         },
       }),
     ],
-    onResponse: (_c: Context, res: Response) => {
+    onResponse: ({ response }) => {
       // Force all responses to 202 Accepted
-      return new Response(res.body, {
+      return new Response(response.body, {
         status: 202,
-        headers: res.headers,
+        headers: response.headers,
       });
     },
   });
@@ -108,13 +108,13 @@ Deno.test("onResponse: async handler works", async () => {
         },
       }),
     ],
-    onResponse: async (_c: Context, res: Response) => {
+    onResponse: async ({ response }) => {
       // Simulate async operation
       await new Promise((resolve) => setTimeout(resolve, 1));
-      const headers = new Headers(res.headers);
+      const headers = new Headers(response.headers);
       headers.set("x-async", "true");
-      return new Response(res.body, {
-        status: res.status,
+      return new Response(response.body, {
+        status: response.status,
         headers,
       });
     },

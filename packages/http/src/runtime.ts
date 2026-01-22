@@ -6,24 +6,30 @@ import { createRouter } from "./router.ts";
 
 // onError handler that processes unexpected exceptions
 export type OnErrorHandler = (
-  error: unknown,
-  c: Context,
+  info: {
+    error: unknown;
+    context: Context;
+  },
 ) => Response | Promise<Response>;
 
 // onRequest hook that runs before routing begins
 // Receives minimal input (just the request), returns a locals patch
 export type OnRequestHandler = (
-  request: Request,
+  info: {
+    request: Request;
+  },
 ) => void | Record<string, unknown> | Promise<void | Record<string, unknown>>;
 
 // onResponse hook that runs after handler execution, before returning response
 export type OnResponseHandler = (
-  c: Context,
-  response: Response,
+  info: {
+    context: Context;
+    response: Response;
+  },
 ) => Response | Promise<Response>;
 
 // Default onError implementation: logs the error and returns a sanitized 500 response
-const defaultOnError: OnErrorHandler = (error, _c) => {
+const defaultOnError: OnErrorHandler = ({ error }) => {
   // Log the unexpected error
   console.error("Unexpected error during request handling:", error);
 
@@ -85,7 +91,7 @@ export function setup(config: Handler[] | Config): {
     fetch: async (request: Request): Promise<Response> => {
       try {
         // Run onRequest hook BEFORE routing to get initial locals
-        const initialLocals = onRequest ? await onRequest(request) : {};
+        const initialLocals = onRequest ? await onRequest({ request }) : {};
 
         // Normal request processing - guards and handlers use explicit returns
         const response = await router.handle(request, initialLocals || {});
@@ -93,10 +99,10 @@ export function setup(config: Handler[] | Config): {
         // Run onResponse hook after handler execution
         // Note: onResponse receives the full context from the route handler
         if (onResponse && response.context) {
-          const updatedResponse = await onResponse(
-            response.context,
-            response.response,
-          );
+          const updatedResponse = await onResponse({
+            context: response.context,
+            response: response.response,
+          });
           return updatedResponse;
         }
 
@@ -112,7 +118,7 @@ export function setup(config: Handler[] | Config): {
           locals: {},
         };
 
-        return await onError(error, context);
+        return await onError({ error, context });
       }
     },
   };
