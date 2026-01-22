@@ -2,6 +2,7 @@
 title: "How to Read These Docs"
 description: "A guide to understanding Hectoday HTTP's documentation structure"
 order: 1
+draft: true
 ---
 
 These docs are structured as **concept → practice → reference**.

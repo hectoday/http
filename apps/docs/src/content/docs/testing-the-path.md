@@ -2,6 +2,7 @@
 title: "Testing the Path"
 description: "Writing tests for explicit, predictable request handling"
 order: 14
+draft: true
 ---
 
 When everything is explicit, testing becomes straightforward.

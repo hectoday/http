@@ -2,6 +2,7 @@
 title: "Guards: Making Decisions Explicit"
 description: "Using guards to control request flow explicitly"
 order: 7
+draft: true
 ---
 
 You've extracted facts. You've validated data. Now comes the critical question: **should this request be allowed to continue?**

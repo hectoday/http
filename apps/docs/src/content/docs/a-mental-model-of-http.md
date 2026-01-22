@@ -2,6 +2,7 @@
 title: "A Mental Model of HTTP"
 description: "Understanding HTTP from first principles"
 order: 2
+draft: true
 ---
 
 Before you write a single line of code, you need a way to think about HTTP servers.

@@ -2,6 +2,7 @@
 title: "Your First Server"
 description: "Building your first Hectoday HTTP server"
 order: 4
+draft: true
 ---
 
 You understand the mental model. You know the Web standards. Now let's build a server.

@@ -2,6 +2,7 @@
 title: "Describing Facts"
 description: "Extracting request data without making decisions"
 order: 5
+draft: true
 ---
 
 The request has arrived. The route matched. Now you need to read its data.

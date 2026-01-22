@@ -2,6 +2,7 @@
 title: "What This Is"
 description: "Understanding Hectoday HTTP's purpose and philosophy"
 order: 0
+draft: true
 ---
 
 Hectoday HTTP is a web framework that refuses to make decisions for you.
