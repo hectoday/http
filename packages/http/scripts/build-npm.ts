@@ -12,7 +12,14 @@ await emptyDir("./dist");
 await build({
   entryPoints: ["./mod.ts"],
   outDir: "./dist",
-  shims: {},
+  shims: {
+    deno: false,
+    undici: true,
+    urlPattern: true,
+  },
+  compilerOptions: {
+    lib: ["ES2022", "DOM", "DOM.Iterable"],
+  },
   test: false,
   skipNpmInstall: true,
   skipSourceOutput: true,
