@@ -125,10 +125,6 @@ export default function DocsList({ docs, helpers, isDev }: DocsListProps) {
 
               if (!partDocs || partDocs.length === 0) return null;
 
-              const sectionTitle = partInfo
-                ? `Part ${partNum}: ${partInfo.title}`
-                : "Other";
-
               return (
                 <section
                   key={partNum}

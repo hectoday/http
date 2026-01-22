@@ -8,13 +8,13 @@ import hectodayTheme from "~/styles/hectoday.shiki.json";
 
 const codeExample = `import { route, setup } from "@hectoday/http";
 
-const app = setup([
-  route.get("/", {
-    resolve: () => {
-      return new Response("Hello HTTP");
-    },
-  }),
-]);
+const app = setup({
+  handlers: [
+    route.get("/", {
+      resolve: () => new Response("Hello HTTP"),
+    }),
+  ],
+});
 
 Deno.serve(app.fetch);`;
 ---
