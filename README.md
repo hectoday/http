@@ -156,7 +156,7 @@ This project values **clarity over convenience**.
 
 ## Documentation
 
-📚 **Full documentation:** [https://hectoday.com/docs](https://hectoday.com/docs)
+**Full documentation:** [https://docs.hectoday.com](https://docs.hectoday.com)
 
 **Start here:**
 - [How to Read These Docs](https://hectoday.com/docs/how-to-read-these-docs)
