@@ -140,7 +140,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10%] px-4">
       <div
         className="fixed inset-0 bg-black/50"
         onClick={handleClose}
@@ -151,9 +151,10 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Command Menu"
+        className="w-full max-w-2xl min-w-[600px]"
       >
         <Command
-          className="relative w-full max-w-2xl bg-white rounded-lg shadow-2xl overflow-hidden"
+          className="relative w-full bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200"
           label="Command Menu"
           onKeyDown={(e) => {
             if (e.key === "Escape") {
@@ -186,7 +187,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
               autoFocus
             />
           </div>
-          <Command.List className="max-h-96 overflow-y-auto p-2">
+          <Command.List className="h-96 overflow-y-auto p-2">
             {mainResults.length === 0 && helperResults.length === 0
               ? (
                 <Command.Empty className="py-6 text-center text-sm text-gray-500">
@@ -196,19 +197,21 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
               : (
                 <>
                   {mainResults.length > 0 && (
-                    <Command.Group heading="Documentation" className="mb-2">
-                      <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Documentation
-                      </div>
+                    <Command.Group
+                      heading="Documentation"
+                      className="mb-2 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-gray-500 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider"
+                    >
                       {mainResults.map((doc) => (
                         <Command.Item
                           key={doc.id}
                           value={doc.id}
                           onSelect={() => handleSelect(doc.id)}
-                          className="flex flex-col px-4 py-3 rounded-md cursor-pointer data-[selected=true]:bg-gray-100 transition-colors"
+                          className="flex flex-col px-3 py-2.5 rounded cursor-pointer data-[selected=true]:bg-gray-50 transition-colors"
                         >
                           <div className="flex items-center gap-2">
-                            <span className="font-medium">{doc.title}</span>
+                            <span className="text-base font-medium">
+                              {doc.title}
+                            </span>
                             {doc.draft && (
                               <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">
                                 Draft
@@ -226,19 +229,21 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                   )}
 
                   {helperResults.length > 0 && (
-                    <Command.Group heading="Helpers" className="mt-4">
-                      <div className="px-2 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Helpers
-                      </div>
+                    <Command.Group
+                      heading="Helpers"
+                      className="mt-4 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-gray-500 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider"
+                    >
                       {helperResults.map((doc) => (
                         <Command.Item
                           key={doc.id}
                           value={doc.id}
                           onSelect={() => handleSelect(doc.id)}
-                          className="flex flex-col px-4 py-3 rounded-md cursor-pointer data-[selected=true]:bg-gray-100 transition-colors"
+                          className="flex flex-col px-3 py-2.5 rounded cursor-pointer data-[selected=true]:bg-gray-50 transition-colors"
                         >
                           <div className="flex items-center gap-2">
-                            <span className="font-medium">{doc.title}</span>
+                            <span className="text-base font-medium">
+                              {doc.title}
+                            </span>
                             {doc.draft && (
                               <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded">
                                 Draft
@@ -257,29 +262,29 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 </>
               )}
           </Command.List>
-          <div className="border-t border-gray-200 px-4 py-2 text-xs text-gray-500 flex items-center justify-between">
-            <div className="flex gap-4">
+          <div className="border-t border-[rgb(209,217,224)] px-3 py-2 text-xs text-gray-500 flex items-center justify-between">
+            <div className="flex gap-3">
               <span>
-                <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700">
+                <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
                   ↑↓
                 </kbd>{" "}
                 Navigate
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700">
+                <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
                   ↵
                 </kbd>{" "}
                 Select
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700">
+                <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
                   Esc
                 </kbd>{" "}
                 Close
               </span>
             </div>
             <span className="text-gray-400">
-              <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700">
+              <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
                 ⌘K
               </kbd>
             </span>
