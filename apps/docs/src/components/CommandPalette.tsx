@@ -266,24 +266,73 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
           <div className="border-t border-[rgb(209,217,224)] px-3 py-2 text-xs text-gray-500 flex items-baseline justify-between">
             <div className="flex gap-3">
               <span className="flex gap-[0.5ch] items-center">
-                <KeyboardShortcut items={["↑"]} />
+                <KeyboardShortcut
+                  items={["↑"]}
+                  onClick={() => {
+                    const input = dialogRef.current?.querySelector("input");
+                    if (input) {
+                      const event = new KeyboardEvent("keydown", {
+                        key: "ArrowUp",
+                        bubbles: true,
+                        cancelable: true,
+                      });
+                      input.dispatchEvent(event);
+                    }
+                  }}
+                />
                 <span>Up</span>
               </span>
               <span className="flex gap-[0.5ch] items-center">
-                <KeyboardShortcut items={["↓"]} />
+                <KeyboardShortcut
+                  items={["↓"]}
+                  onClick={() => {
+                    const input = dialogRef.current?.querySelector("input");
+                    if (input) {
+                      const event = new KeyboardEvent("keydown", {
+                        key: "ArrowDown",
+                        bubbles: true,
+                        cancelable: true,
+                      });
+                      input.dispatchEvent(event);
+                    }
+                  }}
+                />
                 <span>Down</span>
               </span>
               <span className="flex gap-[0.5ch] items-center">
-                <KeyboardShortcut items={["↵"]} />
+                <KeyboardShortcut
+                  items={["↵"]}
+                  onClick={() => {
+                    const input = dialogRef.current?.querySelector("input");
+                    if (input) {
+                      const event = new KeyboardEvent("keydown", {
+                        key: "Enter",
+                        bubbles: true,
+                        cancelable: true,
+                      });
+                      input.dispatchEvent(event);
+                    }
+                  }}
+                />
                 <span>Enter</span>
               </span>
               <span className="flex gap-[0.5ch] items-center">
-                <KeyboardShortcut items={["esc"]} />
+                <KeyboardShortcut
+                  items={["esc"]}
+                  onClick={() => {
+                    handleClose();
+                  }}
+                />
                 <span>Close</span>
               </span>
             </div>
             <span className="text-gray-400">
-              <KeyboardShortcut items={["⌘", "K"]} />
+              <KeyboardShortcut
+                items={["⌘", "K"]}
+                onClick={() => {
+                  handleClose();
+                }}
+              />
             </span>
           </div>
         </Command>
