@@ -1,5 +1,5 @@
 ---
-title: "Composition Over Configuration"
+title: "Composition over configuration"
 description: "Building larger APIs from small, reusable pieces"
 order: 4
 part: 3
@@ -10,7 +10,7 @@ Small APIs are easy. One file, a few routes, done.
 
 Large APIs need structure. But structure doesn't mean configuration files, decorators, or magic conventions.
 
-In Hectoday HTTP, structure comes from **composition**—building larger pieces from smaller ones.
+In Hectoday HTTP, structure comes from **composition**, building larger pieces from smaller ones.
 
 ## Building Larger APIs
 
@@ -495,7 +495,7 @@ src/
 
 ## Helpers as Copy-Paste Recipes
 
-Hectoday HTTP has a minimal core. Everything else is helpers—copy-paste recipes you can use, modify, or ignore.
+Hectoday HTTP has a minimal core. Everything else is helpers, copy-paste recipes you can use, modify, or ignore.
 
 ### Why Helpers Are Documentation, Not Dependencies
 
@@ -737,7 +737,7 @@ route.post("/api/search", {
 });
 ```
 
-**It's just a guard.** Nothing special about helpers—they use the same primitives you use.
+**It's just a guard.** Nothing special about helpers, they use the same primitives you use.
 
 ### The Philosophy
 
@@ -761,4 +761,4 @@ Web Standards (Request/Response)
 
 ---
 
-Next: [Security as a First-Class Concept](./security-as-a-first-class-concept) — designing secure APIs with explicit controls.
+Next: [Security as a first-class concept](./security-as-a-first-class-concept) - designing secure APIs with explicit controls.

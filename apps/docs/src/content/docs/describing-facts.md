@@ -559,4 +559,4 @@ To summarize:
 
 ---
 
-Next: [Validation Without Control Flow](./validation-without-control-flow) — turning raw facts into validated data.
+Next: [Validation without control flow](./validation-without-control-flow) - turning raw facts into validated data.

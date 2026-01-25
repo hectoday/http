@@ -1,5 +1,5 @@
 ---
-title: "Zod Validator: Schema Validation Adapter"
+title: "Zod validator: schema validation adapter"
 description: "Validator adapter for using Zod schemas with Hectoday HTTP"
 draft: false
 ---

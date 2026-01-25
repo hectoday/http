@@ -1,5 +1,5 @@
 ---
-title: "How to Read These Docs"
+title: "How to read these docs"
 description: "A guide to understanding Hectoday HTTP's documentation structure"
 order: 2
 part: 1
@@ -76,7 +76,7 @@ Skim **Chapter 1-2** to understand the mental model. Then jump to **Chapter 7: T
 
 ### If You're Skeptical
 
-Read **Chapter 1: A Mental Model** and **Chapter 15: Philosophy**. If these resonate, read the rest. If not, this framework isn't for you—and that's fine.
+Read **Chapter 1: A mental model** and **Chapter 15: Philosophy**. If these resonate, read the rest. If not, this framework isn't for you, and that's fine.
 
 ## What These Docs Are Not
 
@@ -90,7 +90,7 @@ Once you understand the model, tasks become obvious.
 
 You won't find recipes like "how to handle file uploads" or "how to add CORS." Instead, you'll learn the primitives, and recipes become trivial.
 
-(We do provide helpers for common patterns—listed separately at the bottom of the documentation index—but they're documented as **examples of composition**, not magical solutions.)
+(We do provide helpers for common patterns, listed separately at the bottom of the documentation index, but they're documented as **examples of composition**, not magical solutions.)
 
 ### Not Comprehensive on First Read
 
@@ -155,6 +155,6 @@ You can read the core chapters (1-9) in under an hour. But the ideas will change
 
 ## Ready?
 
-Start with [Chapter 1: A Mental Model of HTTP](./a-mental-model-of-http).
+Start with [Chapter 1: A mental model of HTTP](./a-mental-model-of-http).
 
 Or jump to [Installation](./installation) if you want to start coding immediately.

@@ -1,5 +1,5 @@
 ---
-title: "Runtime Independence"
+title: "Runtime independence"
 description: "Running the same code across Deno, Bun, and Cloudflare Workers"
 order: 3
 part: 4
@@ -778,4 +778,4 @@ That's why it's called "runtime independence."
 
 ---
 
-Next: [Testing the Path](./testing-the-path) — verifying your handlers work correctly.
+Next: [Testing the path](./testing-the-path) - verifying your handlers work correctly.

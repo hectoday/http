@@ -1,5 +1,5 @@
 ---
-title: "Errors Are Responses"
+title: "Errors are responses"
 description: "Handling failures explicitly without exceptions"
 order: 3
 part: 3
@@ -767,7 +767,7 @@ route.get("/users/:id", {
 })
 ```
 
-**These are just helpers—not framework magic.** They're pure functions that return Responses.
+**These are just helpers, not framework magic.** They're pure functions that return Responses.
 
 ### The Pattern
 
@@ -789,4 +789,4 @@ Every error response is visible in the handler. You control exactly what clients
 
 ---
 
-Next: [Composition Over Configuration](./composition-over-configuration) — building larger APIs from small pieces.
+Next: [Composition over configuration](./composition-over-configuration) - building larger APIs from small pieces.

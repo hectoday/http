@@ -1,5 +1,5 @@
 ---
-title: "Guards: Making Decisions Explicit"
+title: "Guards: making decisions explicit"
 description: "Using guards to control request flow explicitly"
 order: 5
 part: 2
@@ -26,7 +26,7 @@ That's it. A guard receives context, returns a decision.
 
 ### A Decision Boundary
 
-Guards are **decision boundaries**—places where the request might end:
+Guards are **decision boundaries**, places where the request might end:
 
 ```typescript
 const requireAuth: GuardFn = (c) => {
@@ -55,7 +55,7 @@ If a guard returns `{ allow: true }`, the request continues to the next guard (i
 
 ### The Moment Intent Becomes Outcome
 
-Before the guard runs, the request is in limbo—it **might** be allowed:
+Before the guard runs, the request is in limbo, it **might** be allowed:
 
 ```typescript
 route.get("/admin", {
@@ -603,7 +603,7 @@ const app = setup({
 });
 ```
 
-All routes in the group get the guards. **Still explicit—the group definition shows the guards.**
+All routes in the group get the guards. **Still explicit, the group definition shows the guards.**
 
 Routes can add their own guards:
 
@@ -631,4 +631,4 @@ const adminRoutes = group({
 
 ---
 
-Next: [The Request Lifecycle (Fully Explicit)](./the-request-lifecycle-fully-explicit) — putting all the pieces together.
+Next: [The request lifecycle (fully explicit)](./the-request-lifecycle-fully-explicit) - putting all the pieces together.

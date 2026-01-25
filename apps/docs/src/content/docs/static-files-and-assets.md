@@ -1,5 +1,5 @@
 ---
-title: "Static Files and Assets"
+title: "Static files and assets"
 description: "Serving static files explicitly without magic conventions"
 order: 2
 part: 4
@@ -483,12 +483,12 @@ return new Response(image, {
 ```
 
 **Cache-Control values**:
-- `public` — Can be cached by browsers and CDNs
-- `private` — Only browser can cache (not CDNs)
-- `no-cache` — Must revalidate before using cached version
-- `no-store` — Don't cache at all
-- `max-age=N` — Cache for N seconds
-- `immutable` — File will never change (safe to cache forever)
+- `public` - Can be cached by browsers and CDNs
+- `private` - Only browser can cache (not CDNs)
+- `no-cache` - Must revalidate before using cached version
+- `no-store` - Don't cache at all
+- `max-age=N` - Cache for N seconds
+- `immutable` - File will never change (safe to cache forever)
 
 ### ETag
 
@@ -757,4 +757,4 @@ Deno.serve(app.fetch);
 
 ---
 
-Next: [Runtime Independence](./runtime-independence) — running the same code on Deno, Bun, and Workers.
+Next: [Runtime independence](./runtime-independence) - running the same code on Deno, Bun, and Workers.

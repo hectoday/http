@@ -1,5 +1,5 @@
 ---
-title: "Philosophy (Revisited)"
+title: "Philosophy (revisited)"
 description: "Why Hectoday HTTP makes these design choices"
 order: 3
 part: 5
@@ -620,7 +620,7 @@ The framework never makes HTTP decisions. It computes facts about requests. Guar
 
 **Everything else is your job.**
 
-And when debugging at 2am, when code breaks in production, when a new developer joins the team, when a security audit happens, when requirements change—
+And when debugging at 2am, when code breaks in production, when a new developer joins the team, when a security audit happens, when requirements change...
 
 **You'll be glad the code is explicit.**
 
@@ -649,10 +649,10 @@ Write a route. See how it feels. Notice that you can read it six months later an
 
 ## Additional Resources
 
-- [Installation Guide](./installation)
-- [GitHub Repository](https://github.com/hectoday/http)
-- [Example Projects](https://github.com/hectoday/http/tree/main/example)
-- [API Reference](./reference)
+- [Installation guide](./installation)
+- [GitHub repository](https://github.com/hectoday/http)
+- [Example projects](https://github.com/hectoday/http/tree/main/example)
+- [API reference](./reference)
 
 **Build something. See if explicitness works for you.**
 

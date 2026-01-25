@@ -1,5 +1,5 @@
 ---
-title: "What This Is"
+title: "What this is"
 description: "Understanding Hectoday HTTP's purpose and philosophy"
 order: 1
 part: 1

@@ -1,5 +1,5 @@
 ---
-title: "The Web Standard Foundation"
+title: "The web standard foundation"
 description: "How Web Standards provide the primitives for HTTP servers"
 order: 1
 part: 2
@@ -43,7 +43,7 @@ Deno.serve((request: Request) => {
 
 #### The Properties
 
-**`request.method`** — HTTP method as a string
+**`request.method`** - HTTP method as a string
 
 ```typescript
 request.method // "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | ...
@@ -61,7 +61,7 @@ if (request.method === "GET") {
 }
 ```
 
-**`request.url`** — Full URL as a string
+**`request.url`** - Full URL as a string
 
 ```typescript
 request.url // "https://example.com/users/123?include=posts"
@@ -76,7 +76,7 @@ url.searchParams.get("include") // "posts"
 url.hostname // "example.com"
 ```
 
-**`request.headers`** — Headers object
+**`request.headers`** - Headers object
 
 ```typescript
 request.headers.get("content-type") // "application/json" | null
@@ -90,7 +90,7 @@ request.headers.get("Content-Type") // same as "content-type"
 request.headers.get("CONTENT-TYPE") // same as "content-type"
 ```
 
-**`request.body`** — ReadableStream or null
+**`request.body`** - ReadableStream or null
 
 ```typescript
 // For JSON
@@ -192,7 +192,7 @@ return new Response(stream);
 return new Response(null, { status: 204 }); // 204 No Content
 ```
 
-### Headers, Body, Method, URL — The Complete Picture
+### Headers, body, method, URL - the complete picture
 
 ```typescript
 Deno.serve(async (request: Request) => {
@@ -302,16 +302,16 @@ return Response.json(
 
 The framework version seems convenient, but:
 
-1. **It's one more thing to learn** — `ctx.json()` instead of `Response.json()`
-2. **It's one more thing that can break** — framework updates can change the API
-3. **It's not portable** — switching frameworks means relearning
-4. **It's not documented universally** — you need framework-specific docs
+1. **It's one more thing to learn** - `ctx.json()` instead of `Response.json()`
+2. **It's one more thing that can break** - framework updates can change the API
+3. **It's not portable** - switching frameworks means relearning
+4. **It's not documented universally** - you need framework-specific docs
 
 Web standards are:
-- **Already learned** — if you know Fetch API, you know this
-- **Stable** — standards don't break on minor updates
-- **Portable** — works everywhere the Web platform exists
-- **Universally documented** — MDN, specs, endless tutorials
+- **Already learned** - if you know Fetch API, you know this
+- **Stable** - standards don't break on minor updates
+- **Portable** - works everywhere the Web platform exists
+- **Universally documented** - MDN, specs, endless tutorials
 
 ### Future-Proof
 
@@ -452,4 +452,4 @@ Hectoday HTTP **refuses** to add magic where explicitness matters:
 
 ---
 
-Next: [Your First Server](./your-first-server) — building a complete handler with what we've learned.
+Next: [Your first server](./your-first-server) - building a complete handler with what we've learned.

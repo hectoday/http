@@ -1,5 +1,5 @@
 ---
-title: "Validation Without Control Flow"
+title: "Validation without control flow"
 description: "Using validation to describe data, not control requests"
 order: 4
 part: 2
@@ -599,4 +599,4 @@ Validation produces facts. You make decisions. **No hidden control flow.**
 
 ---
 
-Next: [Guards: Making Decisions Explicit](./guards-making-decisions-explicit) — the other half of request control.
+Next: [Guards: making decisions explicit](./guards-making-decisions-explicit) - the other half of request control.

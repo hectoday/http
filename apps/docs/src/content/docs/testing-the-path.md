@@ -1019,4 +1019,4 @@ Deno.test("description of scenario", async () => {
 
 ---
 
-Next: [Reference](./reference) — Complete API documentation for when you need details.
+Next: [Reference](./reference) - Complete API documentation for when you need details.

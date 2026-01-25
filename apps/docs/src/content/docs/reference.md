@@ -31,16 +31,16 @@ interface Context<
 
 **Properties**:
 
-- `request: Request` — The original Web Standard Request object
-- `raw: RawValues` — Extracted but unvalidated inputs
-- `input: InputState` — Validation results (ok or not ok)
-- `locals: Record<string, unknown>` — Request-scoped data from hooks and guards
+- `request: Request` - The original Web Standard Request object
+- `raw: RawValues` - Extracted but unvalidated inputs
+- `input: InputState` - Validation results (ok or not ok)
+- `locals: Record<string, unknown>` - Request-scoped data from hooks and guards
 
 **Type parameters**:
 
-- `TParams` — Type of validated params (inferred from schema)
-- `TQuery` — Type of validated query (inferred from schema)
-- `TBody` — Type of validated body (inferred from schema)
+- `TParams` - Type of validated params (inferred from schema)
+- `TQuery` - Type of validated query (inferred from schema)
+- `TBody` - Type of validated body (inferred from schema)
 
 ### RawValues
 
@@ -56,16 +56,16 @@ interface RawValues {
 
 **Properties**:
 
-- `params` — Path parameters from URL pattern (e.g., `:id`)
-- `query` — Query parameters from search string
-- `body` — Parsed body (only if body schema defined), otherwise undefined
+- `params` - Path parameters from URL pattern (e.g., `:id`)
+- `query` - Query parameters from search string
+- `body` - Parsed body (only if body schema defined), otherwise undefined
 
 **Notes**:
 
 - All params are `string | undefined`
 - Query values can be arrays if parameter appears multiple times
 - Body is parsed as JSON when body schema is defined
-- Raw values are **not type-safe** — validate them
+- Raw values are **not type-safe**, validate them
 
 ### InputState
 
@@ -92,10 +92,10 @@ interface InputOk<TParams, TQuery, TBody> {
 
 **Properties**:
 
-- `ok: true` — Validation passed
-- `params` — Validated, typed params
-- `query` — Validated, typed query
-- `body` — Validated, typed body
+- `ok: true` - Validation passed
+- `params` - Validated, typed params
+- `query` - Validated, typed query
+- `body` - Validated, typed body
 
 **Type safety**: TypeScript infers exact types from your schemas.
 
@@ -119,11 +119,11 @@ interface InputErr {
 
 **Properties**:
 
-- `ok: false` — Validation failed
-- `failed` — Which parts failed (`["params"]`, `["query", "body"]`, etc.)
-- `issues` — Normalized array of all validation issues
-- `received` — Raw values that failed validation
-- `errors` — Original error objects from validator (optional)
+- `ok: false` - Validation failed
+- `failed` - Which parts failed (`["params"]`, `["query", "body"]`, etc.)
+- `issues` - Normalized array of all validation issues
+- `received` - Raw values that failed validation
+- `errors` - Original error objects from validator (optional)
 
 ### ValidationIssue
 
@@ -140,10 +140,10 @@ interface ValidationIssue {
 
 **Properties**:
 
-- `part` — Which part failed: `"params"`, `"query"`, or `"body"`
-- `path` — Path to the failing field (e.g., `["email"]` or `["user", "name"]`)
-- `message` — Human-readable error message
-- `code` — Optional error code from validator
+- `part` - Which part failed: `"params"`, `"query"`, or `"body"`
+- `path` - Path to the failing field (e.g., `["email"]` or `["user", "name"]`)
+- `message` - Human-readable error message
+- `code` - Optional error code from validator
 
 ### ValidationPart
 
@@ -169,11 +169,11 @@ interface Handler {
 
 **Properties**:
 
-- `method` — HTTP method(s): `"GET"`, `"POST"`, or `["GET", "POST"]`
-- `path` — URL pattern with optional parameters: `"/users/:id"`
-- `handler` — The function that returns a Response
-- `guards` — Optional guards that run before handler
-- `request` — Optional validation schemas
+- `method` - HTTP method(s): `"GET"`, `"POST"`, or `["GET", "POST"]`
+- `path` - URL pattern with optional parameters: `"/users/:id"`
+- `handler` - The function that returns a Response
+- `guards` - Optional guards that run before handler
+- `request` - Optional validation schemas
 
 **Notes**:
 
@@ -193,11 +193,11 @@ type HandlerFn<TParams = unknown, TQuery = unknown, TBody = unknown> = (
 
 **Parameters**:
 
-- `c: Context` — The request context
+- `c: Context` - The request context
 
 **Returns**:
 
-- `Response | Promise<Response>` — Must return a Web Standard Response
+- `Response | Promise<Response>` - Must return a Web Standard Response
 
 **Notes**:
 
@@ -242,8 +242,8 @@ Create a GET route.
 
 **Parameters**:
 
-- `path` — URL pattern (e.g., `"/users/:id"`)
-- `config` — Route configuration
+- `path` - URL pattern (e.g., `"/users/:id"`)
+- `config` - Route configuration
 
 **Returns**: Handler descriptor
 
@@ -346,9 +346,9 @@ Create a route for a custom HTTP method.
 
 **Parameters**:
 
-- `method` — Any HTTP method string (e.g., `"PROPFIND"`)
-- `path` — URL pattern
-- `config` — Route configuration
+- `method` - Any HTTP method string (e.g., `"PROPFIND"`)
+- `path` - URL pattern
+- `config` - Route configuration
 
 **Example**:
 
@@ -374,9 +374,9 @@ interface RouteConfig<
 
 **Properties**:
 
-- `request` — Optional validation schemas
-- `guards` — Optional guards
-- `resolve` — Handler function (required)
+- `request` - Optional validation schemas
+- `guards` - Optional guards
+- `resolve` - Handler function (required)
 
 ### RequestSchemas
 
@@ -394,9 +394,9 @@ interface RequestSchemas<
 
 **Properties**:
 
-- `params` — Schema for path parameters
-- `query` — Schema for query string
-- `body` — Schema for request body
+- `params` - Schema for path parameters
+- `query` - Schema for query string
+- `body` - Schema for request body
 
 **Example**:
 
@@ -422,7 +422,7 @@ Bootstrap the Hectoday HTTP application.
 
 **Parameters**:
 
-- `config: Config | Handler[]` — Configuration object or array of handlers
+- `config: Config | Handler[]` - Configuration object or array of handlers
 
 **Returns**: Object with `fetch` method
 
@@ -452,11 +452,11 @@ interface Config {
 
 **Properties**:
 
-- `handlers` — Array of route handlers (required)
-- `validator` — Validator adapter (required if any route uses schemas)
-- `onRequest` — Hook that runs before routing
-- `onResponse` — Hook that runs after handler
-- `onError` — Hook that handles unexpected errors
+- `handlers` - Array of route handlers (required)
+- `validator` - Validator adapter (required if any route uses schemas)
+- `onRequest` - Hook that runs before routing
+- `onResponse` - Hook that runs after handler
+- `onError` - Hook that handles unexpected errors
 
 ### OnRequestHandler
 
@@ -470,13 +470,13 @@ Runs **before routing**, receives the raw Request.
 
 **Parameters**:
 
-- `info.request: Request` — The incoming request
+- `info.request: Request` - The incoming request
 
 **Returns**:
 
-- `void` — No locals to add
-- `Record<string, unknown>` — Locals to merge into context
-- `Promise` — Async version of above
+- `void` - No locals to add
+- `Record<string, unknown>` - Locals to merge into context
+- `Promise` - Async version of above
 
 **Parameter Styles**:
 
@@ -524,12 +524,12 @@ Runs **after handler**, can modify the response.
 
 **Parameters**:
 
-- `info.context: Context` — The request context
-- `info.response: Response` — The response from handler
+- `info.context: Context` - The request context
+- `info.response: Response` - The response from handler
 
 **Returns**:
 
-- `Response` — Modified or original response
+- `Response` - Modified or original response
 
 **Parameter Styles**:
 
@@ -579,12 +579,12 @@ Handles **unexpected errors** that escape handlers.
 
 **Parameters**:
 
-- `info.error: unknown` — The thrown error
-- `info.context: Context` — Minimal context (might not have full data)
+- `info.error: unknown` - The thrown error
+- `info.context: Context` - Minimal context (might not have full data)
 
 **Returns**:
 
-- `Response` — Error response to send to client
+- `Response` - Error response to send to client
 
 **Parameter Styles**:
 
@@ -646,11 +646,11 @@ A function that makes an allow/deny decision.
 
 **Parameters**:
 
-- `c: Context` — Request context
+- `c: Context` - Request context
 
 **Returns**:
 
-- `GuardResult` — Allow or deny
+- `GuardResult` - Allow or deny
 
 **Notes**:
 
@@ -676,8 +676,8 @@ The result of a guard.
 
 **Properties**:
 
-- `allow: true` — Request continues
-- `locals` — Optional data to add to `c.locals`
+- `allow: true` - Request continues
+- `locals` - Optional data to add to `c.locals`
 
 **Example**:
 
@@ -693,7 +693,7 @@ return { allow: true, locals: { userId: "123" } };
 
 **Properties**:
 
-- `deny: Response` — The response to send (request ends)
+- `deny: Response` - The response to send (request ends)
 
 **Example**:
 
@@ -737,7 +737,7 @@ Apply guards to multiple handlers.
 
 **Parameters**:
 
-- `options: GroupOptions` — Group configuration
+- `options: GroupOptions` - Group configuration
 
 **Returns**: Array of handlers with guards prepended
 
@@ -764,8 +764,8 @@ interface GroupOptions {
 
 **Properties**:
 
-- `guards` — Guards to apply to all handlers
-- `handlers` — Handlers (or nested groups) to apply guards to
+- `guards` - Guards to apply to all handlers
+- `handlers` - Handlers (or nested groups) to apply guards to
 
 **Notes**:
 
@@ -791,11 +791,11 @@ Adapter interface for validation libraries.
 
 **Type parameters**:
 
-- `TSchema` — The schema type from your validation library
+- `TSchema` - The schema type from your validation library
 
 **Methods**:
 
-- `validate()` — Validate input against schema
+- `validate()` - Validate input against schema
 
 ### validate()
 
@@ -809,9 +809,9 @@ validate<S extends TSchema>(
 
 **Parameters**:
 
-- `schema` — The schema to validate against
-- `input` — The data to validate (unknown type)
-- `part` — Which part is being validated (`"params"`, `"query"`, `"body"`)
+- `schema` - The schema to validate against
+- `input` - The data to validate (unknown type)
+- `part` - Which part is being validated (`"params"`, `"query"`, `"body"`)
 
 **Returns**: `ValidateResult` (success or failure)
 
@@ -834,8 +834,8 @@ interface ValidateOk<T> {
 
 **Properties**:
 
-- `ok: true` — Validation succeeded
-- `value: T` — The validated, typed value
+- `ok: true` - Validation succeeded
+- `value: T` - The validated, typed value
 
 ### ValidateErr
 
@@ -849,9 +849,9 @@ interface ValidateErr<TErr> {
 
 **Properties**:
 
-- `ok: false` — Validation failed
-- `issues` — Normalized array of issues
-- `error` — Optional original error from validator
+- `ok: false` - Validation failed
+- `issues` - Normalized array of issues
+- `error` - Optional original error from validator
 
 ### SchemaLike
 
@@ -865,7 +865,7 @@ Minimal interface that validation schemas must implement.
 
 **Methods**:
 
-- `safeParse()` — Parse input, return success or failure
+- `safeParse()` - Parse input, return success or failure
 
 ### SafeParseResult
 
@@ -966,11 +966,11 @@ Common helper patterns available as copy-paste recipes in the documentation.
 
 ### Available Helpers
 
-- **[Zod Validator](./helpers/zod-validator)** — Validator adapter for Zod schemas
-- **[maxBodyBytes](./helpers/max-body-bytes)** — Limit request body size (guard)
-- **[CORS](./helpers/cors)** — Add CORS headers to responses
-- **[Request ID](./helpers/request-id)** — Generate and track request IDs
-- **[Rate Limiting](./helpers/rate-limit)** — Limit requests per client
+- **[Zod validator](./helpers/zod-validator)** - Validator adapter for Zod schemas
+- **[maxBodyBytes](./helpers/max-body-bytes)** - Limit request body size (guard)
+- **[CORS](./helpers/cors)** - Add CORS headers to responses
+- **[Request ID](./helpers/request-id)** - Generate and track request IDs
+- **[Rate limiting](./helpers/rate-limit)** - Limit requests per client
 
 ### Usage Pattern
 
@@ -999,10 +999,10 @@ route.post("/upload", {
 
 ### Why Copy-Paste?
 
-- **You own the code** — No external dependencies
-- **No version conflicts** — No need to track updates
-- **Modify freely** — Change without forking
-- **Copy only what you need** — No bloat
+- **You own the code** - No external dependencies
+- **No version conflicts** - No need to track updates
+- **Modify freely** - Change without forking
+- **Copy only what you need** - No bloat
 
 See [Composition Over Configuration](./composition-over-configuration#helpers-as-copy-paste-recipes) for more details.
 
@@ -1111,4 +1111,4 @@ route.all("/*", {
 
 ---
 
-Next: [Philosophy (Revisited)](./philosophy-revisited) — Why Hectoday HTTP makes these design choices.
+Next: [Philosophy (revisited)](./philosophy-revisited) - Why Hectoday HTTP makes these design choices.

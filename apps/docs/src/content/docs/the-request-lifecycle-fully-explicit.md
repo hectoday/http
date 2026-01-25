@@ -1,5 +1,5 @@
 ---
-title: "The Request Lifecycle (Fully Explicit)"
+title: "The request lifecycle (fully explicit)"
 description: "Understanding the complete path of every request"
 order: 1
 part: 3
@@ -734,4 +734,4 @@ const app = setup({
 
 ---
 
-Next: [Hooks: The Three Extension Points](./hooks-the-three-extension-points) — understanding onRequest, onResponse, and onError in depth.
+Next: [Hooks: the three extension points](./hooks-the-three-extension-points) - understanding onRequest, onResponse, and onError in depth.

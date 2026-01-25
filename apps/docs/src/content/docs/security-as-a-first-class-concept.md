@@ -1,5 +1,5 @@
 ---
-title: "Security as a First-Class Concept"
+title: "Security as a first-class concept"
 description: "Designing secure APIs with explicit security controls"
 order: 1
 part: 4
@@ -709,7 +709,7 @@ route.post("/api/comments", {
 
 ## Auditing the Request Path
 
-The most important security feature of Hectoday HTTP isn't a guard—it's **visibility**.
+The most important security feature of Hectoday HTTP isn't a guard, it's **visibility**.
 
 ### Why Explicit Flow Is Easier to Reason About
 
@@ -950,4 +950,4 @@ const apiRoutes = group({
 
 ---
 
-Next: [Static Files and Assets](./static-files-and-assets) — serving files while maintaining explicit control.
+Next: [Static files and assets](./static-files-and-assets) - serving files while maintaining explicit control.

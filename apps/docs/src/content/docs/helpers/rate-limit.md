@@ -1,5 +1,5 @@
 ---
-title: "Rate Limiting - Protect Your API"
+title: "Rate limiting - protect your API"
 description: "Limit request rates per client"
 draft: true
 ---
@@ -314,12 +314,12 @@ If running on Cloudflare Workers, use their built-in rate limiting:
 
 ## Notes
 
-- **In-memory storage** — Simple but doesn't scale across servers
-- **Use Redis** — For production multi-server deployments
-- **Use platform features** — Cloudflare, AWS, etc. have built-in rate limiting
-- **Clean up expired entries** — Prevents memory leaks
-- **Set `Retry-After` header** — Tells clients when to retry
-- **Different keys** — Rate limit by IP, user, API key, etc.
+- **In-memory storage** - Simple but doesn't scale across servers
+- **Use Redis** - For production multi-server deployments
+- **Use platform features** - Cloudflare, AWS, etc. have built-in rate limiting
+- **Clean up expired entries** - Prevents memory leaks
+- **Set `Retry-After` header** - Tells clients when to retry
+- **Different keys** - Rate limit by IP, user, API key, etc.
 
 ## Why Not Built-In?
 

@@ -1,5 +1,5 @@
 ---
-title: "Your First Server"
+title: "Your first server"
 description: "Building your first Hectoday HTTP server"
 order: 2
 part: 2
@@ -95,7 +95,7 @@ interface Context {
 }
 ```
 
-### `c.request` — The Original Request
+### `c.request` - The original request
 
 ```typescript
 route.get("/hello", {
@@ -111,7 +111,7 @@ route.get("/hello", {
 
 This is the standard Fetch API `Request`. No wrapper. Use it directly.
 
-### `c.raw` — Extracted Inputs
+### `c.raw` - Extracted inputs
 
 Hectoday HTTP extracts common values for you:
 
@@ -145,7 +145,7 @@ route.post("/users", {
 
 **Important**: `c.raw` values are **not validated**. They're just extracted. Use them carefully or validate them first.
 
-### `c.input` — Validation Results
+### `c.input` - Validation results
 
 When you define schemas, `c.input` tells you if validation passed:
 
@@ -172,7 +172,7 @@ route.post("/users", {
 
 We'll cover validation in detail later. For now, know: **validation never auto-responds**. You check `c.input.ok` and decide what to do.
 
-### `c.locals` — Request-Scoped Data
+### `c.locals` - Request-scoped data
 
 Guards and hooks can attach data to `c.locals`:
 
@@ -493,4 +493,4 @@ Two decision points. Two ways to end. Everything else is just computation.
 
 ---
 
-Next: [Describing Facts](./describing-facts) — how to safely extract and work with request data.
+Next: [Describing facts](./describing-facts) - how to safely extract and work with request data.

@@ -1,5 +1,5 @@
 ---
-title: "maxBodyBytes: Limit Request Body Size"
+title: "maxBodyBytes: limit request body size"
 description: "Guard helper to limit request body size"
 draft: false
 ---
@@ -126,10 +126,10 @@ route.post("/api", {
 
 ## How It Works
 
-1. **Checks `Content-Length` header** — Most clients send this
-2. **Compares to max** — Rejects if over limit
-3. **Returns 413** — Standard "Payload Too Large" status
-4. **Allows if no header** — Runtime will enforce limits when reading body
+1. **Checks `Content-Length` header** - Most clients send this
+2. **Compares to max** - Rejects if over limit
+3. **Returns 413** - Standard "Payload Too Large" status
+4. **Allows if no header** - Runtime will enforce limits when reading body
 
 ## Notes
 

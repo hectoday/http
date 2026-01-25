@@ -1,5 +1,5 @@
 ---
-title: "Hooks: The Three Extension Points"
+title: "Hooks: the three extension points"
 description: "Understanding onRequest, onResponse, and onError hooks"
 order: 2
 part: 3
@@ -108,9 +108,9 @@ route.get("/test", {
 
 ### What It Cannot Do
 
-- **Cannot deny requests** — no way to return Response
-- **Cannot short-circuit** — always runs fully
-- **Cannot access route params** — routing hasn't happened yet
+- **Cannot deny requests** - no way to return Response
+- **Cannot short-circuit** - always runs fully
+- **Cannot access route params** - routing hasn't happened yet
 
 If you need to deny requests, use a **guard** instead:
 
@@ -366,7 +366,7 @@ onError: (info) => {
 }
 ```
 
-**The error is `unknown`** — could be anything. The context **may be incomplete** if error happened early.
+**The error is `unknown`**, could be anything. The context **may be incomplete** if error happened early.
 
 ### What It Returns
 
@@ -792,9 +792,9 @@ setup({
 
 Three hooks:
 
-1. **onRequest** — Before routing, add locals
-2. **onResponse** — After handler, modify response
-3. **onError** — When throw, return error response
+1. **onRequest** - Before routing, add locals
+2. **onResponse** - After handler, modify response
+3. **onError** - When throw, return error response
 
 Three rules:
 
@@ -810,4 +810,4 @@ Three questions:
 
 ---
 
-Next: [Errors Are Responses](./errors-are-responses) — how to handle errors explicitly without throwing.
+Next: [Errors are responses](./errors-are-responses) - how to handle errors explicitly without throwing.

@@ -1,5 +1,5 @@
 ---
-title: "Request ID - Tracking and Tracing"
+title: "Request ID - Tracking and tracing"
 description: "Generate and track request IDs across your application"
 draft: true
 ---

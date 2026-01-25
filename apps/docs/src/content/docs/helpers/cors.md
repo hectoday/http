@@ -1,5 +1,5 @@
 ---
-title: "CORS - Cross-Origin Resource Sharing"
+title: "CORS - Cross-origin resource sharing"
 description: "Add CORS headers to responses"
 draft: true
 ---

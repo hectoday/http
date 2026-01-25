@@ -1,5 +1,5 @@
 ---
-title: "A Mental Model of HTTP"
+title: "A mental model of HTTP"
 description: "Understanding HTTP from first principles"
 order: 3
 part: 1
@@ -336,4 +336,4 @@ When you think this way, HTTP becomes predictable. You know where control flow h
 
 ---
 
-Next: [The Web Standard Foundation](./the-web-standard-foundation) — how Web APIs provide the primitives for this model.
+Next: [The web standard foundation](./the-web-standard-foundation) - how Web APIs provide the primitives for this model.
