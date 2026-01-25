@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Command } from "cmdk";
 import Fuse from "fuse.js";
+import { KeyboardShortcut } from "./KeyboardShortcut.tsx";
 
 interface DocItem {
   id: string;
@@ -262,31 +263,27 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 </>
               )}
           </Command.List>
-          <div className="border-t border-[rgb(209,217,224)] px-3 py-2 text-xs text-gray-500 flex items-center justify-between">
+          <div className="border-t border-[rgb(209,217,224)] px-3 py-2 text-xs text-gray-500 flex items-baseline justify-between">
             <div className="flex gap-3">
-              <span>
-                <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
-                  ↑↓
-                </kbd>{" "}
-                Navigate
+              <span className="flex gap-[0.5ch] items-center">
+                <KeyboardShortcut items={["↑"]} />
+                <span>Up</span>
               </span>
-              <span>
-                <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
-                  ↵
-                </kbd>{" "}
-                Select
+              <span className="flex gap-[0.5ch] items-center">
+                <KeyboardShortcut items={["↓"]} />
+                <span>Down</span>
               </span>
-              <span>
-                <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
-                  Esc
-                </kbd>{" "}
-                Close
+              <span className="flex gap-[0.5ch] items-center">
+                <KeyboardShortcut items={["↵"]} />
+                <span>Enter</span>
+              </span>
+              <span className="flex gap-[0.5ch] items-center">
+                <KeyboardShortcut items={["esc"]} />
+                <span>Close</span>
               </span>
             </div>
             <span className="text-gray-400">
-              <kbd className="px-1 py-0.5 bg-gray-50 rounded text-xs text-gray-600">
-                ⌘K
-              </kbd>
+              <KeyboardShortcut items={["⌘", "K"]} />
             </span>
           </div>
         </Command>
