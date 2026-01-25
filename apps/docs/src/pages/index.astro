@@ -5,6 +5,7 @@ import WarningBanner from "~/components/WarningBanner.astro";
 import Hero from "~/components/Hero.astro";
 import type { ThemeRegistration } from "shiki";
 import hectodayTheme from "~/styles/hectoday.shiki.json";
+import { KeyboardShortcut } from "~/components/KeyboardShortcut";
 
 const codeExample = `import { route, setup } from "@hectoday/http";
 
@@ -28,6 +29,8 @@ Deno.serve(app.fetch);`;
     <WarningBanner
         message="This framework is under development and imperfections may occur."
     />
+
+    <KeyboardShortcut items={["Ctrl", "Shift", "A"]}>Test</KeyboardShortcut>
 
     <article class="prose">
         <h2>Install</h2>
