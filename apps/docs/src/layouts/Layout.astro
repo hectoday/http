@@ -1,6 +1,8 @@
 ---
 import "~/styles/global.css";
 import Footer from "~/components/Footer.astro";
+import CommandPalette from "~/components/CommandPalette.tsx";
+import { getCollection } from "astro:content";
 
 interface Props {
     title: string;
@@ -8,6 +10,16 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const isDev = import.meta.env.DEV;
+
+// Get all docs for the command palette
+const allDocs = await getCollection("docs");
+const docsForPalette = allDocs.map((doc) => ({
+    id: doc.id,
+    title: doc.data.title,
+    description: doc.data.description,
+    draft: doc.data.draft,
+}));
 ---
 
 <html lang="en">
@@ -36,6 +48,11 @@ const { title, description } = Astro.props;
     <body
         class="max-w-3xl mx-auto px-8 py-8 bg-white text-black leading-relaxed"
     >
+        <CommandPalette
+            client:only="react"
+            docs={docsForPalette}
+            isDev={isDev}
+        />
         <main>
             <slot />
         </main>
