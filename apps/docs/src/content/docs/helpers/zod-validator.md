@@ -6,7 +6,7 @@ draft: false
 
 A validator adapter that integrates Zod schemas with Hectoday HTTP's validation system.
 
-## The Code
+## The code
 
 ```typescript
 import type {
@@ -64,7 +64,7 @@ npm install zod
 
 ## Usage
 
-### Basic Setup
+### Basic setup
 
 ```typescript
 import { setup, route } from "@hectoday/http";
@@ -101,7 +101,7 @@ const app = setup({
 });
 ```
 
-### With Params, Query, and Body
+### With params, query, and body
 
 ```typescript
 route.post("/orgs/:orgId/users", {
@@ -140,7 +140,7 @@ route.post("/orgs/:orgId/users", {
 });
 ```
 
-## Advanced Zod Features
+## Advanced Zod features
 
 ### Transformations
 
@@ -195,7 +195,7 @@ route.post("/register", {
 });
 ```
 
-### Optional Fields
+### Optional fields
 
 ```typescript
 route.patch("/users/:id", {
@@ -219,7 +219,7 @@ route.patch("/users/:id", {
 });
 ```
 
-### Default Values
+### Default values
 
 ```typescript
 route.get("/search", {
@@ -246,7 +246,7 @@ route.get("/search", {
 });
 ```
 
-## Reusable Schemas
+## Reusable schemas
 
 Define schemas once, reuse everywhere:
 
@@ -307,7 +307,7 @@ const updateUserRoute = route.patch("/users/:id", {
 });
 ```
 
-## Error Messages
+## Error messages
 
 Zod provides detailed error messages:
 
@@ -331,7 +331,7 @@ Zod provides detailed error messages:
 }
 ```
 
-## Custom Error Messages
+## Custom error messages
 
 ```typescript
 route.post("/users", {
@@ -352,7 +352,7 @@ route.post("/users", {
 });
 ```
 
-## Type Inference
+## Type inference
 
 TypeScript automatically infers types from Zod schemas:
 
@@ -383,7 +383,7 @@ route.post("/users", {
 });
 ```
 
-## Adapter Interface
+## Adapter interface
 
 The validator adapter implements the `Validator` interface:
 
@@ -410,7 +410,7 @@ interface ValidationIssue {
 }
 ```
 
-## Other Schema Libraries
+## Other schema libraries
 
 You can create adapters for other validation libraries:
 
@@ -481,7 +481,7 @@ export const yupValidator: Validator<AnySchema> = {
 - `c.raw` always contains unvalidated data
 - Type inference works automatically with Zod
 
-## Why Not Built-In?
+## Why not built-in?
 
 Hectoday HTTP is validator-agnostic. Different projects use different schema libraries:
 - Some use Zod

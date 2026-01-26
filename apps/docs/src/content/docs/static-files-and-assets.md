@@ -10,7 +10,7 @@ Your API might need to serve static files: HTML pages, images, CSS, JavaScript b
 
 In Hectoday HTTP, static files are just HTTP responses. Nothing special.
 
-## Static Files Are Still HTTP
+## Static files are still HTTP
 
 A static file response is identical to any other response:
 
@@ -30,7 +30,7 @@ route.get("/index.html", {
 
 **That's it.** Read the file, return a Response.
 
-### Why They're Not Special
+### Why they're not special
 
 Many frameworks have "special" static file handling:
 
@@ -67,7 +67,7 @@ route.get("/logo.png", {
 
 **Explicit mapping. Explicit headers. Just like any other route.**
 
-### Files Are Just Bytes
+### Files are just bytes
 
 A Response body can be:
 - String
@@ -89,11 +89,11 @@ return new Response(fileBytes);
 
 No special file handling. Just bytes in a Response.
 
-## Serving Files Explicitly
+## Serving files explicitly
 
 Let's build file serving from first principles.
 
-### Single File
+### Single file
 
 Serve one specific file:
 
@@ -113,7 +113,7 @@ route.get("/", {
 
 **Full control**: You chose the URL (`"/"`), the file path (`"./public/index.html"`), and the Content-Type.
 
-### Multiple Files with Pattern Matching
+### Multiple files with pattern matching
 
 Serve files from a directory:
 
@@ -183,7 +183,7 @@ function getContentType(filename: string): string {
 
 **No magic. Every decision is in your code.**
 
-### Nested Paths
+### Nested paths
 
 Serve files with directory structure:
 
@@ -230,7 +230,7 @@ route.get("/static/*", {
 
 **Wildcard matching** (`"*"`) captures the rest of the path.
 
-### Security: Path Traversal Prevention
+### Security: path traversal prevention
 
 **Always validate file paths**:
 
@@ -278,7 +278,7 @@ route.get("/files/*", {
 
 **Path traversal is a serious vulnerability.** Always validate and sanitize file paths.
 
-### Runtime-Specific Optimizations
+### Runtime-specific optimizations
 
 Different runtimes have optimized file serving:
 
@@ -369,11 +369,11 @@ route.get("/assets/:filename", {
 
 **Each runtime has its own optimizations.** Use them when appropriate.
 
-## Mapping URLs to Files
+## Mapping URLs to files
 
 You control the URL-to-file mapping explicitly.
 
-### Direct Mapping
+### Direct mapping
 
 ```typescript
 // URL: /index.html → File: ./public/index.html
@@ -387,7 +387,7 @@ route.get("/index.html", {
 })
 ```
 
-### Strip Prefix
+### Strip prefix
 
 ```typescript
 // URL: /static/logo.png → File: ./public/logo.png
@@ -400,7 +400,7 @@ route.get("/static/:filename", {
 })
 ```
 
-### Add Prefix
+### Add prefix
 
 ```typescript
 // URL: /logo.png → File: ./assets/images/logo.png
@@ -413,7 +413,7 @@ route.get("/:filename", {
 })
 ```
 
-### Custom Logic
+### Custom logic
 
 ```typescript
 // URL: /v2/api.js → File: ./dist/api.v2.js
@@ -434,7 +434,7 @@ route.get("/:version/:filename", {
 
 **You write the mapping logic.** No conventions. No magic.
 
-## Controlling Headers
+## Controlling headers
 
 Headers determine how browsers cache and handle files.
 
@@ -566,7 +566,7 @@ route.get("/app.js", {
 
 **Pre-compression** is more efficient than runtime compression.
 
-### Security Headers
+### Security headers
 
 For HTML files, add security headers:
 
@@ -593,7 +593,7 @@ route.get("/", {
 
 **Security headers protect against common attacks.**
 
-### CORS Headers
+### CORS headers
 
 For assets used cross-origin:
 
@@ -640,7 +640,7 @@ route.get("/download/:filename", {
 
 **Content-Disposition: attachment** triggers download dialog.
 
-## Complete Example: Static File Server
+## Complete example: static file server
 
 Putting it all together:
 

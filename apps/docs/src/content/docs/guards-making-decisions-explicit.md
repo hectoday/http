@@ -10,7 +10,7 @@ You've extracted facts. You've validated data. Now comes the critical question: 
 
 Guards answer this question. They are the **only** place besides handlers where requests can end.
 
-## What Is a Guard?
+## What is a guard?
 
 A guard is a function that makes an allow/deny decision:
 
@@ -24,7 +24,7 @@ type GuardResult =
 
 That's it. A guard receives context, returns a decision.
 
-### A Decision Boundary
+### A decision boundary
 
 Guards are **decision boundaries**, places where the request might end:
 
@@ -53,7 +53,7 @@ If a guard returns `{ deny: Response }`, the request ends immediately. The handl
 
 If a guard returns `{ allow: true }`, the request continues to the next guard (if any) or to the handler.
 
-### The Moment Intent Becomes Outcome
+### The moment intent becomes outcome
 
 Before the guard runs, the request is in limbo, it **might** be allowed:
 
@@ -81,7 +81,7 @@ This is different from validation:
 - **Validation** asks: "Is this data well-formed?"
 - **Guards** ask: "Should this request proceed?"
 
-### Using Guards
+### Using guards
 
 Attach guards to routes:
 
@@ -238,7 +238,7 @@ const requireValidApiKey: GuardFn = (c) => {
 
 You decide the status code, the body, the headers. Guards are explicit.
 
-### Why There Is No "Throw"
+### Why there is no "throw"
 
 Some frameworks let you throw to deny:
 
@@ -282,7 +282,7 @@ You see:
 
 **No magic. No hidden mappings. Just explicit returns.**
 
-### Why Guards Must Be Explicit
+### Why guards must be explicit
 
 Implicit guards create confusion:
 
@@ -320,11 +320,11 @@ Reading the route definition tells you:
 
 **The code is the documentation.**
 
-## Guard Ordering
+## Guard ordering
 
 Guards run in the order you specify. This order is **part of your API design**.
 
-### Order Matters
+### Order matters
 
 ```typescript
 route.get("/admin/users", {
@@ -353,7 +353,7 @@ route.get("/admin/users", {
 
 If `requireAdmin` checks `c.locals.user` but `requireAuth` hasn't run yet, `user` won't exist. The guard will fail incorrectly.
 
-### Dependencies Between Guards
+### Dependencies between guards
 
 Guards can depend on previous guards' locals:
 
@@ -408,7 +408,7 @@ route.delete("/users/:id", {
 
 **The order is explicit.** You can trace the data flow by reading the guard array.
 
-### Short-Circuiting
+### Short-circuiting
 
 The first guard to deny ends the request:
 
@@ -447,7 +447,7 @@ route.get("/admin", {
 
 This is **sequential evaluation**. Not parallel, not all-at-once. One by one, in order.
 
-### Why Order Is Part of Your API Design
+### Why order is part of your API design
 
 The order affects:
 
@@ -503,7 +503,7 @@ route.post("/transfer", {
 
 The client gets the **first** error they encounter. Order determines which error they see.
 
-### Reusable Guards
+### Reusable guards
 
 Guards are just functions. Share them:
 
@@ -541,7 +541,7 @@ route.delete("/admin/users/:id", {
 
 Same guards, different routes. **Composition without hidden behavior.**
 
-### Parameterized Guards
+### Parameterized guards
 
 Guards can be factories:
 
@@ -576,7 +576,7 @@ route.get("/moderator", {
 
 **Still explicit.** The factory creates a guard, you see it in the array.
 
-### Guard Composition with `group()`
+### Guard composition with `group()`
 
 Apply guards to multiple routes at once:
 

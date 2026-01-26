@@ -14,7 +14,7 @@ Hectoday HTTP does none of this.
 
 Instead, it **describes facts** and lets **you commit reality**.
 
-## The Core Idea
+## The core idea
 
 ```typescript
 // Hectoday HTTP gives you facts
@@ -35,9 +35,9 @@ Hectoday HTTP computes:
 
 **You decide what these facts mean as HTTP.**
 
-## What Problems It Solves
+## What problems it solves
 
-### Hidden Control Flow
+### Hidden control flow
 
 Most frameworks have invisible branching:
 
@@ -60,7 +60,7 @@ if (!result.ok) {
 }
 ```
 
-### Implicit Meaning
+### Implicit meaning
 
 Frameworks often assign meaning to code patterns:
 
@@ -85,7 +85,7 @@ const guard = (c) => {
 // You see exactly when and how requests end
 ```
 
-### Framework Lock-In
+### Framework lock-in
 
 Most frameworks wrap Web standards:
 
@@ -106,21 +106,21 @@ return new Response(JSON.stringify({ data: "..." }), {
 });
 ```
 
-## What It Intentionally Does Not Solve
+## What it intentionally does not solve
 
-### Convenience Over Clarity
+### Convenience over Clarity
 
 Hectoday HTTP will never auto-return 400 on validation failure. That would be convenient, but it would hide the decision.
 
-### Magic Error Handling
+### Magic error Handling
 
 Hectoday HTTP will never catch handler errors and return 500. You handle errors explicitly or they go to `onError`.
 
-### Opinionated Responses
+### Opinionated responses
 
 Hectoday HTTP will never format error objects for you. JSON:API? Problem Details? Your schema? You choose.
 
-### Middleware Chains
+### Middleware chains
 
 Hectoday HTTP has no middleware. Instead, it has:
 - `onRequest` - gathers facts before routing
@@ -129,39 +129,39 @@ Hectoday HTTP has no middleware. Instead, it has:
 
 Each step has exactly one job.
 
-## Who This Is For
+## Who this is for
 
-### You Want Explicit Control
+### You want explicit control
 
 You want to **see** every decision boundary in your code. You don't want the framework guessing what you meant.
 
-### You Value Web Standards
+### You value Web Standards
 
 You want to write code that works across Deno, Bun, Cloudflare Workers, and future runtimes. You don't want to rewrite when platforms change.
 
-### You Think in Facts and Decisions
+### You think in facts and decisions
 
 You separate **observing reality** from **committing to outcomes**. You want your framework to match this mental model.
 
-### You're Building Something That Lasts
+### You're building something that lasts
 
 You want code that's still readable in 3 years. You want new team members to understand the request flow by reading handlers, not docs.
 
-## Who This Is Not For
+## Who this is not for
 
-### You Want Rapid Prototyping
+### You want rapid prototyping
 
 If you need to ship fast and don't care about explicitness, use something with more magic. Hectoday HTTP optimizes for clarity over speed of development.
 
-### You Want Batteries Included
+### You want batteries included
 
 Hectoday HTTP has no built-in ORM, no template engine, no session middleware. It's a request handler, nothing more.
 
-### You Want Convention Over Configuration
+### You want convention over configuration
 
 Hectoday HTTP has almost no conventions. You write explicit code for every case. If you prefer "it just works" magic, this isn't it.
 
-## The Philosophy in One Sentence
+## The philosophy in one sentence
 
 **Hectoday HTTP describes what happened. You decide what it means.**
 

@@ -6,7 +6,7 @@ draft: true
 
 Generate unique request IDs for tracing requests through logs and services.
 
-## The Code
+## The code
 
 ```typescript
 function generateRequestId(): string {
@@ -32,7 +32,7 @@ function addRequestIdHeader(info: {
 
 ## Usage
 
-### Basic Setup
+### Basic setup
 
 ```typescript
 import { setup, route } from "@hectoday/http";
@@ -57,7 +57,7 @@ const app = setup({
 
 Now every response includes `X-Request-ID` header.
 
-### Accept Client Request IDs
+### Accept client request IDs
 
 Accept request IDs from clients (if provided):
 
@@ -68,7 +68,7 @@ onRequest: ({ request }) => {
 }
 ```
 
-### Request Logging
+### Request logging
 
 Log requests with IDs:
 
@@ -97,7 +97,7 @@ const app = setup({
 });
 ```
 
-### Structured Logging
+### Structured logging
 
 Use request IDs in structured logs:
 
@@ -148,7 +148,7 @@ const app = setup({
 });
 ```
 
-### Error Tracking
+### Error tracking
 
 Include request IDs in error responses:
 
@@ -183,7 +183,7 @@ const app = setup({
 });
 ```
 
-### Distributed Tracing
+### Distributed tracing
 
 Forward request IDs to external services:
 
@@ -205,7 +205,7 @@ route.get("/data", {
 });
 ```
 
-## Custom ID Generation
+## Custom ID generation
 
 ### Short IDs
 
@@ -243,7 +243,7 @@ function generateNanoId(): string {
 - Forward to downstream services for distributed tracing
 - Log with request IDs for correlating log entries
 
-## Why Not Built-In?
+## Why not built-in?
 
 Request ID generation is application-specific:
 - Some accept client IDs, some generate server-side

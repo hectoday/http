@@ -6,7 +6,7 @@ draft: true
 
 Limit how many requests a client can make in a time window.
 
-## The Code
+## The code
 
 ```typescript
 import type { GuardFn } from "@hectoday/http";
@@ -62,7 +62,7 @@ function rateLimit(options: {
 
 ## Usage
 
-### Basic Rate Limiting
+### Basic rate limiting
 
 ```typescript
 import { route } from "@hectoday/http";
@@ -81,7 +81,7 @@ route.post("/api/data", {
 });
 ```
 
-### By IP Address
+### By IP address
 
 ```typescript
 route.post("/api/submit", {
@@ -96,7 +96,7 @@ route.post("/api/submit", {
 });
 ```
 
-### By User ID
+### By user ID
 
 ```typescript
 route.post("/api/action", {
@@ -112,7 +112,7 @@ route.post("/api/action", {
 });
 ```
 
-### By API Key
+### By API key
 
 ```typescript
 route.get("/api/data", {
@@ -130,9 +130,9 @@ route.get("/api/data", {
 });
 ```
 
-## Advanced Usage
+## Advanced usage
 
-### Different Limits Per Route
+### Different limits per route
 
 ```typescript
 const strictLimit = rateLimit({
@@ -160,7 +160,7 @@ const authRoutes = [
 ];
 ```
 
-### Custom Error Response
+### Custom error response
 
 ```typescript
 function customRateLimit(maxRequests: number, windowMs: number): GuardFn {
@@ -233,7 +233,7 @@ const app = setup({
 });
 ```
 
-### Cleanup Old Entries
+### Cleanup old entries
 
 The in-memory Map grows over time. Add periodic cleanup:
 
@@ -249,9 +249,9 @@ setInterval(() => {
 }, 10 * 60 * 1000);
 ```
 
-## Production Considerations
+## Production considerations
 
-### Use Redis for Distributed Systems
+### Use Redis for distributed systems
 
 The in-memory Map doesn't work across multiple servers. Use Redis:
 
@@ -303,7 +303,7 @@ function redisRateLimit(options: {
 }
 ```
 
-### Use Cloudflare Rate Limiting
+### Use Cloudflare rate limiting
 
 If running on Cloudflare Workers, use their built-in rate limiting:
 
@@ -321,7 +321,7 @@ If running on Cloudflare Workers, use their built-in rate limiting:
 - **Set `Retry-After` header** - Tells clients when to retry
 - **Different keys** - Rate limit by IP, user, API key, etc.
 
-## Why Not Built-In?
+## Why not built-in?
 
 Rate limiting strategy varies:
 - Some use in-memory, some use Redis

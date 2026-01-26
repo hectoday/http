@@ -10,11 +10,11 @@ The request has arrived. The route matched. Now you need to read its data.
 
 But **reading is not deciding**. This chapter is about observation: extracting facts from requests without committing to outcomes.
 
-## What Is a "Fact"?
+## What is a "fact"?
 
 A fact is something you've **observed** but haven't **acted upon**.
 
-### The Difference
+### The difference
 
 ```typescript
 // Observing (fact)
@@ -31,7 +31,7 @@ if (!authHeader) {
 
 Facts are passive. Decisions are active. **Separate them.**
 
-### Reading the Request Without Deciding
+### Reading the request without deciding
 
 When you read request data, you're gathering information:
 
@@ -53,7 +53,7 @@ route.get("/users/:id", {
 
 You're not validating. You're not authorizing. You're not processing. You're just **reading what exists**.
 
-### Extracting Data Safely
+### Extracting data safely
 
 HTTP requests are hostile. Clients can send anything:
 
@@ -82,7 +82,7 @@ Everything in `c.raw` is **unvalidated**. Use it carefully.
 
 URLs contain two types of data: **path parameters** and **query parameters**.
 
-### Path Parameters
+### Path parameters
 
 Path parameters come from the URL pattern:
 
@@ -158,7 +158,7 @@ route.get("/users/:id", {
 })
 ```
 
-### Query Parameters
+### Query parameters
 
 Query parameters come from the URL search string:
 
@@ -183,7 +183,7 @@ route.get("/search", {
 c.raw.query.page // "2" (string), not 2 (number)
 ```
 
-### Query Parameter Arrays
+### Query parameter arrays
 
 Query parameters can appear multiple times:
 
@@ -223,7 +223,7 @@ route.get("/filter", {
 })
 ```
 
-### Missing Query Parameters
+### Missing query parameters
 
 ```typescript
 route.get("/search", {
@@ -245,7 +245,7 @@ route.get("/search", {
 // → query = undefined → returns 400
 ```
 
-### Search Params vs Internal Naming
+### Search params vs internal naming
 
 The URL uses `?key=value` syntax. Internally, you access via object properties:
 
@@ -268,7 +268,7 @@ JavaScript property access rules apply:
 - `c.raw.query.max_results` works (valid identifier)
 - `c.raw.query["include-draft"]` needed (hyphen not valid in dot notation)
 
-### The Full URL
+### The full URL
 
 If you need more than params and query, use `c.request.url`:
 
@@ -289,11 +289,11 @@ route.get("/example", {
 })
 ```
 
-## Reading the Body
+## Reading the body
 
 Request bodies are more complex than URLs. They're optional, can be large, and come in various formats.
 
-### When a Body Exists
+### When a body exists
 
 Not all requests have bodies:
 
@@ -330,7 +330,7 @@ route.post("/users", {
 })
 ```
 
-### Reading the Body Manually
+### Reading the body manually
 
 The Fetch API provides several methods:
 
@@ -361,7 +361,7 @@ route.post("/echo", {
 })
 ```
 
-### JSON as a Fact, Not a Guarantee
+### JSON as a fact, not a guarantee
 
 When you call `c.request.json()`, you're asking: "Parse this body as JSON."
 
@@ -393,7 +393,7 @@ The client might send:
 
 **Never assume the body is what you expect.** Validate it.
 
-### Hectoday HTTP's Body Parsing
+### Hectoday HTTP's body parsing
 
 When you define a `body` schema, Hectoday HTTP automatically parses the body **as JSON**:
 
@@ -450,7 +450,7 @@ route.post("/upload", {
 })
 ```
 
-### Empty Bodies
+### Empty bodies
 
 An empty body is not an error, it's a fact:
 
@@ -502,7 +502,7 @@ route.post("/users", {
 })
 ```
 
-### Content-Type Header
+### Content-Type header
 
 The `Content-Type` header tells you what format the body is:
 
@@ -539,7 +539,7 @@ const data = await c.request.json(); // Throws!
 
 Always wrap parsing in try/catch or use validation.
 
-### Facts About the Body
+### Facts about the body
 
 To summarize:
 

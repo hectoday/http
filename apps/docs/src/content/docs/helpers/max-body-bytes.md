@@ -6,7 +6,7 @@ draft: false
 
 A guard helper that limits request body size, protecting against large payloads.
 
-## The Code
+## The code
 
 ```typescript
 const SIZES = {
@@ -81,7 +81,7 @@ route.post("/webhook", {
 
 ## Customization
 
-### Custom Error Response
+### Custom error response
 
 ```typescript
 function maxBodyBytes(max: number, errorFn?: (size: number, max: number) => Response): GuardFn {
@@ -124,7 +124,7 @@ route.post("/api", {
 });
 ```
 
-## How It Works
+## How it works
 
 1. **Checks `Content-Length` header** - Most clients send this
 2. **Compares to max** - Rejects if over limit
@@ -139,7 +139,7 @@ route.post("/api", {
 - Use this for early rejection before parsing large payloads
 - Combine with request validation for body structure checks
 
-## Why Not Built-In?
+## Why not built-in?
 
 This is a policy decision (how big is too big?), not a framework primitive. Different routes have different limits:
 

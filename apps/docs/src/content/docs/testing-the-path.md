@@ -12,7 +12,7 @@ You don't mock route matching, validation, or guard execution. Those are impleme
 
 You test what matters: your handlers, business logic, and how they interact with your services.
 
-## The Testing Philosophy
+## The testing Philosophy
 
 **Test your application code:**
 - Handler logic
@@ -29,11 +29,11 @@ You test what matters: your handlers, business logic, and how they interact with
 
 The framework already works. Test your code instead.
 
-## Testing Handlers with Dependencies
+## Testing handlers with dependencies
 
 Real handlers depend on services, databases, and external APIs. Test them by injecting mock dependencies.
 
-### Basic Handler Testing
+### Basic handler testing
 
 ```typescript
 import { assertEquals } from "@std/assert";
@@ -117,11 +117,11 @@ Deno.test("GET /users/:id returns 404 when not found", async () => {
 
 **Pattern: Dependency injection.** Handlers accept services, tests inject mocks.
 
-## Testing Business Logic
+## Testing business logic
 
 Extract complex logic into testable functions. Test them independently.
 
-### Testing Domain Logic
+### Testing domain logic
 
 ```typescript
 // Domain logic - pure functions
@@ -226,11 +226,11 @@ function createOrderHandlers(orderService: OrderService, accountService: Account
 
 **Pattern: Extract and test.** Complex logic lives in pure functions, handlers orchestrate.
 
-## Testing with In-Memory State
+## Testing with in-memory state
 
 For integration tests, use in-memory implementations instead of real databases.
 
-### In-Memory Service Implementation
+### In-memory service implementation
 
 ```typescript
 class InMemoryUserService implements UserService {
@@ -306,11 +306,11 @@ Deno.test("users are isolated between tests", async () => {
 
 **Pattern: In-memory implementations.** Fast, isolated, no external dependencies.
 
-## Testing Authentication and Authorization
+## Testing authentication and authorization
 
 Test your auth logic by mocking the authentication service.
 
-### Testing Protected Routes
+### Testing protected routes
 
 ```typescript
 interface AuthService {
@@ -435,11 +435,11 @@ Deno.test("admin route requires admin role", async () => {
 
 **Pattern: Mock auth service.** Control who's authenticated and what roles they have.
 
-## Testing Error Handling
+## Testing error handling
 
 Test how your handlers deal with failures from dependencies.
 
-### Testing Service Failures
+### Testing service failures
 
 ```typescript
 Deno.test("handler returns 500 when service throws", async () => {
@@ -540,7 +540,7 @@ Deno.test("handler handles specific business errors", async () => {
 
 Test how your handlers respond to invalid input.
 
-### Testing Input Validation
+### Testing input validation
 
 ```typescript
 import { z } from "zod";
@@ -633,11 +633,11 @@ Deno.test("rejects underage users", async () => {
 
 **Pattern: Test validation rules.** Send invalid data, verify proper error responses.
 
-## Testing External API Calls
+## Testing external API calls
 
 Mock external APIs to test integration logic.
 
-### Testing Third-Party Services
+### Testing third-party services
 
 ```typescript
 interface PaymentProvider {
@@ -766,11 +766,11 @@ Deno.test("checkout fails with invalid payment token", async () => {
 
 **Pattern: Mock external services.** Control their behavior, test your error handling.
 
-## Testing Hooks
+## Testing hooks
 
 Test lifecycle hooks that add cross-cutting concerns.
 
-### Testing Request/Response Hooks
+### Testing request/response hooks
 
 ```typescript
 Deno.test("onRequest adds request ID to context", async () => {
@@ -852,11 +852,11 @@ Deno.test("onError logs and sanitizes errors", async () => {
 
 **Pattern: Test hooks directly.** Verify they modify context, responses, or handle errors correctly.
 
-## Test Organization Patterns
+## Test organization patterns
 
 Structure your tests to match your application architecture.
 
-### Test File Structure
+### Test file structure
 
 ```typescript
 // tests/users/create-user.test.ts
@@ -886,7 +886,7 @@ Deno.test("complete user registration flow", async () => {
 });
 ```
 
-### Test Fixtures and Helpers
+### Test fixtures and helpers
 
 ```typescript
 // tests/fixtures/users.ts
@@ -954,7 +954,7 @@ Deno.test("example with helpers", async () => {
 });
 ```
 
-## Why This Testing Approach Works
+## Why this testing approach works
 
 **Tests are about your code:**
 - You test handlers, business logic, service integrations
@@ -981,7 +981,7 @@ Deno.test("example with helpers", async () => {
 - Examples of success and error cases
 - Clear contracts between layers
 
-## The Testing Template
+## The testing template
 
 Every handler test follows this pattern:
 

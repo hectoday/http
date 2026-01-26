@@ -10,7 +10,7 @@ Hectoday HTTP has exactly three hooks. Not middleware chains. Not plugins. Three
 
 This chapter explains what each hook does, when it runs, what it can and cannot do, and how to use them effectively.
 
-## The Three Hooks
+## The three hooks
 
 ```typescript
 setup({
@@ -35,11 +35,11 @@ setup({
 
 **Key insight**: These three points cover the entire request lifecycle. Nothing happens outside them.
 
-## onRequest: Before Routing
+## onRequest: Before routing
 
 `onRequest` runs **before routing begins**. It receives the raw `Request` and returns locals.
 
-### When It Runs
+### When it runs
 
 ```
 1. Request arrives
@@ -52,7 +52,7 @@ setup({
 
 It runs **once per request**, before any routing logic.
 
-### What It Receives
+### What it receives
 
 ```typescript
 onRequest: (info) => {
@@ -68,7 +68,7 @@ onRequest: (info) => {
 
 **That's all.** No route params (routing hasn't happened). No context (not built yet). Just the raw request.
 
-### What It Returns
+### What it returns
 
 Either `void` or `Record<string, unknown>` (or Promise of either):
 
@@ -106,7 +106,7 @@ route.get("/test", {
 })
 ```
 
-### What It Cannot Do
+### What it cannot do
 
 - **Cannot deny requests** - no way to return Response
 - **Cannot short-circuit** - always runs fully
@@ -133,7 +133,7 @@ const requireApiKey: GuardFn = (c) => {
 };
 ```
 
-### Common Patterns
+### Common patterns
 
 **Request ID tracking:**
 
@@ -180,11 +180,11 @@ export default {
 };
 ```
 
-## onResponse: After Handler
+## onResponse: After handler
 
 `onResponse` runs **after the handler succeeds**. It receives the context and response, returns a (possibly modified) response.
 
-### When It Runs
+### When it runs
 
 ```
 1. Request arrives
@@ -198,7 +198,7 @@ export default {
 
 It runs **once per request**, after handler returns successfully.
 
-### What It Receives
+### What it receives
 
 ```typescript
 onResponse: (info) => {
@@ -219,7 +219,7 @@ onResponse: (info) => {
 
 **Full context.** Everything the handler had access to.
 
-### What It Returns
+### What it returns
 
 A `Response` (or Promise of Response):
 
@@ -245,7 +245,7 @@ onResponse: async ({ context, response }) => {
 }
 ```
 
-### What It Cannot Do
+### What it cannot do
 
 **Cannot run if handler throws:**
 
@@ -276,7 +276,7 @@ route.get("/protected", {
 
 `onResponse` only runs when **handler succeeds**.
 
-### Common Patterns
+### Common patterns
 
 **Add response headers:**
 
@@ -331,11 +331,11 @@ onResponse: async ({ response }) => {
 }
 ```
 
-## onError: When Handler Throws
+## onError: When handler throws
 
 `onError` runs **when a handler throws an exception**. It receives the error and context, returns an error response.
 
-### When It Runs
+### When it runs
 
 ```
 1. Request arrives
@@ -349,7 +349,7 @@ onResponse: async ({ response }) => {
 
 It runs **only when something throws**. Not for explicit error responses.
 
-### What It Receives
+### What it receives
 
 ```typescript
 onError: (info) => {
@@ -368,7 +368,7 @@ onError: (info) => {
 
 **The error is `unknown`**, could be anything. The context **may be incomplete** if error happened early.
 
-### What It Returns
+### What it returns
 
 A `Response` (or Promise of Response):
 
@@ -422,7 +422,7 @@ onError: ({ error, context }) => {
 }
 ```
 
-### What Throws Are Caught
+### What throws are caught
 
 **Handlers:**
 
@@ -455,7 +455,7 @@ route.get("/test", {
 })
 ```
 
-### What Doesn't Throw
+### What doesn't throw
 
 **Explicit Response returns:**
 
@@ -482,7 +482,7 @@ route.get("/test", {
 
 `onError` only catches **exceptions**, not explicit error responses.
 
-### Common Patterns
+### Common patterns
 
 **Centralized error logging:**
 
@@ -552,7 +552,7 @@ onError: ({ error }) => {
 }
 ```
 
-## Parameter Styles: Two Ways to Write Hooks
+## Parameter styles: two ways to write hooks
 
 All hooks receive a single `info` object. You can use it two ways:
 
@@ -579,7 +579,7 @@ onError: ({ error, context }) => {
 
 **When to use:** You want concise code and only need specific properties.
 
-### Named Parameter (Explicit)
+### Named parameter (explicit)
 
 You can also use the named parameter directly:
 
@@ -605,7 +605,7 @@ onError: (info) => {
 
 **When to use:** You want explicit parameter names or need autocomplete to discover what's available.
 
-### Partial Destructuring
+### Partial destructuring
 
 Only destructure what you need:
 
@@ -626,11 +626,11 @@ onError: ({ error }) => {
 
 **Both styles work identically.** Choose what feels clearest for your code.
 
-## Hook Execution Order
+## Hook execution order
 
 Hooks run in a specific order:
 
-### Happy Path (No Errors)
+### Happy path (no errors)
 
 ```
 Request
@@ -648,7 +648,7 @@ onResponse ← Always runs if handler succeeds
 Response
 ```
 
-### Error Path (Handler Throws)
+### Error path (handler throws)
 
 ```
 Request
@@ -666,7 +666,7 @@ onError ← Runs instead of onResponse
 Error Response
 ```
 
-### Guard Denial Path
+### Guard denial path
 
 ```
 Request
@@ -682,7 +682,7 @@ Response ← Guard response returned directly, no onResponse
 
 **Key rule:** `onResponse` and `onError` are mutually exclusive. One or the other, never both.
 
-## Hooks Are Optional
+## Hooks are optional
 
 All three hooks are optional:
 
@@ -721,7 +721,7 @@ If you don't provide a hook, default behavior applies:
 - `onResponse`: Response returned unmodified
 - `onError`: Logs error, returns 500
 
-## Hooks vs Guards vs Handlers
+## Hooks vs guards vs handlers
 
 **When to use each:**
 
@@ -732,7 +732,7 @@ If you don't provide a hook, default behavior applies:
 - Environment setup
 - Anything **every request** needs before routing
 
-### Use Guards for:
+### Use guards for:
 - Authentication checks
 - Authorization decisions
 - Request validation that can deny
@@ -750,12 +750,12 @@ If you don't provide a hook, default behavior applies:
 - Development vs production error handling
 - Anything that handles **unexpected exceptions**
 
-### Use Handlers for:
+### Use handlers for:
 - Business logic
 - Explicit error responses (not throws)
 - Anything that's **route-specific logic**
 
-## Why Three Hooks, Not Middleware Chains?
+## Why three hooks, not middleware chains?
 
 Middleware chains are implicit and unpredictable:
 
