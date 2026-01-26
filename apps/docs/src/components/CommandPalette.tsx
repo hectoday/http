@@ -159,7 +159,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Command Menu"
-        className="w-full max-w-2xl min-w-[600px]"
+        className="w-full max-w-2xl"
       >
         <Command
           className="relative w-full bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200"
