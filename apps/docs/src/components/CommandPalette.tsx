@@ -78,8 +78,15 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
       }
     };
 
+    // Listen for custom event to open command palette (used by SearchButton click)
+    const handleOpen = () => setOpen(true);
+
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    document.addEventListener("open-command-palette", handleOpen);
+    return () => {
+      document.removeEventListener("keydown", down);
+      document.removeEventListener("open-command-palette", handleOpen);
+    };
   }, []);
 
   // Scroll lock when open

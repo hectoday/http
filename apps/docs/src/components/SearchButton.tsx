@@ -2,14 +2,7 @@ import { KeyboardShortcut } from "./KeyboardShortcut.tsx";
 
 export default function SearchButton() {
   const triggerSearch = () => {
-    const event = new KeyboardEvent("keydown", {
-      key: "k",
-      metaKey: true,
-      ctrlKey: true,
-      bubbles: true,
-      cancelable: true,
-    });
-    document.dispatchEvent(event);
+    document.dispatchEvent(new CustomEvent("open-command-palette"));
   };
 
   return (

@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 
 const PART_NAMES: Record<number, string> = {
   1: "PART 1: MENTAL MODELS",
