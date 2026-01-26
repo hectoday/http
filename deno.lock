@@ -9,11 +9,13 @@
     "npm:@types/react-dom@^19.2.3": "19.2.3_@types+react@19.2.8",
     "npm:@types/react@^19.2.8": "19.2.8",
     "npm:astro@^5.16.9": "5.16.9_vite@6.4.1__picomatch@4.0.3_zod@3.25.76",
+    "npm:clsx@^2.1.1": "2.1.1",
     "npm:cmdk@^1.0.4": "1.1.1_react@19.2.3_react-dom@19.2.3__react@19.2.3_@types+react@19.2.8_@types+react-dom@19.2.3__@types+react@19.2.8",
     "npm:fuse.js@7": "7.1.0",
     "npm:react-dom@^19.2.3": "19.2.3_react@19.2.3",
     "npm:react@^19.2.3": "19.2.3",
     "npm:shiki@^3.21.0": "3.21.0",
+    "npm:tailwind-merge@^3.4.0": "3.4.0",
     "npm:tailwindcss@^4.1.18": "4.1.18",
     "npm:zod@^4.3.5": "4.3.5"
   },
@@ -2748,6 +2750,9 @@
       ],
       "bin": true
     },
+    "tailwind-merge@3.4.0": {
+      "integrity": "sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g=="
+    },
     "tailwindcss@4.1.18": {
       "integrity": "sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw=="
     },
@@ -3032,7 +3037,9 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/assert@1"
+      "jsr:@std/assert@1",
+      "npm:clsx@^2.1.1",
+      "npm:tailwind-merge@^3.4.0"
     ],
     "members": {
       "apps/docs": {
