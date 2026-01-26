@@ -7,7 +7,7 @@ const currentYear = new Date().getFullYear();
 <footer class="mt-16 pt-8 border-t border-[--color-border]">
     <nav
         aria-label="Footer"
-        class="flex flex-wrap items-center gap-x-6 gap-y-2 text-base font-medium mb-6"
+        class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-6 gap-y-2 text-base font-medium mb-6"
     >
         <a href="/docs" class="hover:opacity-60 transition-opacity">Docs</a>
         <a
@@ -20,9 +20,24 @@ const currentYear = new Date().getFullYear();
             rel="noopener noreferrer"
             class="hover:opacity-60 transition-opacity">JSR</a
         >
-        <div class="ml-auto">
-            <SearchButton client:only="react" />
-        </div>
+        <a
+            href="/llms.txt"
+            target="_self"
+            rel="noopener noreferrer"
+            class="hover:opacity-60 transition-opacity"
+        >
+            llms.txt
+        </a>
+        <a
+            href="/llms-full.txt"
+            target="_self"
+            rel="noopener noreferrer"
+            class="hover:opacity-60 transition-opacity"
+        >
+            llms-full.txt
+        </a>
+
+        <SearchButton client:only="react" />
     </nav>
     <p class="text-sm text-black/60">
         <span aria-label="Copyright">&copy;</span>
