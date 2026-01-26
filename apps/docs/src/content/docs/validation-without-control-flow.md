@@ -10,7 +10,7 @@ You've extracted facts from the request. Now you need to know: **does this data 
 
 Validation answers that question. But in Hectoday HTTP, validation **never decides what happens next**. It only describes whether data is valid.
 
-## Validation as Description
+## Validation as description
 
 Most frameworks make validation a decision boundary:
 
@@ -34,7 +34,7 @@ if (!result.ok) {
 }
 ```
 
-### The Distinction
+### The distinction
 
 **Validation** answers: "Does this data match the schema?"
 
@@ -71,7 +71,7 @@ route.post("/users", {
 
 Validation computed a fact: `c.input.ok = false`. You decided what it means: return 400.
 
-### Why This Matters
+### Why this matters
 
 When validation and control flow are separate, you can:
 
@@ -122,11 +122,11 @@ if (!c.input.ok) {
 
 If validation auto-returned, you couldn't do any of this.
 
-## Valid vs Invalid ≠ Allowed vs Denied
+## Valid vs invalid ≠ allowed vs denied
 
 This is crucial: **validation and authorization are different concerns**.
 
-### Valid Data Can Be Denied
+### Valid data can be denied
 
 ```typescript
 route.post("/admin/users", {
@@ -156,7 +156,7 @@ route.post("/admin/users", {
 
 The data **is** valid JSON matching the schema. But it's still rejected because of a business rule.
 
-### Invalid Data Might Not Mean 400
+### Invalid data might not mean 400
 
 ```typescript
 route.post("/users", {
@@ -185,7 +185,7 @@ route.post("/users", {
 
 You control the semantics. Validation just describes the data.
 
-### The Layers
+### The layers
 
 ```
 Request arrives
@@ -203,7 +203,7 @@ Process (action)
 
 Each layer has a different job. **Validation is just one fact-gathering step.**
 
-## Validators Return Information
+## Validators return information
 
 When Hectoday HTTP runs validation, it calls your validator adapter:
 
@@ -300,7 +300,7 @@ if (!c.input.ok && c.input.errors?.body) {
 
 But the normalized `issues` array is always available for generic handling.
 
-### What Gets Validated
+### What gets validated
 
 Hectoday HTTP validates three parts independently:
 
@@ -377,11 +377,11 @@ route.get("/health", {
 })
 ```
 
-## Composing Validators
+## Composing validators
 
 Validation schemas compose **at the data level**, not the control flow level.
 
-### Layering Without Branching
+### Layering without branching
 
 Build complex schemas from simple ones:
 
@@ -428,7 +428,7 @@ route.post("/admin/users", {
 
 **No branching**. Each route independently declares its schema. Validation runs once. You decide what to do with the result.
 
-### Conditional Validation
+### Conditional validation
 
 Sometimes validation depends on context:
 
@@ -476,7 +476,7 @@ route.patch("/users/:id", {
 
 You can validate manually when needed. Hectoday HTTP doesn't force you into one pattern.
 
-### Validator Adapters
+### Validator adapters
 
 Hectoday HTTP is validator-agnostic. Bring your own:
 
@@ -562,7 +562,7 @@ const validator = {
 
 All adapt the same interface. Your handlers don't change when you switch validators.
 
-### No Validator Required
+### No validator required
 
 If you don't define schemas, you don't need a validator:
 
@@ -579,7 +579,7 @@ const app = setup({
 
 Validation is opt-in. Use it when you need type safety and structured error handling. Skip it when you don't.
 
-### The Pattern
+### The pattern
 
 ```
 Request arrives

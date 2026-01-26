@@ -10,7 +10,7 @@ Not all requests succeed. Some fail because of invalid input. Some fail because 
 
 In Hectoday HTTP, **expected failures are responses**. Only unexpected failures are exceptions.
 
-## Errors Are Not Exceptions
+## Errors are not exceptions
 
 Most frameworks blur the line between expected and unexpected failures:
 
@@ -38,7 +38,7 @@ The framework maps exceptions to status codes. `ValidationError` becomes 400. `U
 
 **This is implicit.** You can't tell from reading the handler what status codes it returns.
 
-### Hectoday HTTP's Model
+### Hectoday HTTP's model
 
 In Hectoday HTTP, there are two types of failures:
 
@@ -82,7 +82,7 @@ route.get("/users", {
 })
 ```
 
-### The Distinction
+### The distinction
 
 **Expected failure**:
 - You know it might happen
@@ -96,7 +96,7 @@ route.get("/users", {
 - The client can't do much about it
 - Examples: database connection lost, out of memory, null pointer
 
-### Why Throwing Breaks the Mental Model
+### Why throwing breaks the mental model
 
 When you throw to indicate expected failures, you hide control flow:
 
@@ -148,11 +148,11 @@ route.post("/users", {
 
 Every `return` is visible. You can trace the control flow. You can see exactly what responses this handler returns.
 
-## Modeling Failure
+## Modeling failure
 
 Different types of failures need different responses.
 
-### Invalid Input
+### Invalid input
 
 When the client sends malformed or invalid data:
 
@@ -205,7 +205,7 @@ route.post("/users", {
 }
 ```
 
-### Unauthorized Access
+### Unauthorized access
 
 When the client isn't authenticated:
 
@@ -257,7 +257,7 @@ You might also include helpful information:
 }
 ```
 
-### Forbidden Access
+### Forbidden access
 
 When the client is authenticated but not authorized:
 
@@ -288,7 +288,7 @@ const requireAdmin: GuardFn = (c) => {
 }
 ```
 
-### Not Found
+### Not found
 
 When the requested resource doesn't exist:
 
@@ -372,7 +372,7 @@ route.post("/users", {
 }
 ```
 
-### Unprocessable Entity
+### Unprocessable entity
 
 When the input is valid but semantically incorrect:
 
@@ -431,7 +431,7 @@ route.post("/transfers", {
 }
 ```
 
-### Internal Errors
+### Internal errors
 
 When something unexpected happens (bugs, infrastructure failures):
 
@@ -495,11 +495,11 @@ const app = setup({
 
 **Never** expose stack traces or internal details to clients in production.
 
-## Returning Errors Explicitly
+## Returning errors explicitly
 
 Errors are just Responses. Return them like any other response.
 
-### Status Codes as Facts
+### Status codes as facts
 
 Status codes communicate **what kind of failure** occurred:
 
@@ -621,7 +621,7 @@ return Response.json(
 );
 ```
 
-### Consistent Error Format
+### Consistent error format
 
 Choose a format and stick to it across your API:
 
@@ -706,7 +706,7 @@ return new Response(
 
 **Hectoday HTTP doesn't enforce a format.** Choose what works for your API and use it consistently.
 
-### Helper Functions
+### Helper functions
 
 Reduce repetition with error helpers:
 
@@ -769,7 +769,7 @@ route.get("/users/:id", {
 
 **These are just helpers, not framework magic.** They're pure functions that return Responses.
 
-### The Pattern
+### The pattern
 
 ```
 Something fails

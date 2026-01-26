@@ -12,11 +12,11 @@ Large APIs need structure. But structure doesn't mean configuration files, decor
 
 In Hectoday HTTP, structure comes from **composition**, building larger pieces from smaller ones.
 
-## Building Larger APIs
+## Building larger APIs
 
 As your API grows, you need to organize routes, share guards, and reuse validation logic.
 
-### Composing Handlers
+### Composing handlers
 
 Start simple:
 
@@ -92,7 +92,7 @@ Deno.serve(app.fetch);
 
 **That's it.** Routes are just arrays. Composition is just spread operators. No magic.
 
-### Grouping with Shared Guards
+### Grouping with shared guards
 
 Use `group()` to apply guards to multiple routes:
 
@@ -151,7 +151,7 @@ updateSettings.guards = [requireAuth, requireAdmin, ...updateSettings.guards]
 
 It's **build-time composition**. No runtime overhead. No hidden behavior.
 
-### Nested Groups
+### Nested groups
 
 Groups can contain groups:
 
@@ -181,7 +181,7 @@ export const apiRoutes = group({
 // 3. Route-specific guards (if any)
 ```
 
-### Reusing Guards
+### Reusing guards
 
 Guards are just functions. Export and reuse them:
 
@@ -259,7 +259,7 @@ export const adminRoutes = group({
 
 **Same guards, different contexts.** Pure functions, no magic.
 
-### Parameterized Guards
+### Parameterized guards
 
 Create guard factories for flexible reuse:
 
@@ -351,7 +351,7 @@ route.delete("/posts/:id", {
 
 **Still explicit.** You see the parameters in the route definition.
 
-### Reusing Validators
+### Reusing validators
 
 Validators are just schemas. Share them:
 
@@ -436,7 +436,7 @@ export const authRoutes = [
 
 **Same schemas, different routes.** Data structures, not configuration.
 
-### Composition Patterns
+### Composition patterns
 
 **By feature**:
 
@@ -493,11 +493,11 @@ src/
 
 **Choose what works for your team.** Hectoday HTTP doesn't enforce structure.
 
-## Helpers as Copy-Paste Recipes
+## Helpers as copy-paste recipes
 
 Hectoday HTTP has a minimal core. Everything else is helpers, copy-paste recipes you can use, modify, or ignore.
 
-### Why Helpers Are Documentation, Not Dependencies
+### Why helpers are documentation, not dependencies
 
 **Core framework**:
 - Route matching
@@ -524,7 +524,7 @@ These are **recipes, not packages**. Copy the code, paste it into your project, 
 - Modify without forking
 - Copy only what you need
 
-### Example: maxBodyBytes Helper
+### Example: maxBodyBytes helper
 
 See the [full documentation](./helpers/max-body-bytes) for the complete code.
 
@@ -608,7 +608,7 @@ const maxBodyBytesCustom = (limit: number): GuardFn => {
 
 **Or don't use it at all**. It's optional.
 
-### More Helper Examples
+### More helper examples
 
 **CORS Headers** - See [full docs](./helpers/cors)
 
@@ -644,7 +644,7 @@ onResponse: ({ context, response }) => {
 guards: [rateLimit({ maxRequests: 100, windowMs: 60_000 })]
 ```
 
-### Why Copy-Paste?
+### Why copy-paste?
 
 **No dependency bloat:**
 
@@ -680,7 +680,7 @@ import { Framework } from "big-framework";
 
 Hectoday HTTP: **core is ~500 lines, helpers are documentation**.
 
-### Writing Your Own Helpers
+### Writing your own helpers
 
 Helpers are just functions. Write your own:
 
@@ -739,7 +739,7 @@ route.post("/api/search", {
 
 **It's just a guard.** Nothing special about helpers, they use the same primitives you use.
 
-### The Philosophy
+### The philosophy
 
 **Core**: Minimal, stable, never changes
 

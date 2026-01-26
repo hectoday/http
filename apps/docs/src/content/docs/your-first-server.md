@@ -8,7 +8,7 @@ draft: false
 
 You understand the mental model. You know the Web standards. Now let's build a server.
 
-## A Server Is Just a Function
+## A server is just a function
 
 At its core, every Hectoday HTTP server is a function: `Request → Response`.
 
@@ -30,7 +30,7 @@ Deno.serve(app.fetch);
 
 Let's break this down:
 
-### The Setup
+### The setup
 
 ```typescript
 const app = setup({
@@ -40,7 +40,7 @@ const app = setup({
 
 `setup()` takes a configuration and returns an object with a `fetch` method. That `fetch` method is your server function: `Request → Response`.
 
-### The Route
+### The route
 
 ```typescript
 route.get("/", {
@@ -53,7 +53,7 @@ route.get("/", {
 - **Method**: `.get` matches only GET requests
 - **Handler**: `resolve` is the function that returns the Response
 
-### The Server
+### The server
 
 ```typescript
 Deno.serve(app.fetch);
@@ -69,11 +69,11 @@ Pass the `fetch` function to your runtime's server. It works with:
 2. Pass them to `setup()`
 3. Pass `app.fetch` to your runtime
 
-## The Handler Signature
+## The handler signature
 
 Every handler receives **context** and returns a **Response**.
 
-### What You Receive: Context
+### What you receive: Context
 
 ```typescript
 route.get("/users/:id", {
@@ -195,7 +195,7 @@ More on this in the Guards chapter.
 
 Every handler **must return a Response**. Not a string. Not an object. A `Response`.
 
-### Simple Text
+### Simple text
 
 ```typescript
 route.get("/hello", {
@@ -211,7 +211,7 @@ route.get("/user", {
 })
 ```
 
-### With Status Code
+### With status Code
 
 ```typescript
 route.post("/users", {
@@ -222,7 +222,7 @@ route.post("/users", {
 })
 ```
 
-### With Headers
+### With headers
 
 ```typescript
 route.get("/data", {
@@ -239,7 +239,7 @@ route.get("/data", {
 })
 ```
 
-### Error Responses
+### Error responses
 
 ```typescript
 route.get("/admin", {
@@ -256,7 +256,7 @@ route.get("/admin", {
 })
 ```
 
-### Empty Response
+### Empty response
 
 ```typescript
 route.delete("/users/:id", {
@@ -269,7 +269,7 @@ route.delete("/users/:id", {
 })
 ```
 
-### Async Handlers
+### Async handlers
 
 Most real handlers are async:
 
@@ -291,7 +291,7 @@ route.get("/users/:id", {
 })
 ```
 
-### Multiple Returns
+### Multiple returns
 
 You can return from multiple places:
 
@@ -326,15 +326,15 @@ route.get("/users/:id", {
 
 Each `return` is a decision boundary. The request ends there.
 
-## When a Request Ends
+## When a request ends
 
 This is the most important concept in Hectoday HTTP: **knowing when requests end**.
 
-### Only Two Ways a Request Can End
+### Only two ways a request can end
 
 In Hectoday HTTP, requests end in exactly two places:
 
-#### 1. A Guard Denies
+#### 1. A guard denies
 
 ```typescript
 const requireAuth = (c) => {
@@ -359,7 +359,7 @@ route.get("/protected", {
 
 If a guard returns `{ deny: Response }`, the request ends. The handler never runs.
 
-#### 2. A Handler Returns
+#### 2. A handler returns
 
 ```typescript
 route.get("/users/:id", {
@@ -379,11 +379,11 @@ route.get("/users/:id", {
 
 When the handler returns a `Response`, the request ends.
 
-### What CANNOT End Requests
+### What CANNOT end requests
 
 These do **not** end requests:
 
-#### Validation Failures
+#### Validation failures
 
 ```typescript
 route.post("/users", {
@@ -403,7 +403,7 @@ route.post("/users", {
 
 Validation sets `c.input.ok = false`. **It doesn't return.** You decide what that means.
 
-#### Throwing Errors
+#### Throwing errors
 
 ```typescript
 route.get("/users", {
@@ -436,7 +436,7 @@ route.get("/users/:id", {
 })
 ```
 
-### Why This Matters for Correctness
+### Why this matters for correctness
 
 When you know **exactly** where requests can end, you can reason about your code:
 
@@ -475,7 +475,7 @@ At any point in the handler, you can trace backward:
 
 **No hidden branching. No magic returns. Just explicit control flow.**
 
-### The Complete Picture
+### The complete picture
 
 ```
 Request arrives

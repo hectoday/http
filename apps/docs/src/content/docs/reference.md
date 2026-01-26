@@ -10,7 +10,7 @@ This is the complete API reference. Use it when you need exact details about typ
 
 For concepts and examples, see the earlier chapters. This is just the facts.
 
-## Core Types
+## Core types
 
 ### Context
 
@@ -227,7 +227,7 @@ type Params2 = RouteParams<"/orgs/:orgId/repos/:repoId">;
 - Used internally for type safety
 - You rarely use this explicitly
 
-## Route Functions
+## Route functions
 
 ### route.get()
 
@@ -668,7 +668,7 @@ type GuardResult =
 
 The result of a guard.
 
-### Allow Result
+### Allow result
 
 ```typescript
 { allow: true; locals?: Record<string, unknown> }
@@ -685,7 +685,7 @@ The result of a guard.
 return { allow: true, locals: { userId: "123" } };
 ```
 
-### Deny Result
+### Deny result
 
 ```typescript
 { deny: Response }
@@ -701,7 +701,7 @@ return { allow: true, locals: { userId: "123" } };
 return { deny: Response.json({ error: "Forbidden" }, { status: 403 }) };
 ```
 
-### Guard Example
+### Guard example
 
 ```typescript
 const requireAuth: GuardFn = (c) => {
@@ -893,7 +893,7 @@ interface SafeParseFailure<E> {
 }
 ```
 
-### Validator Example (Zod)
+### Validator example (Zod)
 
 ```typescript
 import { z } from "zod";
@@ -923,7 +923,7 @@ export const zodValidator: Validator<z.ZodType> = {
 };
 ```
 
-## Type Inference
+## Type inference
 
 ### InferSchema
 
@@ -960,11 +960,11 @@ type InferInput<T> = T extends SchemaLike<infer TOut, any>
 
 Infer input type from schema (for type-safe handlers).
 
-## Helper Recipes
+## Helper recipes
 
 Common helper patterns available as copy-paste recipes in the documentation.
 
-### Available Helpers
+### Available helpers
 
 - **[Zod validator](./helpers/zod-validator)** - Validator adapter for Zod schemas
 - **[maxBodyBytes](./helpers/max-body-bytes)** - Limit request body size (guard)
@@ -972,7 +972,7 @@ Common helper patterns available as copy-paste recipes in the documentation.
 - **[Request ID](./helpers/request-id)** - Generate and track request IDs
 - **[Rate limiting](./helpers/rate-limit)** - Limit requests per client
 
-### Usage Pattern
+### Usage pattern
 
 Helpers are **copy-paste recipes**, not dependencies:
 
@@ -997,7 +997,7 @@ route.post("/upload", {
 });
 ```
 
-### Why Copy-Paste?
+### Why copy-paste?
 
 - **You own the code** - No external dependencies
 - **No version conflicts** - No need to track updates
@@ -1008,7 +1008,7 @@ See [Composition Over Configuration](./composition-over-configuration#helpers-as
 
 ## Constants
 
-### HTTP Status Codes
+### HTTP status codes
 
 No built-in constants, use numbers directly:
 
@@ -1033,7 +1033,7 @@ Common status codes:
 | 500 | Internal Server Error |
 | 503 | Service Unavailable |
 
-### HTTP Methods
+### HTTP methods
 
 No built-in constants, use strings:
 
@@ -1041,9 +1041,9 @@ No built-in constants, use strings:
 route.on("PROPFIND", "/webdav", { resolve: ... })
 ```
 
-## Error Handling
+## Error handling
 
-### Framework Errors
+### Framework errors
 
 Hectoday HTTP throws errors for:
 
@@ -1071,7 +1071,7 @@ const app = setup({
 });
 ```
 
-### 404 Handling
+### 404 handling
 
 **Framework returns 404** when no route matches:
 
@@ -1092,7 +1092,7 @@ route.all("/*", {
 })
 ```
 
-## Version Compatibility
+## Version compatibility
 
 **Minimum runtime requirements**:
 

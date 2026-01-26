@@ -10,7 +10,7 @@ The mental model from Chapter 1 needs concrete primitives. Fortunately, they alr
 
 Originally designed for browsers, the Fetch API has become the universal standard for HTTP on both client and server.
 
-## The Fetch API (On the Server)
+## The fetch API (on the server)
 
 The Fetch API defines three core primitives: `Request`, `Response`, and `Headers`. Understanding these is understanding HTTP itself.
 
@@ -41,7 +41,7 @@ Deno.serve((request: Request) => {
 });
 ```
 
-#### The Properties
+#### The properties
 
 **`request.method`** - HTTP method as a string
 
@@ -135,7 +135,7 @@ Deno.serve((request: Request) => {
 });
 ```
 
-#### Common Response Patterns
+#### Common response patterns
 
 **Plain text**:
 
@@ -224,11 +224,11 @@ Deno.serve(async (request: Request) => {
 
 This is **standard JavaScript**. No framework concepts. Just Web APIs.
 
-## Why Web Standards Matter
+## Why web standards matter
 
 Using Web standards instead of framework-specific APIs has profound implications.
 
-### Portability Across Deno, Bun, Workers
+### Portability across Deno, Bun, Workers
 
 The same code runs everywhere:
 
@@ -280,7 +280,7 @@ app.get("/hello", (request, h) => {
 
 Each framework invents its own abstraction. Switching runtimes means rewriting code.
 
-### No Framework-Shaped Abstractions
+### No framework-shaped abstractions
 
 Frameworks often wrap Web standards with their own APIs:
 
@@ -313,7 +313,7 @@ Web standards are:
 - **Portable** - works everywhere the Web platform exists
 - **Universally documented** - MDN, specs, endless tutorials
 
-### Future-Proof
+### Future-proof
 
 When new runtimes emerge, they implement Web standards first:
 
@@ -325,11 +325,11 @@ return new Response("Hello World");
 
 Framework-specific code has no such guarantee.
 
-## What Hectoday HTTP Adds (and What It Refuses To)
+## What hectoday HTTP adds (and what it refuses to)
 
 Hectoday HTTP is not "just" the Fetch API. It adds structure without adding abstraction.
 
-### What It Adds
+### What it adds
 
 **Route matching**:
 
@@ -389,7 +389,7 @@ resolve: (c) => {
 
 You could pass data around manually, but Hectoday HTTP threads it through automatically.
 
-### What It Refuses To Add
+### What it refuses to add
 
 **No implicit routing**:
 
@@ -435,7 +435,7 @@ setup({
 
 Middleware chains have implicit ordering and unclear control flow. Hectoday HTTP makes every step explicit.
 
-### The Line
+### The line
 
 Hectoday HTTP adds structure where manual work is repetitive:
 - Parsing URL patterns

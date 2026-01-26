@@ -10,9 +10,9 @@ These docs are structured as **concept → practice → reference**.
 
 Each chapter builds on the previous one, adding a single idea. You can stop at any point and still understand everything you've read.
 
-## The Structure
+## The structure
 
-### Part 1: Mental Models
+### Part 1: mental models
 
 Before you write code, you need a way to **think about HTTP**. These chapters build a mental model:
 
@@ -22,7 +22,7 @@ Before you write code, you need a way to **think about HTTP**. These chapters bu
 
 **Read these even if you're impatient.** The framework's API only makes sense with this model.
 
-### Part 2: Core Concepts
+### Part 2: core concepts
 
 These chapters introduce the framework's primitives:
 
@@ -32,7 +32,7 @@ These chapters introduce the framework's primitives:
 
 Each concept gets its own chapter. **Nothing is assumed.** If you read linearly, you'll never encounter an unexplained term.
 
-### Part 3: Composition
+### Part 3: composition
 
 Once you understand the pieces, you'll see how they compose:
 
@@ -42,7 +42,7 @@ Once you understand the pieces, you'll see how they compose:
 
 This is where the framework's constraints start to feel like leverage.
 
-### Part 4: Real Concerns
+### Part 4: real concerns
 
 Practical chapters about:
 
@@ -52,7 +52,7 @@ Practical chapters about:
 
 These apply the mental model to real problems.
 
-### Part 5: Reference
+### Part 5: reference
 
 - Testing strategies
 - Complete API reference
@@ -62,25 +62,25 @@ Use these when you need details, not understanding.
 
 ## How to Navigate
 
-### If You're Exploring
+### If you're exploring
 
 Start at **Chapter 1: A Mental Model of HTTP**. Read sequentially. Each chapter is short.
 
-### If You Need Something Specific
+### If you need something specific
 
 Jump to the reference (Chapter 14). But if the API feels confusing, back up to the concept chapters.
 
-### If You're Experienced
+### If you're experienced
 
 Skim **Chapter 1-2** to understand the mental model. Then jump to **Chapter 7: The Request Lifecycle** for the full picture.
 
-### If You're Skeptical
+### If you're skeptical
 
 Read **Chapter 1: A mental model** and **Chapter 15: Philosophy**. If these resonate, read the rest. If not, this framework isn't for you, and that's fine.
 
-## What These Docs Are Not
+## What these docs are not
 
-### Not a Tutorial
+### Not a tutorial
 
 You won't find "build a blog in 10 minutes." These docs explain **how the framework thinks**, not how to accomplish tasks quickly.
 
@@ -92,11 +92,11 @@ You won't find recipes like "how to handle file uploads" or "how to add CORS." I
 
 (We do provide helpers for common patterns, listed separately at the bottom of the documentation index, but they're documented as **examples of composition**, not magical solutions.)
 
-### Not Comprehensive on First Read
+### Not comprehensive on first read
 
 You don't need to read everything to start. **Read until you understand the model**, then write code. Return to the docs when you need specifics.
 
-## Key Terms You'll Encounter
+## Key terms you'll encounter
 
 These terms have precise meanings in Hectoday HTTP:
 
@@ -112,27 +112,27 @@ These terms have precise meanings in Hectoday HTTP:
 
 **Locals**: Request-scoped data accumulated from `onRequest` and guards. Never mutated, always merged forward.
 
-## Reading Tips
+## Reading tips
 
-### Linear First, Random Later
+### Linear first, random later
 
 On first read, go **sequentially**. The chapters assume you've seen the previous ones.
 
 After you've read through once, use the docs as a reference. Jump around freely.
 
-### Code First, Explanation Second
+### Code first, explanation second
 
 Each chapter shows code **before** explaining it. Try to understand the code yourself first. Then read the explanation.
 
 This mirrors how you'll use the framework: you'll see code, and it should make sense without extensive docs.
 
-### When Something Feels Wrong
+### When something feels wrong
 
 If an API feels awkward or verbose, **that's often intentional**. The framework optimizes for explicitness, not brevity.
 
 If you find yourself wanting magic, re-read **Chapter 9: Composition** and **Chapter 15: Philosophy**. The verbosity often disappears when you compose primitives.
 
-## What Success Looks Like
+## What success looks like
 
 You'll know you understand Hectoday HTTP when:
 
@@ -143,7 +143,7 @@ You'll know you understand Hectoday HTTP when:
 
 When these feel natural, you've internalized the model. The rest is just syntax.
 
-## A Note on Length
+## A note on length
 
 These docs are **detailed but not long**. Each chapter is short. We prefer:
 

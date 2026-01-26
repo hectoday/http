@@ -20,7 +20,7 @@ Deno has first-class TypeScript support and built-in Web Standards.
 deno add jsr:@hectoday/http
 ```
 
-### Basic Server
+### Basic server
 
 ```typescript
 // main.ts
@@ -46,7 +46,7 @@ deno run --allow-net main.ts
 
 **That's it.** No build step. No bundler. Just run.
 
-### With Options
+### With options
 
 ```typescript
 Deno.serve({
@@ -70,7 +70,7 @@ Deno.serve({
 
 **Deno handles HTTP/2 automatically** when using TLS.
 
-### Deno-Specific Features
+### Deno-specific features
 
 **File system access**:
 
@@ -142,7 +142,7 @@ Or with npm:
 npm install @hectoday/http
 ```
 
-### Basic Server
+### Basic server
 
 ```typescript
 // server.ts
@@ -173,7 +173,7 @@ bun run server.ts
 
 **Fast startup.** Bun optimizes for speed.
 
-### With Options
+### With options
 
 ```typescript
 Bun.serve({
@@ -204,7 +204,7 @@ Bun.serve({
 });
 ```
 
-### Bun-Specific Features
+### Bun-specific features
 
 **Optimized file serving**:
 
@@ -278,7 +278,7 @@ Workers use npm packages:
 npm install @hectoday/http
 ```
 
-### Basic Worker
+### Basic worker
 
 ```typescript
 // src/index.ts
@@ -315,7 +315,7 @@ Deploy:
 npx wrangler deploy
 ```
 
-### With Environment Variables
+### With environment variables
 
 Workers use `env` bindings:
 
@@ -357,7 +357,7 @@ export default {
 };
 ```
 
-### Workers-Specific Features
+### Workers-specific features
 
 **No file system**:
 
@@ -431,11 +431,11 @@ export default {
 - No long-running processes
 - No WebSockets (use Durable Objects instead)
 
-## What Changes (and What Doesn't)
+## What changes (and what doesn't)
 
 The beauty of Web Standards: **your handler code doesn't change**.
 
-### What Stays the Same
+### What stays the same
 
 **Your routes**:
 
@@ -508,7 +508,7 @@ const app = setup({
 
 **99% of your code is portable.** Only server initialization changes.
 
-### What Changes
+### What changes
 
 **Server initialization**:
 
@@ -562,7 +562,7 @@ const users = await db.users.getAll();
 const users = await env.DB.prepare("SELECT * FROM users").all();
 ```
 
-### Abstracting Runtime Differences
+### Abstracting runtime differences
 
 Create runtime adapters:
 
@@ -625,7 +625,7 @@ route.get("/config", {
 
 The runtime environment changes. The API doesn't.
 
-### The Separation
+### The separation
 
 ```
 Your Handlers (portable)
@@ -643,7 +643,7 @@ This means:
 - Switch runtimes without rewriting code
 - No vendor lock-in
 
-### Testing Across Runtimes
+### Testing across runtimes
 
 Your tests work everywhere:
 
@@ -671,7 +671,7 @@ Deno.test("GET /health returns 200", async () => {
 
 **This test runs on Deno, Bun, or any runtime with a test runner.**
 
-### Development vs Production
+### Development vs production
 
 Develop on one runtime, deploy to another:
 
@@ -732,7 +732,7 @@ export default { fetch: app.fetch };
 
 **Handlers are pure.** Server setup is runtime-specific.
 
-### The Promise of Web Standards
+### The promise of web standards
 
 When you build on Web Standards:
 
@@ -752,7 +752,7 @@ When you build on Web Standards:
 - No compatibility shims
 - Just Web Standards
 
-### The Portability Guarantee
+### The portability guarantee
 
 ```typescript
 // This code is a contract

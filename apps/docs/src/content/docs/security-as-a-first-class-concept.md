@@ -10,7 +10,7 @@ Security isn't an afterthought. It's not middleware you add later. It's a core p
 
 In Hectoday HTTP, security is **explicit decisions** visible in your code.
 
-## Security Is a Decision, Not Middleware
+## Security is a decision, not middleware
 
 Most frameworks treat security as middleware:
 
@@ -31,7 +31,7 @@ app.post("/api/users", handler);
 
 This creates **security through obscurity**. You don't see the checks when reading routes. You don't know the order. You don't know what responses they return.
 
-### Why Security Belongs in Guards
+### Why security belongs in guards
 
 Guards make security decisions **explicit**:
 
@@ -67,7 +67,7 @@ route.post("/api/users", {
 
 **Security is visible.** You can audit it by reading the route definition.
 
-### The Difference
+### The difference
 
 **Middleware approach** (implicit):
 ```typescript
@@ -94,7 +94,7 @@ route.post("/users", {
 
 **Security decisions are part of the route definition.** Not global config. Not hidden middleware.
 
-## Common Security Guards
+## Common security guards
 
 Let's build security guards for common threats.
 
@@ -136,7 +136,7 @@ export const requireAuth: GuardFn = (c) => {
 
 **Protects against**: Unauthorized access
 
-### Content-Type Validation
+### Content-Type validation
 
 Prevent attacks that exploit content type confusion:
 
@@ -197,7 +197,7 @@ route.post("/api/users", {
 
 **Protects against**: Content type confusion attacks, unexpected data formats
 
-### Body Size Limits
+### Body size limits
 
 Prevent denial-of-service through large payloads:
 
@@ -269,7 +269,7 @@ route.post("/api/upload", {
 
 **Protects against**: DoS attacks via large payloads, resource exhaustion
 
-### Rate Limiting
+### Rate limiting
 
 Prevent abuse through excessive requests:
 
@@ -377,7 +377,7 @@ route.post("/api/ai/generate", {
 
 **Protects against**: Brute force attacks, API abuse, resource exhaustion
 
-### Origin Validation
+### Origin validation
 
 Prevent cross-origin attacks:
 
@@ -429,7 +429,7 @@ route.post("/api/webhooks/payment", {
 
 **Protects against**: Cross-origin attacks, unauthorized webhook sources
 
-### CSRF Protection
+### CSRF protection
 
 Prevent cross-site request forgery:
 
@@ -497,7 +497,7 @@ route.post("/api/users", {
 
 **Protects against**: Cross-site request forgery attacks
 
-### API Key Validation
+### API key validation
 
 For machine-to-machine authentication:
 
@@ -642,7 +642,7 @@ const app = setup({
 
 **Enables**: Request tracing, security auditing, debugging
 
-### Input Sanitization
+### Input sanitization
 
 Prevent injection attacks:
 
@@ -707,11 +707,11 @@ route.post("/api/comments", {
 
 **Protects against**: XSS, SQL injection (when combined with parameterized queries)
 
-## Auditing the Request Path
+## Auditing the request path
 
 The most important security feature of Hectoday HTTP isn't a guard, it's **visibility**.
 
-### Why Explicit Flow Is Easier to Reason About
+### Why explicit flow is easier to reason about
 
 When security is explicit, auditing is straightforward:
 
@@ -748,7 +748,7 @@ A: No. `requireNotSelf` denies them.
 
 **All answers are in the route definition.** No hidden middleware. No global config. Just explicit guards.
 
-### Tracing Security Decisions
+### Tracing security decisions
 
 For any request, you can trace exactly what happened:
 
@@ -814,7 +814,7 @@ const app = setup({
 
 You can see **exactly** which guard denied the request.
 
-### Security Reviews
+### Security reviews
 
 When reviewing code for security issues, you read route definitions:
 
@@ -873,7 +873,7 @@ route.post("/api/transfer", {
 
 **Everything is visible.** No hidden middleware to check. No global config to audit.
 
-### No Hidden Bypasses
+### No hidden bypasses
 
 Common middleware problem:
 

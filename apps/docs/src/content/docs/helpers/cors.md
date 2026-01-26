@@ -6,7 +6,7 @@ draft: true
 
 Add CORS headers to responses using the `onResponse` hook.
 
-## The Code
+## The code
 
 ```typescript
 interface CorsOptions {
@@ -59,7 +59,7 @@ function corsHeaders(options: CorsOptions = {}): (info: {
 
 ## Usage
 
-### Basic CORS (Allow All)
+### Basic CORS (allow all)
 
 ```typescript
 import { setup, route } from "@hectoday/http";
@@ -77,7 +77,7 @@ const app = setup({
 });
 ```
 
-### Specific Origin
+### Specific origin
 
 ```typescript
 const app = setup({
@@ -89,7 +89,7 @@ const app = setup({
 });
 ```
 
-### Custom Methods and Headers
+### Custom methods and headers
 
 ```typescript
 const app = setup({
@@ -104,7 +104,7 @@ const app = setup({
 });
 ```
 
-### With Credentials
+### With credentials
 
 ```typescript
 const app = setup({
@@ -117,7 +117,7 @@ const app = setup({
 });
 ```
 
-### Handle OPTIONS Preflight
+### Handle OPTIONS preflight
 
 Add an OPTIONS handler for preflight requests:
 
@@ -143,7 +143,7 @@ const app = setup({
 });
 ```
 
-## Dynamic Origins
+## Dynamic origins
 
 For multiple allowed origins:
 
@@ -180,7 +180,7 @@ const app = setup({
 });
 ```
 
-## Per-Route CORS
+## Per-route CORS
 
 Use different CORS policies for different route groups:
 
@@ -223,7 +223,7 @@ const app = setup({
 - OPTIONS requests return 204 No Content
 - Set CORS in `onResponse` so all responses get headers
 
-## Why Not Built-In?
+## Why not built-in?
 
 CORS configuration varies widely:
 - Public APIs allow all origins

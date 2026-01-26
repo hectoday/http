@@ -10,7 +10,7 @@ You've seen the pieces. Now see how they fit together.
 
 Every request in Hectoday HTTP follows the same path. Every step is visible. Nothing happens automatically.
 
-## The Full Path of a Request
+## The full path of a request
 
 Here's the complete lifecycle:
 
@@ -278,7 +278,7 @@ route.get("/users/:id", {
 
 The Response you return is the Response the client receives. **What you write is what they get.**
 
-## Complete Example: Tracing a Request
+## Complete example: tracing a request
 
 Let's trace a complete request through the system:
 
@@ -403,7 +403,7 @@ const app = setup({
 Deno.serve(app.fetch);
 ```
 
-### Successful Request
+### Successful request
 
 ```bash
 POST /orgs/123e4567-e89b-12d3-a456-426614174000/users
@@ -459,7 +459,7 @@ Content-Type: application/json
    → Body: { id: "...", name: "Alice", email: "alice@example.com" }
 ```
 
-### Failed Request (Invalid Input)
+### Failed request (invalid input)
 
 ```bash
 POST /orgs/not-a-uuid/users
@@ -504,7 +504,7 @@ Content-Type: application/json
    → Body: { error: "Invalid input", issues: [...] }
 ```
 
-### Failed Request (No Auth)
+### Failed request (no auth)
 
 ```bash
 POST /orgs/123e4567-e89b-12d3-a456-426614174000/users
@@ -539,11 +539,11 @@ Content-Type: application/json
 
 **Notice**: The handler never ran. The guard denied, request ended.
 
-## Nothing Happens Automatically
+## Nothing happens automatically
 
 This is the key principle: **the framework does nothing you didn't ask for**.
 
-### No Fallback Behavior
+### No fallback behavior
 
 **No automatic 400 on validation failure**:
 
@@ -623,7 +623,7 @@ route.get("/users/:id", {
 })
 ```
 
-### No Hidden Defaults
+### No hidden defaults
 
 **No default headers**:
 
@@ -721,7 +721,7 @@ const app = setup({
 });
 ```
 
-### What This Means
+### What this means
 
 **You can trace every request by reading code**:
 

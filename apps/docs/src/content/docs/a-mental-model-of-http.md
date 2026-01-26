@@ -10,7 +10,7 @@ Before you write a single line of code, you need a way to think about HTTP serve
 
 This chapter builds that mental model. No framework concepts yet. Just HTTP itself.
 
-## Every Request Has a Path
+## Every request has a path
 
 When a request arrives at your server, it has already traveled:
 
@@ -26,7 +26,7 @@ Socket → Parser → Router → Handler → Response
 
 This internal path is what you control as a developer.
 
-### What a Request Is
+### What a request is
 
 A request is data sent from a client:
 
@@ -43,7 +43,7 @@ That's it. Nothing more, nothing less.
 
 The request doesn't "know" if it's authorized. It doesn't "know" if its data is valid. It's just bytes that need interpretation.
 
-### What a Response Is
+### What a response is
 
 A response is data sent back to the client:
 
@@ -58,7 +58,7 @@ interface Response {
 
 Every request must produce exactly one response. Not zero. Not two. One.
 
-### Why Servers Are Just Functions Over Time
+### Why servers are just functions over time
 
 At the lowest level, a server is:
 
@@ -89,11 +89,11 @@ Each request is independent. They might interleave. But each one follows its own
 
 **This is the fundamental model**: requests come in, responses go out, and each request has its own isolated path through your code.
 
-## Inbound Request → Outbound Response
+## Inbound request → outbound response
 
 Direction matters in HTTP. Understanding the flow from input to output is essential.
 
-### The Directionality of HTTP
+### The directionality of HTTP
 
 ```
 CLIENT                          SERVER
@@ -110,7 +110,7 @@ CLIENT                          SERVER
 
 **Outbound**: Server to client. You create this. You control every byte.
 
-### Why This Perspective Matters
+### Why this perspective matters
 
 When a request arrives, you're in **reactive mode**:
 
@@ -136,7 +136,7 @@ Everything about the request is **given to you**. You must:
 
 You're not calling APIs. You're not fetching data. You're **receiving** input and **producing** output.
 
-### The Asymmetry
+### The asymmetry
 
 ```typescript
 // Inbound: you must handle anything
@@ -157,7 +157,7 @@ return new Response(
 
 **Outbound is safe.** You construct exactly what you want to send.
 
-### Why Naming This Changes Design
+### Why naming this changes design
 
 Most frameworks blur this boundary. They make inbound data feel safe:
 
@@ -196,11 +196,11 @@ return Response.json(user);
 
 Each phase is explicit. You see exactly when you're receiving, deciding, and responding.
 
-## Facts Before Decisions
+## Facts before decisions
 
 The most important principle in Hectoday HTTP: **separate observation from action**.
 
-### What Is a Fact?
+### What is a fact?
 
 A fact is something you've **observed** but not **acted upon**:
 
@@ -213,7 +213,7 @@ const body = await request.json();                // Observed: body is { name: 1
 
 These are observations. Nothing has happened yet. The request hasn't ended.
 
-### What Is a Decision?
+### What is a decision?
 
 A decision is when you **commit to an outcome**:
 
@@ -237,7 +237,7 @@ return Response.json({ id: 1, name: body.name }, { status: 201 });
 
 Each `return` is a decision boundary. The request ends.
 
-### Why Separate Them?
+### Why separate them?
 
 Most frameworks mix facts and decisions:
 
@@ -251,7 +251,7 @@ validate(body, schema); // Might return 400, might throw, might continue
 
 When observation and action are mixed, you can't reason about control flow. You don't know where requests end.
 
-### The Hectoday HTTP Way
+### The Hectoday HTTP way
 
 ```typescript
 // Phase 1: Gather ALL facts
@@ -281,7 +281,7 @@ return Response.json(user, { status: 201 });
 
 **Facts are computed once. Decisions are made explicitly. Processing happens only after decisions pass.**
 
-### Why This Matters for Code Structure
+### Why this matters for code structure
 
 When you separate facts from decisions, your code has a shape:
 
@@ -314,7 +314,7 @@ You can read top-to-bottom and see:
 
 No hidden branching. No mysterious returns. Just facts, decisions, code.
 
-### The Mental Model Complete
+### The mental model complete
 
 ```
 Request arrives (inbound)

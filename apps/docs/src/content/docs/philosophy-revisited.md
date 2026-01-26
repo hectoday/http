@@ -10,7 +10,7 @@ You've read the concepts. You've seen the examples. You've studied the reference
 
 Now let's return to the question: **Why is Hectoday HTTP designed this way?**
 
-## Why There Is No Magic
+## Why there is no magic
 
 Magic in frameworks comes in many forms:
 - Middleware that auto-returns responses
@@ -22,7 +22,7 @@ Magic in frameworks comes in many forms:
 
 **But magic has a cost.**
 
-### Magic Hides Control Flow
+### Magic hides control flow
 
 ```typescript
 // In a framework with magic
@@ -43,7 +43,7 @@ Reading this code, you can't answer:
 
 **To understand the code, you need to understand the framework's magic.**
 
-### Explicitness Makes Control Flow Visible
+### Explicitness makes control flow visible
 
 ```typescript
 // In Hectoday HTTP
@@ -79,7 +79,7 @@ Reading this code, you **know**:
 
 **Every decision is visible. Every branch is explicit. No framework magic required.**
 
-### The Trade-Off
+### The trade-off
 
 **Magic framework**:
 - ✓ Less code to write
@@ -99,7 +99,7 @@ Reading this code, you **know**:
 
 Not because convenience is bad. But because **in production systems that last years, maintained by multiple people, visibility is more valuable than convenience.**
 
-### Magic Breaks Down at Scale
+### Magic breaks down at scale
 
 Small project (1 developer, 3 months):
 
@@ -178,7 +178,7 @@ route.get("/api/v2/organizations/:orgId/projects/:projectId/reports", {
 
 **New developer can read this code and understand it without reading framework docs.**
 
-### Magic Optimizes for Writing, Not Reading
+### Magic optimizes for writing, not reading
 
 You write code once. You read it hundreds of times.
 
@@ -194,7 +194,7 @@ You write code once. You read it hundreds of times.
 
 **Code is read 10x more than it's written.** Hectoday HTTP optimizes for reading.
 
-### The Real Cost of Magic
+### The real cost of magic
 
 The cost of magic isn't lines of code. It's **cognitive load**.
 
@@ -213,11 +213,11 @@ Every question requires **context switching** to framework docs or source code.
 
 **Less context switching = faster understanding = faster development.**
 
-## Why Explicitness Scales
+## Why explicitness scales
 
 Explicit code has properties that become more valuable as projects grow.
 
-### Property 1: Code Is Self-Documenting
+### Property 1: code is self-documenting
 
 ```typescript
 // This code documents itself
@@ -261,7 +261,7 @@ route.delete("/admin/users/:id", {
 
 **No external docs needed.** The code is the documentation.
 
-### Property 2: Changes Are Localized
+### Property 2: changes are localized
 
 To change behavior, you change the code directly:
 
@@ -306,7 +306,7 @@ resolve: async (c) => {
 
 **All changes are local.** No framework config. No global middleware. Just edit the handler.
 
-### Property 3: Refactoring Is Safe
+### Property 3: refactoring is safe
 
 When code is explicit, refactoring is straightforward:
 
@@ -354,7 +354,7 @@ resolve: async (c) => {
 
 **TypeScript guides refactoring.** If it compiles, it probably works.
 
-### Property 4: Testing Is Straightforward
+### Property 4: testing is straightforward
 
 Explicit code is easy to test (as we saw in Chapter 13):
 
@@ -399,7 +399,7 @@ Deno.test("DELETE /users/:id requires all permissions", async () => {
 
 **Every branch is testable.** Just create requests and check responses.
 
-### Property 5: Onboarding Is Faster
+### Property 5: onboarding is faster
 
 New team member on **magic framework**:
 1. Read framework docs
@@ -421,7 +421,7 @@ New team member on **Hectoday HTTP**:
 
 **Because the code is self-documenting, learning happens by reading code.**
 
-### Property 6: Debugging Is Tracing Execution
+### Property 6: debugging is tracing execution
 
 With magic, debugging requires understanding framework internals.
 
@@ -449,13 +449,13 @@ route.post("/users", {
 
 **Every step is visible. Add logging anywhere. Trace the exact path.**
 
-## When Hectoday HTTP Is the Wrong Tool
+## When hectoday HTTP Is the wrong tool
 
 Honesty time: **Hectoday HTTP is not for everyone.**
 
 Here's when you should use something else.
 
-### When Prototyping
+### When prototyping
 
 If you're:
 - Building a proof of concept
@@ -467,7 +467,7 @@ If you're:
 
 **Good alternatives**: Express, Hono, Elysia (for speed)
 
-### When Building Trivial APIs
+### When building trivial APIs
 
 If your API is:
 - 3-5 simple CRUD endpoints
@@ -479,7 +479,7 @@ If your API is:
 
 **Good alternatives**: Deno's `Deno.serve()` directly, or any lightweight router
 
-### When You Want Batteries Included
+### When you want batteries included
 
 If you want:
 - Built-in ORM
@@ -492,7 +492,7 @@ If you want:
 
 **Good alternatives**: Remix, Next.js, Fresh (for full-stack)
 
-### When Your Team Prefers Magic
+### When your team prefers magic
 
 If your team:
 - Loves decorators
@@ -504,7 +504,7 @@ If your team:
 
 **Good alternatives**: NestJS, Fastify with decorators
 
-### When You Need Maximum Performance
+### When you need maximum performance
 
 If you need:
 - Absolute lowest latency (every microsecond counts)
@@ -515,7 +515,7 @@ If you need:
 
 **Good alternatives**: Rust/Axum, Go/Gin, Bun with zero-abstraction handlers
 
-### When You're Building Microservices at Scale
+### When you're building microservices at scale
 
 If you're:
 - Building 100+ services
@@ -527,11 +527,11 @@ If you're:
 
 **Good alternatives**: Use Hectoday HTTP for individual services, but add Istio/Envoy/Kong for orchestration
 
-## When Hectoday HTTP Is the Right Tool
+## When hectoday HTTP Is the Right Tool
 
 Hectoday HTTP shines when:
 
-### Building APIs That Last
+### Building APIs that last
 
 Your API will:
 - Live for years
@@ -551,7 +551,7 @@ You have:
 
 **Self-documenting code reduces communication overhead.**
 
-### Valuing Maintainability
+### Valuing maintainability
 
 You prioritize:
 - Code readability over brevity
@@ -560,7 +560,7 @@ You prioritize:
 
 **Explicit code is maintainable code.**
 
-### Need Runtime Independence
+### Need runtime independence
 
 You want:
 - To deploy on multiple runtimes
@@ -569,7 +569,7 @@ You want:
 
 **Web Standards enable portability.**
 
-### Want Security Visibility
+### Want security visibility
 
 You need:
 - To audit security controls
@@ -579,7 +579,7 @@ You need:
 
 **Explicit guards make security auditable.**
 
-### Building Production APIs
+### Building production APIs
 
 Your API needs:
 - Reliable behavior
@@ -589,7 +589,7 @@ Your API needs:
 
 **Explicit control flow is production-ready.**
 
-## The Core Trade-Off
+## The core trade-off
 
 Every framework makes a trade-off:
 
@@ -612,7 +612,7 @@ If you're building something that:
 
 **Choose explicitness.** You'll maintain faster.
 
-## The Philosophy in One Sentence
+## The philosophy in one sentence
 
 **Hectoday HTTP describes what happened. You decide what it means.**
 
@@ -626,7 +626,7 @@ And when debugging at 2am, when code breaks in production, when a new developer 
 
 ---
 
-## Closing Thoughts
+## Closing thoughts
 
 If you've read this far, you understand Hectoday HTTP's philosophy.
 
@@ -647,7 +647,7 @@ Write a route. See how it feels. Notice that you can read it six months later an
 
 ---
 
-## Additional Resources
+## Additional resources
 
 - [Installation guide](./installation)
 - [GitHub repository](https://github.com/hectoday/http)
