@@ -220,7 +220,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                           key={doc.id}
                           value={doc.id}
                           onSelect={() => handleSelect(doc.id)}
-                          className="flex flex-col px-3 py-2.5 rounded cursor-pointer data-[selected=true]:bg-gray-50 transition-colors"
+                          className="animated-border-item flex flex-col px-3 py-2.5 cursor-pointer transition-colors"
                         >
                           <div className="flex items-center gap-2">
                             <span className="text-base font-medium">
@@ -252,7 +252,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                           key={doc.id}
                           value={doc.id}
                           onSelect={() => handleSelect(doc.id)}
-                          className="flex flex-col px-3 py-2.5 rounded cursor-pointer data-[selected=true]:bg-gray-50 transition-colors"
+                          className="animated-border-item flex flex-col px-3 py-2.5 cursor-pointer transition-colors"
                         >
                           <div className="flex items-center gap-2">
                             <span className="text-base font-medium">
