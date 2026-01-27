@@ -58,16 +58,16 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
     [helperDocs],
   );
 
-  // Search results using Fuse.js
+  // Search results using Fuse.js - only show results when searching
   const mainResults = useMemo(() => {
-    if (!search) return mainDocs;
+    if (!search) return [];
     return mainFuse.search(search).map((result) => result.item);
-  }, [search, mainDocs, mainFuse]);
+  }, [search, mainFuse]);
 
   const helperResults = useMemo(() => {
-    if (!search) return helperDocs;
+    if (!search) return [];
     return helperFuse.search(search).map((result) => result.item);
-  }, [search, helperDocs, helperFuse]);
+  }, [search, helperFuse]);
 
   // Keyboard shortcut to open/close
   useEffect(() => {
@@ -148,7 +148,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10%] px-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center py-[10%] px-4">
       <div
         className="fixed inset-0 bg-black/50"
         onClick={handleClose}
@@ -159,10 +159,10 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Command Menu"
-        className="w-full max-w-2xl"
+        className="w-full max-w-2xl max-h-full flex flex-col"
       >
         <Command
-          className="relative w-full bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200"
+          className="relative w-full bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 flex flex-col max-h-full"
           label="Command Menu"
           onKeyDown={(e) => {
             if (e.key === "Escape") {
@@ -172,7 +172,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
           }}
           shouldFilter={false}
         >
-          <div className="flex items-center border-b border-gray-200 px-4">
+          <div className="flex items-center border-b border-gray-200 px-4 flex-shrink-0">
             <svg
               className="w-5 h-5 text-gray-400"
               fill="none"
@@ -195,8 +195,14 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
               autoFocus
             />
           </div>
-          <Command.List className="h-96 overflow-y-auto p-2">
-            {mainResults.length === 0 && helperResults.length === 0
+          <Command.List className="overflow-y-auto p-2 flex-1 min-h-0">
+            {!search
+              ? (
+                <div className="py-6 text-center text-sm text-gray-500">
+                  Type to search documentation...
+                </div>
+              )
+              : mainResults.length === 0 && helperResults.length === 0
               ? (
                 <Command.Empty className="py-6 text-center text-sm text-gray-500">
                   No results found.
@@ -270,7 +276,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 </>
               )}
           </Command.List>
-          <div className="border-t border-[rgb(209,217,224)] px-3 py-2 text-xs text-gray-500 flex items-baseline justify-between">
+          <div className="border-t border-[rgb(209,217,224)] px-3 py-2 text-xs text-gray-500 flex items-baseline justify-between flex-shrink-0">
             <div className="flex gap-3">
               <span className="flex gap-[0.5ch] items-center">
                 <KeyboardShortcut
