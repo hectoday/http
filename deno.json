@@ -4,7 +4,9 @@
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
     "clsx": "npm:clsx@^2.1.1",
-    "tailwind-merge": "npm:tailwind-merge@^3.4.0"
+    "tailwind-merge": "npm:tailwind-merge@^3.4.0",
+    "hast": "npm:@types/hast@^3.0.4",
+    "unist-util-visit": "npm:unist-util-visit@^5.0.0"
   },
   "tasks": {
     "test": "deno test --allow-net packages/http/tests",

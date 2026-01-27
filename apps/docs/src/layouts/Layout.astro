@@ -57,5 +57,27 @@ const docsForPalette = allDocs.map((doc) => ({
             <slot />
         </main>
         <Footer />
+        <script>
+            document.addEventListener("click", async (e) => {
+                const button = (e.target as Element).closest(
+                    "[data-copy-code]",
+                );
+                if (!button) return;
+
+                const wrapper = button.closest(".code-block-wrapper");
+                const code = wrapper?.querySelector("code");
+                const text = code?.textContent || "";
+
+                try {
+                    await navigator.clipboard.writeText(text);
+                    button.classList.add("copied");
+                    setTimeout(() => {
+                        button.classList.remove("copied");
+                    }, 350);
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            });
+        </script>
     </body>
 </html>
