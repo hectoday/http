@@ -1,5 +1,3 @@
-import { KeyboardShortcut } from "./KeyboardShortcut.tsx";
-
 export default function SearchButton() {
   const triggerSearch = () => {
     document.dispatchEvent(new CustomEvent("open-command-palette"));
@@ -8,11 +6,11 @@ export default function SearchButton() {
   return (
     <button
       onClick={triggerSearch}
-      className="inline-flex items-center gap-[1ch] cursor-pointer"
+      className="inline-flex items-center gap-1.5 cursor-pointer hover:text-black transition-colors"
       aria-label="Open search"
     >
       <svg
-        className="w-5 h-5"
+        className="w-4 h-4"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -25,7 +23,7 @@ export default function SearchButton() {
           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
         />
       </svg>
-      <KeyboardShortcut items={["⌘", "K"]} onClick={triggerSearch} />
+      <span>Search</span>
     </button>
   );
 }

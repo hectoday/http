@@ -7,6 +7,7 @@ import type { ThemeRegistration } from "shiki";
 import hectodayTheme from "./src/styles/hectoday.shiki.json" with {
   type: "json",
 };
+import { rehypeCopyCode } from "./src/plugins/rehype-copy-code.ts";
 
 // https://astro.build/config
 export default defineConfig({
@@ -32,5 +33,6 @@ export default defineConfig({
     shikiConfig: {
       theme: hectodayTheme as ThemeRegistration,
     },
+    rehypePlugins: [rehypeCopyCode],
   },
 });

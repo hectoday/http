@@ -6,6 +6,7 @@
     "npm:@astrojs/react@^4.4.2": "4.4.2_@types+react@19.2.8_@types+react-dom@19.2.3__@types+react@19.2.8_react@19.2.3_react-dom@19.2.3__react@19.2.3_vite@6.4.1__picomatch@4.0.3",
     "npm:@deno/astro-adapter@~0.3.2": "0.3.2_astro@5.16.9__vite@6.4.1___picomatch@4.0.3__zod@3.25.76",
     "npm:@tailwindcss/vite@^4.1.18": "4.1.18_vite@6.4.1__picomatch@4.0.3",
+    "npm:@types/hast@^3.0.4": "3.0.4",
     "npm:@types/react-dom@^19.2.3": "19.2.3_@types+react@19.2.8",
     "npm:@types/react@^19.2.8": "19.2.8",
     "npm:astro@^5.16.9": "5.16.9_vite@6.4.1__picomatch@4.0.3_zod@3.25.76",
@@ -17,6 +18,7 @@
     "npm:shiki@^3.21.0": "3.21.0",
     "npm:tailwind-merge@^3.4.0": "3.4.0",
     "npm:tailwindcss@^4.1.18": "4.1.18",
+    "npm:unist-util-visit@5": "5.0.0",
     "npm:zod@^4.3.5": "4.3.5"
   },
   "jsr": {
@@ -3038,8 +3040,10 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
+      "npm:@types/hast@^3.0.4",
       "npm:clsx@^2.1.1",
-      "npm:tailwind-merge@^3.4.0"
+      "npm:tailwind-merge@^3.4.0",
+      "npm:unist-util-visit@5"
     ],
     "members": {
       "apps/docs": {
