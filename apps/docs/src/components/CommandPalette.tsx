@@ -148,7 +148,7 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center py-[10%] px-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10%] pb-4 px-4 h-[100dvh]">
       <div
         className="fixed inset-0 bg-black/50"
         onClick={handleClose}
@@ -282,7 +282,9 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 <KeyboardShortcut
                   items={["↑"]}
                   onClick={() => {
-                    const cmdkRoot = dialogRef.current?.querySelector("[cmdk-root]");
+                    const cmdkRoot = dialogRef.current?.querySelector(
+                      "[cmdk-root]",
+                    );
                     if (cmdkRoot) {
                       const event = new KeyboardEvent("keydown", {
                         key: "ArrowUp",
@@ -290,6 +292,9 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                         cancelable: true,
                       });
                       cmdkRoot.dispatchEvent(event);
+                    }
+                    if (window.matchMedia("(pointer: coarse)").matches) {
+                      dialogRef.current?.querySelector("input")?.blur();
                     }
                   }}
                 />
@@ -299,7 +304,9 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 <KeyboardShortcut
                   items={["↓"]}
                   onClick={() => {
-                    const cmdkRoot = dialogRef.current?.querySelector("[cmdk-root]");
+                    const cmdkRoot = dialogRef.current?.querySelector(
+                      "[cmdk-root]",
+                    );
                     if (cmdkRoot) {
                       const event = new KeyboardEvent("keydown", {
                         key: "ArrowDown",
@@ -307,6 +314,9 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                         cancelable: true,
                       });
                       cmdkRoot.dispatchEvent(event);
+                    }
+                    if (window.matchMedia("(pointer: coarse)").matches) {
+                      dialogRef.current?.querySelector("input")?.blur();
                     }
                   }}
                 />
@@ -316,7 +326,9 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 <KeyboardShortcut
                   items={["↵"]}
                   onClick={() => {
-                    const cmdkRoot = dialogRef.current?.querySelector("[cmdk-root]");
+                    const cmdkRoot = dialogRef.current?.querySelector(
+                      "[cmdk-root]",
+                    );
                     if (cmdkRoot) {
                       const event = new KeyboardEvent("keydown", {
                         key: "Enter",
