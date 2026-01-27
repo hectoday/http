@@ -293,9 +293,6 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                       });
                       cmdkRoot.dispatchEvent(event);
                     }
-                    if (window.matchMedia("(pointer: coarse)").matches) {
-                      dialogRef.current?.querySelector("input")?.blur();
-                    }
                   }}
                 />
                 <span>Up</span>
@@ -314,9 +311,6 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                         cancelable: true,
                       });
                       cmdkRoot.dispatchEvent(event);
-                    }
-                    if (window.matchMedia("(pointer: coarse)").matches) {
-                      dialogRef.current?.querySelector("input")?.blur();
                     }
                   }}
                 />
