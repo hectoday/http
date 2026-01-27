@@ -282,14 +282,14 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 <KeyboardShortcut
                   items={["↑"]}
                   onClick={() => {
-                    const input = dialogRef.current?.querySelector("input");
-                    if (input) {
+                    const cmdkRoot = dialogRef.current?.querySelector("[cmdk-root]");
+                    if (cmdkRoot) {
                       const event = new KeyboardEvent("keydown", {
                         key: "ArrowUp",
                         bubbles: true,
                         cancelable: true,
                       });
-                      input.dispatchEvent(event);
+                      cmdkRoot.dispatchEvent(event);
                     }
                   }}
                 />
@@ -299,14 +299,14 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 <KeyboardShortcut
                   items={["↓"]}
                   onClick={() => {
-                    const input = dialogRef.current?.querySelector("input");
-                    if (input) {
+                    const cmdkRoot = dialogRef.current?.querySelector("[cmdk-root]");
+                    if (cmdkRoot) {
                       const event = new KeyboardEvent("keydown", {
                         key: "ArrowDown",
                         bubbles: true,
                         cancelable: true,
                       });
-                      input.dispatchEvent(event);
+                      cmdkRoot.dispatchEvent(event);
                     }
                   }}
                 />
@@ -316,14 +316,14 @@ export default function CommandPalette({ docs, isDev }: CommandPaletteProps) {
                 <KeyboardShortcut
                   items={["↵"]}
                   onClick={() => {
-                    const input = dialogRef.current?.querySelector("input");
-                    if (input) {
+                    const cmdkRoot = dialogRef.current?.querySelector("[cmdk-root]");
+                    if (cmdkRoot) {
                       const event = new KeyboardEvent("keydown", {
                         key: "Enter",
                         bubbles: true,
                         cancelable: true,
                       });
-                      input.dispatchEvent(event);
+                      cmdkRoot.dispatchEvent(event);
                     }
                   }}
                 />
