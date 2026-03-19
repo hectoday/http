@@ -2,11 +2,30 @@
   "name": "@hectoday/http",
   "version": "0.2.0",
   "description": "A lightweight HTTP framework built on web standards.",
+  "keywords": [
+    "api",
+    "framework",
+    "http",
+    "rest",
+    "router",
+    "server",
+    "web-standards"
+  ],
+  "homepage": "https://github.com/hectoday/http#readme",
+  "bugs": {
+    "url": "https://github.com/hectoday/http/issues"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hectoday/http.git",
+    "directory": "packages/http"
+  },
   "files": [
     "dist"
   ],
   "type": "module",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
