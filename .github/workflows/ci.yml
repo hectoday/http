@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Lint, Check & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Vite+
+        run: npm install -g vite-plus@latest
+
+      - name: Install dependencies
+        run: vp install
+
+      - name: Check (fmt + lint + typecheck)
+        run: vp check
+
+      - name: Run tests
+        run: vp run test -r
