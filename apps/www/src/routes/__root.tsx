@@ -2,9 +2,9 @@ import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/reac
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 
-import TanStackQueryProvider from "../integrations/tanstack-query/root-provider";
+import TanStackQueryProvider from "../integrations/tanstack-query/root-provider.tsx";
 
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
+import TanStackQueryDevtools from "../integrations/tanstack-query/devtools.tsx";
 
 import appCss from "../styles.css?url";
 
