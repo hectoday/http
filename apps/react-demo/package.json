@@ -1,0 +1,40 @@
+{
+  "name": "react-demo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:types": "openapi-typescript http://localhost:3000/openapi.json -o src/api/api.generated.d.ts",
+    "dev": "vp dev",
+    "build": "tsc && vp build",
+    "preview": "vp preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-router": "^1.167.4",
+    "cn-variants": "^1.0.0",
+    "motion": "^12.38.0",
+    "openapi-fetch": "^0.17.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typesafe-route": "^1.0.0"
+  },
+  "devDependencies": {
+    "@msw/source": "^0.6.1",
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.2",
+    "msw": "^2.8.0",
+    "openapi-typescript": "^7.13.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "~5.9.3",
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vite-plus": "latest"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

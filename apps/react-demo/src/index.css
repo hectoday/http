@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --color-surface: #fafafa;
+}
+
+body {
+  background: linear-gradient(180deg, #f0f4ff 0%, #fafafa 40%);
+  min-height: 100dvh;
+}

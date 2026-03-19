@@ -1,0 +1,79 @@
+import type { RouteDescriptor } from "./types";
+
+export interface CorsOptions {
+  origin: string | string[];
+  methods?: string[];
+  allowHeaders?: string[];
+  exposeHeaders?: string[];
+  credentials?: boolean;
+  maxAge?: number;
+}
+
+export interface CorsResult {
+  /** Registers an OPTIONS /** catch-all preflight handler */
+  preflight: (route: {
+    options: (path: string, config: any) => RouteDescriptor;
+  }) => RouteDescriptor;
+  /** Adds CORS headers to a response. Use inside onResponse. */
+  headers: (request: Request, response: Response) => Response;
+}
+
+const DEFAULT_METHODS = ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"];
+
+export function cors(options: CorsOptions): CorsResult {
+  const origins = Array.isArray(options.origin) ? options.origin : [options.origin];
+  const methods = options.methods ?? DEFAULT_METHODS;
+  const allowHeaders = options.allowHeaders ?? [];
+  const exposeHeaders = options.exposeHeaders ?? [];
+  const credentials = options.credentials ?? false;
+  const maxAge = options.maxAge;
+
+  function applyOrigin(h: Headers, requestOrigin: string | null): void {
+    if (origins.includes("*")) {
+      h.set("access-control-allow-origin", "*");
+    } else if (requestOrigin && origins.includes(requestOrigin)) {
+      h.set("access-control-allow-origin", requestOrigin);
+      h.append("vary", "Origin");
+    }
+
+    if (credentials) {
+      h.set("access-control-allow-credentials", "true");
+    }
+
+    if (exposeHeaders.length > 0) {
+      h.set("access-control-expose-headers", exposeHeaders.join(", "));
+    }
+  }
+
+  function applyPreflight(h: Headers): void {
+    h.set("access-control-allow-methods", methods.join(", "));
+    if (allowHeaders.length > 0) {
+      h.set("access-control-allow-headers", allowHeaders.join(", "));
+    }
+    if (maxAge !== undefined) {
+      h.set("access-control-max-age", String(maxAge));
+    }
+  }
+
+  return {
+    preflight: (route) =>
+      route.options("/**", {
+        resolve: (c: { request: Request }) => {
+          const h = new Headers();
+          applyOrigin(h, c.request.headers.get("origin"));
+          applyPreflight(h);
+          return new Response(null, { status: 204, headers: h });
+        },
+      }),
+
+    headers: (request, response) => {
+      const h = new Headers(response.headers);
+      applyOrigin(h, request.headers.get("origin"));
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: h,
+      });
+    },
+  };
+}

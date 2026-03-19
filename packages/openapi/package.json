@@ -1,7 +1,7 @@
 {
-  "name": "@hectoday/http",
-  "version": "0.2.0",
-  "description": "A lightweight HTTP framework built on web standards.",
+  "name": "@hectoday/openapi",
+  "version": "0.1.0",
+  "description": "OpenAPI 3.1 spec generation for @hectoday/http routes.",
   "license": "MIT",
   "files": [
     "dist"
@@ -18,18 +18,19 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "rou3": "^0.7.12"
+    "zod-openapi": "^4.2.4"
   },
   "devDependencies": {
+    "@hectoday/http": "^0.2.0",
     "@types/node": "^25.5.0",
     "@typescript/native-preview": "7.0.0-dev.20260316.1",
-    "bumpp": "^11.0.1",
     "typescript": "^5.9.3",
     "vite-plus": "latest",
     "vitest": "npm:@voidzero-dev/vite-plus-test@latest",
     "zod": "^3.24.0"
   },
   "peerDependencies": {
+    "@hectoday/http": "^0.2.0",
     "zod": "^3.24.0"
   }
 }
