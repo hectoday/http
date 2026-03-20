@@ -17,10 +17,7 @@ function HomePage() {
   const { doc, next } = Route.useLoaderData();
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
-      <article
-        className="prose dark:prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: doc.html }}
-      />
+      <article className="prose max-w-none" dangerouslySetInnerHTML={{ __html: doc.html }} />
       {next ? (
         <nav className="mt-16 flex justify-end border-t pt-6 dark:border-neutral-800">
           <Link

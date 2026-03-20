@@ -22,10 +22,7 @@ function DocPage() {
       <Link to="/" className="text-sm text-blue-600 hover:underline dark:text-blue-400">
         &larr; Home
       </Link>
-      <article
-        className="prose dark:prose-invert mt-8 max-w-none"
-        dangerouslySetInnerHTML={{ __html: doc.html }}
-      />
+      <article className="prose mt-8 max-w-none" dangerouslySetInnerHTML={{ __html: doc.html }} />
       <nav className="mt-16 flex items-center justify-between border-t pt-6 dark:border-neutral-800">
         {prev ? (
           <Link
