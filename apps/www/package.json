@@ -44,6 +44,7 @@
     "jsdom": "^28.1.0",
     "shiki": "^4.0.2",
     "typescript": "^5.7.2",
+    "unist-util-visit": "^5.0.0",
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
     "vite-plus": "latest",
     "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
