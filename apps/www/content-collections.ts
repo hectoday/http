@@ -6,6 +6,7 @@ import { createHighlighter } from "shiki";
 import type { Plugin } from "unified";
 import { visit } from "unist-util-visit";
 import { z } from "zod";
+import { hectodayLight } from "./src/shiki-theme";
 
 /**
  * Rehype plugin that converts fenced mermaid code blocks into
@@ -53,7 +54,7 @@ const DOC_ORDER = [
 
 // Create highlighter once to avoid re-initialization on every transform
 const highlighter = await createHighlighter({
-  themes: ["github-dark"],
+  themes: [hectodayLight],
   langs: ["typescript", "bash", "json"],
 });
 
@@ -68,7 +69,7 @@ const docs = defineCollection({
     const html = await compileMarkdown(ctx, doc, {
       rehypePlugins: [
         rehypeMermaid,
-        [rehypeShikiFromHighlighter, highlighter, { theme: "github-dark" }],
+        [rehypeShikiFromHighlighter, highlighter, { theme: "hectoday-light" }],
       ],
     });
     const titleMatch = doc.content.match(/^#\s+(.+)$/m);
