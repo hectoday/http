@@ -1,8 +1,36 @@
 import { defineCollection, defineConfig } from "@content-collections/core";
 import { compileMarkdown } from "@content-collections/markdown";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
+import type { Root } from "hast";
 import { createHighlighter } from "shiki";
+import type { Plugin } from "unified";
+import { visit } from "unist-util-visit";
 import { z } from "zod";
+
+/**
+ * Rehype plugin that converts fenced mermaid code blocks into
+ * `<pre class="mermaid">…</pre>` so the client-side mermaid library
+ * can pick them up. Runs before Shiki so they aren't syntax-highlighted.
+ */
+const rehypeMermaid: Plugin<[], Root> = () => (tree) => {
+  visit(tree, "element", (node, index, parent) => {
+    if (node.tagName !== "pre" || index == null || !parent || !("children" in parent)) return;
+    const code = node.children[0];
+    if (
+      !code ||
+      code.type !== "element" ||
+      code.tagName !== "code" ||
+      !Array.isArray(code.properties?.className) ||
+      !code.properties.className.includes("language-mermaid")
+    )
+      return;
+
+    // Replace <pre><code class="language-mermaid">…</code></pre>
+    // with <pre class="mermaid">…text…</pre>
+    node.properties = { className: ["mermaid"] };
+    node.children = code.children;
+  });
+};
 
 // Order matches the documentation table of contents in index.md
 const DOC_ORDER = [
@@ -38,7 +66,10 @@ const docs = defineCollection({
   }),
   transform: async (doc, ctx) => {
     const html = await compileMarkdown(ctx, doc, {
-      rehypePlugins: [[rehypeShikiFromHighlighter, highlighter, { theme: "github-dark" }]],
+      rehypePlugins: [
+        rehypeMermaid,
+        [rehypeShikiFromHighlighter, highlighter, { theme: "github-dark" }],
+      ],
     });
     const titleMatch = doc.content.match(/^#\s+(.+)$/m);
     // Rewrite relative markdown links to /docs/ routes
