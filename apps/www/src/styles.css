@@ -31,12 +31,12 @@ pre.shiki {
   background-color: var(--color-gray-950) !important;
 }
 
-/* Mermaid diagrams — polished card style so SVG renders cleanly */
+/* Mermaid diagrams — clean black & white card */
 pre.mermaid {
   background-color: var(--color-white);
   color: var(--color-gray-950);
   border: 1px solid var(--color-gray-200);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   padding: 2rem 1.5rem;
   text-align: center;
   line-height: normal;
@@ -54,6 +54,17 @@ pre.mermaid {
 pre.mermaid svg {
   max-width: 100%;
   height: auto;
+}
+
+/* Rounded small borders on mermaid nodes */
+pre.mermaid .node rect,
+pre.mermaid .node circle,
+pre.mermaid .node polygon,
+pre.mermaid .node path,
+pre.mermaid .label-container,
+pre.mermaid .cluster rect {
+  rx: 6px;
+  ry: 6px;
 }
 
 html.dark pre.mermaid,
