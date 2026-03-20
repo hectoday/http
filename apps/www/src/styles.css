@@ -67,18 +67,23 @@ pre.mermaid .label-container,
 pre.mermaid .cluster rect {
   rx: 6px;
   ry: 6px;
-  stroke-width: 2px;
+  stroke-width: 3px;
 }
 
 pre.mermaid .flowchart-link,
 pre.mermaid .edge-pattern-solid,
 pre.mermaid .edge-pattern-dotted,
 pre.mermaid path.path {
-  stroke-width: 2px;
+  stroke-width: 3px;
 }
 
 pre.mermaid marker path {
-  stroke-width: 1px;
+  stroke-width: 2px;
+}
+
+/* Click-to-zoom: cursor hint */
+pre.mermaid {
+  cursor: zoom-in;
 }
 
 html.dark pre.mermaid,
