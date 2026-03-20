@@ -1,9 +1,30 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap");
+/*
+ * typography.css — Tailwind CSS v4 Typography Setup
+ *
+ * Typefaces: Inter (body/UI), SF Pro Display (headings), SF Mono (code)
+ *
+ * Based on best practices from:
+ *   - Butterick's Practical Typography (practicaltypography.com)
+ *   - Professional Web Typography by Donny Truong (prowebtype.com)
+ *
+ * Inter & SF tuning notes:
+ *   Both are neo-grotesques with tall x-heights (~0.536 for Inter).
+ *   Tall x-height reads larger at the same nominal size, so:
+ *     - Body can sit at 1rem (16px) and still feel 18px
+ *     - Line height should be slightly lower than serif defaults
+ *       (tall x-height + generous leading = overly airy)
+ *     - Negative tracking on headings can be more aggressive
+ *       since both faces have generous default spacing
+ *   Inter has optical sizing (opsz), 4 axes of variable font,
+ *   and true tabular/oldstyle figure alternates.
+ *   SF Pro Display is optimised for ≥20pt; SF Pro Text for <20pt.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 html.dark .shiki,
@@ -25,96 +46,106 @@ body,
 body {
   margin: 0;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
-
-/*
- * typography.css — Tailwind CSS v4 Typography Setup
- *
- * Based on best practices from:
- *   - Butterick's Practical Typography (practicaltypography.com)
- *   - Professional Web Typography by Donny Truong (prowebtype.com)
- *
- * Design principles encoded:
- *   - Body text: 15–25px on screen (Butterick)
- *   - Line height: 120–145% of font size (Butterick)
- *   - Line length: 45–90 characters (Butterick)
- *   - Paragraph spacing: 50–100% of body text size (Butterick)
- *   - Heading sizes: subtle increments, not double (Butterick)
- *   - Kerning always on (Butterick + Truong)
- *   - Ligatures enabled (Truong)
- *   - Letterspacing on caps/small-caps: 5–12% (Butterick)
- *   - Mobile-first approach (Truong)
- */
 
 /* --------------------------------------------------------
  * 1. THEME — Design tokens via @theme
  * -------------------------------------------------------- */
-
 @theme {
   /* -- Font families --
-   * Swap these for your project's typefaces.
-   * Butterick: use a professional font, not system defaults.
-   * The stack below is a sensible starting point;
-   * replace with your licensed web font of choice. */
-  --font-body: "Charter", "Bitstream Charter", "Sitka Text", Cambria, serif;
-  --font-heading: "Charter", "Bitstream Charter", "Sitka Text", Cambria, serif;
-  --font-mono: "Söhne Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+   *
+   * Inter: Variable font with opsz, wght, slnt, wdth axes.
+   * Load from Google Fonts or self-host with:
+   *   @font-face { font-family: "Inter"; src: url(...) format("woff2"); }
+   *
+   * SF Pro: Available on Apple platforms natively via
+   *   system-ui / -apple-system. For cross-platform, self-host
+   *   or fall back to Inter for headings too.
+   *
+   * The stacks below give SF Pro priority on Apple,
+   * Inter everywhere else, with sensible sans fallbacks. */
+  --font-body: "Inter", "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-heading:
+    -apple-system, "SF Pro Display", "Inter", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "SF Mono", "SFMono-Regular", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
 
   /* -- Type scale --
-   * Butterick recommends 15–25px for web body text.
-   * Each step is a subtle increment (≈1.125–1.2 ratio),
-   * NOT the bloated 2× jumps browsers default to. */
-  --font-size-xs: 0.75rem; /* 12px */
-  --font-size-xs--line-height: 1.5;
-  --font-size-sm: 0.875rem; /* 14px */
-  --font-size-sm--line-height: 1.5;
-  --font-size-base: 1.125rem; /* 18px — sweet spot for screen */
-  --font-size-base--line-height: 1.6;
-  --font-size-lg: 1.25rem; /* 20px */
-  --font-size-lg--line-height: 1.55;
-  --font-size-xl: 1.375rem; /* 22px */
-  --font-size-xl--line-height: 1.45;
+   *
+   * Because Inter/SF have tall x-heights, they read larger
+   * than serif faces at the same size. Base at 1rem (16px)
+   * already satisfies Butterick's 15–25px screen range.
+   * On desktop we bump to 1.0625rem (17px) — not 20px,
+   * which would feel oversized with these faces.
+   *
+   * Heading scale uses tighter ratios (~1.125–1.25) per
+   * Butterick: "the smallest increment necessary." */
+  --font-size-2xs: 0.6875rem; /* 11px — fine print, badges */
+  --font-size-2xs--line-height: 1.45;
+  --font-size-xs: 0.75rem; /* 12px — captions, metadata */
+  --font-size-xs--line-height: 1.42;
+  --font-size-sm: 0.875rem; /* 14px — secondary text, UI labels */
+  --font-size-sm--line-height: 1.43;
+  --font-size-base: 1rem; /* 16px — body text */
+  --font-size-base--line-height: 1.55;
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-lg--line-height: 1.5;
+  --font-size-xl: 1.25rem; /* 20px — crosses into Display opsz */
+  --font-size-xl--line-height: 1.4;
+  --font-size-xl--letter-spacing: -0.01em;
   --font-size-2xl: 1.5rem; /* 24px */
-  --font-size-2xl--line-height: 1.4;
-  --font-size-2xl--letter-spacing: -0.01em;
-  --font-size-3xl: 1.75rem; /* 28px */
-  --font-size-3xl--line-height: 1.3;
-  --font-size-3xl--letter-spacing: -0.015em;
-  --font-size-4xl: 2rem; /* 32px */
-  --font-size-4xl--line-height: 1.2;
-  --font-size-4xl--letter-spacing: -0.02em;
-  --font-size-5xl: 2.5rem; /* 40px */
-  --font-size-5xl--line-height: 1.15;
-  --font-size-5xl--letter-spacing: -0.025em;
+  --font-size-2xl--line-height: 1.33;
+  --font-size-2xl--letter-spacing: -0.015em;
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-3xl--line-height: 1.27;
+  --font-size-3xl--letter-spacing: -0.02em;
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-4xl--line-height: 1.17;
+  --font-size-4xl--letter-spacing: -0.025em;
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-5xl--line-height: 1.08;
+  --font-size-5xl--letter-spacing: -0.03em;
+  --font-size-6xl: 3.75rem; /* 60px — hero/display */
+  --font-size-6xl--line-height: 1;
+  --font-size-6xl--letter-spacing: -0.035em;
 
   /* -- Leading (line-height) --
-   * Butterick: 120–145% of point size.
-   * Truong: 1.4–1.6 for body text. */
-  --leading-tight: 1.2;
-  --leading-snug: 1.35;
-  --leading-normal: 1.6;
-  --leading-relaxed: 1.7;
-  --leading-loose: 1.9;
+   * Butterick: 120–145% of font size.
+   * Truong: 1.4–1.6 for body.
+   * Inter's tall x-height means we sit at the lower end: ~1.5–1.55.
+   * Headings drop to 1.1–1.2 since SF Pro Display has
+   * generous built-in vertical metrics at large sizes. */
+  --leading-none: 1;
+  --leading-tight: 1.15;
+  --leading-snug: 1.33;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.625;
+  --leading-loose: 1.8;
 
   /* -- Tracking (letter-spacing) --
-   * Butterick: 5–12% extra for ALL CAPS and small caps.
-   * Never letterspace lowercase body text. */
+   * Inter is already well-spaced at body sizes — don't add tracking.
+   * Negative tracking on headings: Inter & SF look better tightened
+   * above 20px since their default spacing is optimised for text sizes.
+   * Butterick: 5–12% extra for ALL CAPS and small caps. */
+  --tracking-tighter: -0.035em;
   --tracking-tight: -0.02em;
   --tracking-normal: 0em;
-  --tracking-wide: 0.05em;
-  --tracking-wider: 0.08em;
-  --tracking-widest: 0.12em;
+  --tracking-wide: 0.04em;
+  --tracking-wider: 0.075em;
+  --tracking-widest: 0.1em;
 
-  /* -- Spacing --
-   * Butterick: paragraph spacing = 50–100% of body text size.
-   * With base at 1.125rem (18px), that's ~9–18px. */
-  --spacing-paragraph: 1em;
+  /* -- Paragraph spacing --
+   * Butterick: 50–100% of body text size.
+   * At 16px body, that's 8–16px. We use 0.75em (~12px)
+   * which is slightly tighter than the serif version,
+   * matching the denser texture of a grotesque. */
+  --spacing-paragraph: 0.75em;
 
-  /* -- Max widths for measure (line length) --
-   * Butterick: 45–90 characters per line.
-   * ~65ch is the sweet spot for comfortable reading. */
+  /* -- Measure (line length) --
+   * Butterick: 45–90 characters.
+   * Inter's character width is ~10% wider than serif faces,
+   * so 65ch in Inter is roughly equivalent to 72ch in Charter.
+   * We keep the number the same since `ch` is relative to the font. */
   --width-prose: 65ch;
   --width-prose-narrow: 50ch;
   --width-prose-wide: 80ch;
@@ -123,55 +154,61 @@ body {
 /* --------------------------------------------------------
  * 2. BASE LAYER — Typographic defaults
  * -------------------------------------------------------- */
-
 @layer base {
   /* -- Root typographic baseline -- */
   html {
-    /* Butterick: body text 15–25px on screen.
-     * We set 100% (16px) as the root, then bump body to 1.125rem (18px).
-     * This preserves rem calculations while hitting the target range. */
-    font-size: 100%;
-
-    /* Truong: turn on kerning at the root. */
+    font-size: 100%; /* 16px root */
+    /* Truong: always-on kerning */
     font-kerning: normal;
-
-    /* Truong: enable common ligatures and contextual alternates. */
+    /* Truong: standard + contextual ligatures.
+     * Inter supports common ligatures (fi, fl)
+     * and has contextual alternates for → ≠ etc. */
     font-variant-ligatures: common-ligatures contextual;
-
-    /* Smooth text rendering */
+    /* Subpixel rendering — antialiased looks better for Inter
+     * on macOS; on Windows, ClearType handles it. */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
-    /* Enable OpenType features as baseline:
-     * kern = kerning, liga = standard ligatures, clig = contextual ligatures */
+    /* OpenType features as baseline.
+     * cv01 = alternate 1 (open-top 4 in Inter, optional)
+     * cv02 = alternate a (single-storey, optional)
+     * ss01 = open digits (optional)
+     * These are commented out — uncomment the ones you prefer.
+     * The base set just ensures kern/liga/calt are on. */
     font-feature-settings:
       "kern" 1,
       "liga" 1,
-      "clig" 1;
-
-    /* Sensible text rendering for body copy */
+      "calt" 1;
+    /* Enable optical sizing for Inter Variable.
+     * The browser adjusts glyph shapes for the rendered size:
+     * tighter spacing and heavier strokes at small sizes,
+     * more open letterforms at display sizes. */
+    font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
-
-    /* Prevent text inflation on mobile (Truong: mobile-first) */
     text-size-adjust: 100%;
   }
 
   body {
     font-family: var(--font-body);
-    font-size: var(--font-size-base); /* 18px */
-    line-height: var(--leading-normal); /* 1.6 → ~29px */
+    font-size: var(--font-size-base); /* 16px */
+    line-height: var(--leading-normal); /* 1.55 → ~25px */
     font-weight: 400;
-    color: var(--color-gray-900);
-    /* Truong: centered composition */
+    color: var(--color-gray-950);
     margin-inline: auto;
   }
 
   /* -- Headings --
-   * Butterick: fewer levels, subtler emphasis.
-   * Prefer bold over italic, use the smallest
-   * size increment that creates visible difference.
-   * Don't double the size — the default h1 at 200% is excessive. */
-
+   *
+   * Butterick: fewer levels, subtler emphasis, bold not italic,
+   * smallest size increment necessary, space above and below.
+   *
+   * SF Pro Display (via -apple-system) is optically tuned for
+   * large sizes — tighter spacing, slightly thinner strokes.
+   * On non-Apple, Inter handles it well with negative tracking.
+   *
+   * Font weights are tuned for Inter's variable weight axis:
+   *   600 = semi-bold (h2–h4) — enough contrast without heaviness
+   *   700 = bold (h1) — for the primary heading only
+   * SF Pro maps similarly. */
   h1,
   h2,
   h3,
@@ -179,67 +216,66 @@ body {
   h5,
   h6 {
     font-family: var(--font-heading);
-    line-height: var(--leading-tight); /* 1.2 */
-    font-weight: 700;
+    line-height: var(--leading-tight); /* 1.15 */
     text-wrap: balance;
-
-    /* Butterick: suppress hyphenation in headings */
     hyphens: none;
-
-    /* Butterick: best emphasis is space above and below */
     margin-block-start: 1.5em;
     margin-block-end: 0.5em;
   }
 
   h1 {
-    font-size: var(--font-size-4xl); /* 32px — not 2× body */
-    letter-spacing: var(--tracking-tight);
+    font-size: var(--font-size-4xl); /* 36px */
+    font-weight: 700;
+    letter-spacing: -0.025em;
     line-height: var(--leading-tight);
     margin-block-start: 0;
   }
 
   h2 {
     font-size: var(--font-size-2xl); /* 24px */
-    letter-spacing: -0.01em;
-    line-height: var(--leading-snug); /* 1.35 */
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: var(--leading-snug); /* 1.33 */
   }
 
   h3 {
-    font-size: var(--font-size-xl); /* 22px */
+    font-size: var(--font-size-xl); /* 20px */
+    font-weight: 600;
+    letter-spacing: -0.01em;
     line-height: var(--leading-snug);
   }
 
   h4 {
-    font-size: var(--font-size-lg); /* 20px */
+    font-size: var(--font-size-lg); /* 18px */
+    font-weight: 600;
     line-height: var(--leading-snug);
   }
 
-  /* Butterick: two levels of headings is better than three.
-   * If you need h5/h6, keep them at body size but differentiated. */
+  /* Butterick: two heading levels is better than three.
+   * h5/h6 differentiate by weight and case, not size. */
   h5 {
-    font-size: var(--font-size-base); /* 18px — same as body */
-    font-weight: 700;
+    font-size: var(--font-size-base); /* 16px — same as body */
+    font-weight: 600;
   }
 
   h6 {
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    letter-spacing: var(--tracking-wide); /* 0.05em */
+    font-size: var(--font-size-xs); /* 12px */
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider); /* 0.075em */
     text-transform: uppercase;
   }
 
   /* -- Paragraphs --
-   * Butterick: use 4–10pt space between paragraphs (50–100% of body size).
-   * Don't combine with first-line indent — use one or the other. */
+   * Butterick: 50–100% of body size spacing.
+   * Use spacing OR indent, never both. */
   p {
     margin-block: 0 var(--spacing-paragraph);
-    max-inline-size: var(--width-prose); /* 65ch — line length constraint */
+    max-inline-size: var(--width-prose);
   }
 
   /* -- First-line indent alternative --
-   * Truong: first-line indent for long-form reading.
-   * Uncomment the block below and comment out the p margin-block rule
-   * above to switch to indent-based paragraph separation. */
+   * Uncomment to switch from spacing to indent separation.
+   * 1em indent works well with Inter's character width. */
   /*
   p { margin: 0; }
   p + p { text-indent: 1em; }
@@ -251,56 +287,64 @@ body {
     color: inherit;
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
-    text-decoration-color: currentColor;
+    text-underline-offset: 0.2em; /* Slightly more offset for Inter's tall x-height */
+    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
     transition: text-decoration-color 150ms ease;
   }
 
   a:hover {
-    text-decoration-color: transparent;
+    text-decoration-color: currentColor;
   }
 
-  /* -- Bold & Italic --
-   * Butterick: use bold OR italic, not both.
-   * Keep emphasis minimal. */
+  /* -- Emphasis --
+   * Butterick: bold OR italic, not both. Minimal use.
+   * Inter's 600 (semi-bold) is good for inline emphasis
+   * since 700 can feel too heavy next to 400 body text. */
   strong,
   b {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   em,
   i {
     font-style: italic;
+    /* Inter's italic is actually a slant (-12deg).
+     * If using Inter Variable, you can fine-tune:
+     * font-variation-settings: "slnt" -12; */
   }
 
   /* -- Small caps --
-   * Butterick: only use real small caps, never fake ones.
-   * Add 5–12% letterspacing with small caps. */
+   * Butterick: only use real small caps.
+   * Inter does NOT have true small caps — its font-variant-caps
+   * will produce faked (scaled) small caps. Consider skipping
+   * this feature or using a face that supports it.
+   * If you proceed, the letterspacing helps compensate. */
   .small-caps {
-    font-variant-caps: small-caps;
-    letter-spacing: var(--tracking-wide); /* 0.05em ≈ 5% */
+    font-variant-caps: all-small-caps;
+    letter-spacing: var(--tracking-wide); /* 0.04em */
+    font-weight: 500; /* Compensate for lighter stroke at small size */
   }
 
   /* -- All caps --
-   * Butterick: fine for less than one line. Add letterspacing. */
+   * Butterick: fine for less than one line, always letterspace. */
   .all-caps {
     text-transform: uppercase;
-    letter-spacing: var(--tracking-wider); /* 0.08em ≈ 8% */
+    letter-spacing: var(--tracking-wider); /* 0.075em */
   }
 
   /* -- Blockquotes --
-   * Butterick: block quotations should be indented, not italicized. */
+   * Butterick: indented, not italicized. */
   blockquote {
     margin-block: 1.5em;
     margin-inline: 0;
-    padding-inline-start: 1.5em;
-    border-inline-start: 3px solid var(--color-gray-300);
+    padding-inline-start: 1.25em;
+    border-inline-start: 2px solid var(--color-gray-300);
     max-inline-size: var(--width-prose);
   }
 
   blockquote p {
     font-size: inherit;
-    margin-block: 0 0.75em;
+    margin-block: 0 0.625em;
   }
 
   blockquote p:last-child {
@@ -308,8 +352,7 @@ body {
   }
 
   /* -- Lists --
-   * Truong: hang bullets for uninterrupted reading flow.
-   * Ensure enough padding on mobile for hanging bullets. */
+   * Truong: hang bullets for reading flow. */
   ul,
   ol {
     margin-block: 0 var(--spacing-paragraph);
@@ -326,27 +369,28 @@ body {
   }
 
   li {
-    margin-block-end: 0.35em;
-    padding-inline-start: 0.25em;
+    margin-block-end: 0.3em;
+    padding-inline-start: 0.2em;
   }
 
   li > ul,
   li > ol {
-    margin-block: 0.35em 0;
+    margin-block: 0.3em 0;
     margin-inline-start: 1em;
   }
 
-  /* -- Horizontal rules --
-   * Butterick: rules & borders should be subtle. */
+  /* -- Horizontal rules -- */
   hr {
     border: none;
-    border-block-start: 1px solid var(--color-gray-300);
+    border-block-start: 1px solid var(--color-gray-200);
     margin-block: 2em;
     max-inline-size: var(--width-prose);
   }
 
   /* -- Code --
-   * Butterick: monospaced fonts have their place (code, not body text). */
+   * SF Mono on Apple, JetBrains Mono cross-platform.
+   * Size bumped to 0.9em because monospaced faces
+   * typically have smaller apparent size than Inter. */
   code,
   kbd,
   samp,
@@ -355,42 +399,47 @@ body {
   }
 
   code {
-    font-size: 0.875em;
+    font-size: 0.9em;
+    font-weight: 450; /* Slightly heavier to match Inter 400 color */
   }
 
   pre {
     font-size: var(--font-size-sm);
-    line-height: 1.6;
+    line-height: 1.55;
     overflow-x: auto;
-    padding: 1.25em 1.5em;
+    padding: 1em 1.25em;
     margin-block: 1.5em;
-    border-radius: 0.375rem;
+    border-radius: 0.5rem;
     background-color: var(--color-gray-50);
     border: 1px solid var(--color-gray-200);
     max-inline-size: var(--width-prose-wide);
+    tab-size: 2;
   }
 
   pre code {
     font-size: inherit;
+    font-weight: inherit;
     background: none;
     padding: 0;
   }
 
-  /* -- Tables --
-   * Butterick: tables should use minimal rules. */
+  /* -- Tables -- */
   table {
     width: 100%;
     max-inline-size: var(--width-prose-wide);
     border-collapse: collapse;
     margin-block: 1.5em;
-    font-variant-numeric: tabular-nums; /* Truong: tabular figures in data */
+    font-variant-numeric: tabular-nums lining-nums; /* Inter has true tabular figures */
   }
 
   th {
-    font-weight: 700;
+    font-weight: 600;
     text-align: start;
     padding: 0.5em 0.75em;
     border-block-end: 2px solid var(--color-gray-300);
+    font-size: var(--font-size-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
   }
 
   td {
@@ -408,20 +457,19 @@ body {
 
   figcaption {
     font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
-    margin-block-start: 0.75em;
+    color: var(--color-gray-500);
+    margin-block-start: 0.625em;
     line-height: var(--leading-snug);
   }
 
-  /* -- Images inside prose -- */
+  /* -- Images -- */
   img {
     display: block;
     max-inline-size: 100%;
     height: auto;
   }
 
-  /* -- Subscript & superscript --
-   * Prevent them from affecting line height */
+  /* -- Sub/superscript -- */
   sub,
   sup {
     font-size: 0.75em;
@@ -440,57 +488,67 @@ body {
   /* -- Abbreviations -- */
   abbr[title] {
     text-decoration: underline dotted;
-    text-underline-offset: 0.15em;
+    text-underline-offset: 0.2em;
     cursor: help;
+  }
+
+  /* -- Selection -- */
+  ::selection {
+    background-color: var(--color-blue-100);
+    color: var(--color-gray-950);
   }
 }
 
 /* --------------------------------------------------------
  * 3. COMPONENTS — Reusable typographic patterns
  * -------------------------------------------------------- */
-
 @layer components {
-  /* -- Prose container --
-   * The main content wrapper that enforces line-length constraints.
-   * Truong: mobile-first with centered auto margins. */
+  /* -- Prose container -- */
   .prose {
     max-inline-size: var(--width-prose);
-    padding-inline: 2em; /* Truong: ≥2em for hanging bullets */
+    padding-inline: 1.5em;
     font-family: var(--font-body);
     font-size: var(--font-size-base);
     line-height: var(--leading-normal);
   }
 
+  @media (min-width: 640px) {
+    .prose {
+      padding-inline: 2em;
+    }
+  }
+
   .prose-narrow {
     max-inline-size: var(--width-prose-narrow);
   }
-
   .prose-wide {
     max-inline-size: var(--width-prose-wide);
   }
 
-  /* -- Lead paragraph --
-   * Slightly larger for article openings. */
+  /* -- Lead paragraph -- */
   .lead {
     font-size: var(--font-size-lg);
     line-height: var(--leading-relaxed);
-    color: var(--color-gray-700);
+    color: var(--color-gray-600);
+    letter-spacing: -0.005em; /* Very subtle tightening at this size */
   }
 
-  /* -- Drop cap --
-   * For editorial/long-form openings. */
+  /* -- Drop cap -- */
   .drop-cap::first-letter {
     float: inline-start;
-    font-size: 3.5em;
-    line-height: 0.8;
+    font-family: var(--font-heading);
+    font-size: 3.25em;
+    line-height: 0.85;
     font-weight: 700;
-    margin-inline-end: 0.1em;
-    margin-block-start: 0.05em;
+    letter-spacing: -0.02em;
+    margin-inline-end: 0.08em;
+    margin-block-start: 0.02em;
   }
 
   /* -- Numeric features --
-   * Truong: oldstyle figures for running text,
-   * tabular/lining for tables and data. */
+   * Inter has full OpenType numeric alternates:
+   * onum (oldstyle), tnum (tabular), pnum (proportional),
+   * zero (slashed zero), frac (fractions). */
   .oldstyle-nums {
     font-variant-numeric: oldstyle-nums proportional-nums;
   }
@@ -499,80 +557,153 @@ body {
     font-variant-numeric: tabular-nums lining-nums;
   }
 
-  /* -- OpenType discretionary ligatures --
-   * Truong: decorative, suitable for headings only. */
-  .dlig {
-    font-variant-ligatures: discretionary-ligatures;
+  .slashed-zero {
+    font-variant-numeric: slashed-zero;
   }
 
-  /* -- Hanging punctuation --
-   * For optical alignment of quotes and bullets. */
+  .fractions {
+    font-variant-numeric: diagonal-fractions;
+  }
+
+  /* -- Inter stylistic sets --
+   * Uncomment the alternates you want globally or apply per-element.
+   *
+   * cv01: alt 1 (no base serif)
+   * cv02: alt 4 (open top)
+   * cv03: alt 6 (straight tail)
+   * cv04: alt 9 (flat top)
+   * cv05: alt l (with tail)
+   * cv06: alt G (open)
+   * cv07: alt ß (German lowercase sharp s)
+   * cv08: alt ij (Dutch digraph)
+   * cv09: alt u (rounded)
+   * cv10: alt @ (alternate)
+   * cv11: alt ∂ (alt form)
+   * ss01: open digits
+   * ss02: ambiguous characters
+   * ss03: round quotes & commas
+   * ss04: alt y (straight descender)
+   * ss08: alt ij (Dutch)
+   */
+  .inter-open-digits {
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 1,
+      "ss01" 1;
+  }
+
+  .inter-alt-one {
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 1,
+      "cv01" 1;
+  }
+
+  /* -- Hanging punctuation -- */
   .hanging-punctuation {
     hanging-punctuation: first last;
+  }
+
+  /* -- Text balance for multi-line headings -- */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
   }
 }
 
 /* --------------------------------------------------------
  * 4. RESPONSIVE TYPOGRAPHY
  *
- * Truong: mobile-first. Start at a comfortable
- * mobile size, then scale up for larger viewports.
- * Butterick: adjust line length, size, and spacing together.
+ * Inter/SF already read large due to x-height, so the
+ * scaling steps are smaller than they would be for a serif.
+ * Mobile: 16px | Tablet: 16.5px | Desktop: 17px
  * -------------------------------------------------------- */
-
 @media (min-width: 640px) {
-  /* Slightly increase body text on tablets */
   body {
-    font-size: 1.1875rem; /* ~19px */
+    font-size: 1.03125rem; /* ~16.5px */
   }
 }
 
 @media (min-width: 1024px) {
-  /* Full desktop reading size */
   body {
-    font-size: 1.25rem; /* 20px */
-    line-height: 1.55;
+    font-size: 1.0625rem; /* 17px */
+    line-height: 1.5;
   }
 
-  /* Headings can breathe more on large screens */
   h1 {
-    font-size: var(--font-size-5xl);
-  } /* 40px */
+    font-size: var(--font-size-5xl); /* 48px */
+    letter-spacing: -0.03em;
+  }
+
   h2 {
-    font-size: var(--font-size-3xl);
-  } /* 28px */
+    font-size: var(--font-size-3xl); /* 30px */
+    letter-spacing: -0.02em;
+  }
+
   h3 {
-    font-size: var(--font-size-2xl);
-  } /* 24px */
+    font-size: var(--font-size-2xl); /* 24px */
+    letter-spacing: -0.015em;
+  }
+
   h4 {
-    font-size: var(--font-size-xl);
-  } /* 22px */
+    font-size: var(--font-size-xl); /* 20px */
+  }
+}
+
+@media (min-width: 1440px) {
+  /* Large displays — headings can go bigger,
+   * body stays put to avoid oversized text. */
+  h1 {
+    font-size: var(--font-size-6xl); /* 60px */
+    letter-spacing: -0.035em;
+  }
 }
 
 /* --------------------------------------------------------
  * 5. DARK MODE
+ *
+ * Inter renders well on dark backgrounds but needs
+ * slightly thinner weight to avoid blooming from
+ * subpixel rendering. We pull body to 350 (variable)
+ * or keep at 400 if using static weights.
  * -------------------------------------------------------- */
-
 @media (prefers-color-scheme: dark) {
   body {
     color: var(--color-gray-100);
+    /* For Inter Variable, uncomment to reduce dark-mode blooming:
+     * font-variation-settings: "wght" 350; */
+  }
+
+  strong,
+  b {
+    font-weight: 600; /* Keep emphasis ratio */
+    /* font-variation-settings: "wght" 550; */
   }
 
   blockquote {
-    border-inline-start-color: var(--color-gray-600);
+    border-inline-start-color: var(--color-gray-700);
   }
 
   pre {
     background-color: var(--color-gray-900);
-    border-color: var(--color-gray-700);
+    border-color: var(--color-gray-800);
+  }
+
+  code {
+    font-weight: 400; /* Code doesn't need weight bump in dark */
   }
 
   th {
-    border-block-end-color: var(--color-gray-600);
+    border-block-end-color: var(--color-gray-700);
   }
 
   td {
-    border-block-end-color: var(--color-gray-700);
+    border-block-end-color: var(--color-gray-800);
   }
 
   figcaption {
@@ -580,29 +711,37 @@ body {
   }
 
   hr {
-    border-block-start-color: var(--color-gray-700);
+    border-block-start-color: var(--color-gray-800);
+  }
+
+  ::selection {
+    background-color: var(--color-blue-900);
+    color: var(--color-gray-100);
   }
 }
 
 /* --------------------------------------------------------
  * 6. PRINT STYLES
  *
- * Butterick: 10–12pt body text in print,
- * with tighter line spacing and margins.
+ * Butterick: 10–12pt in print.
+ * Inter prints acceptably but isn't a print-optimised face.
+ * Consider swapping to the system serif for print.
  * -------------------------------------------------------- */
-
 @media print {
   body {
-    font-size: 11pt;
-    line-height: 1.35;
+    font-family: var(--font-body);
+    font-size: 10.5pt; /* Inter reads large, so lower end is fine */
+    line-height: 1.4;
     color: #000;
   }
 
   h1 {
-    font-size: 18pt;
+    font-size: 20pt;
+    letter-spacing: -0.02em;
   }
   h2 {
-    font-size: 14pt;
+    font-size: 15pt;
+    letter-spacing: -0.01em;
   }
   h3 {
     font-size: 12pt;
@@ -625,6 +764,5 @@ body {
   h5,
   h6 {
     page-break-after: avoid;
-    /* Butterick: keep headings with next paragraph */
   }
 }
