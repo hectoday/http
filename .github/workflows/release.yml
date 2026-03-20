@@ -80,7 +80,7 @@ jobs:
 
       - name: Update package.json version
         working-directory: ./packages/${{ inputs.package }}
-        run: npm version ${{ inputs.version }} --no-git-tag-version
+        run: npm pkg set version=${{ inputs.version }}
 
       - name: Build package
         working-directory: ./packages/${{ inputs.package }}
@@ -98,8 +98,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add packages/${{ inputs.package }}/package.json
-          git commit -m "chore(${{ inputs.package }}): bump version to ${{ inputs.version }}"
-          git push
+          git diff --staged --quiet && echo "Version already up to date" || (git commit -m "chore(${{ inputs.package }}): bump version to ${{ inputs.version }}" && git push)
 
   dry-run:
     name: Dry Run
@@ -125,7 +124,7 @@ jobs:
 
       - name: Update package.json version
         working-directory: ./packages/${{ inputs.package }}
-        run: npm version ${{ inputs.version }} --no-git-tag-version
+        run: npm pkg set version=${{ inputs.version }}
 
       - name: Build package
         working-directory: ./packages/${{ inputs.package }}
