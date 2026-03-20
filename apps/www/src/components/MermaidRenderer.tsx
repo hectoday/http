@@ -32,8 +32,51 @@ export default function MermaidRenderer({
 
       mermaid.initialize({
         startOnLoad: false,
-        theme: isDark ? "dark" : "default",
+        theme: "base",
         fontFamily: "inherit",
+        themeVariables: isDark
+          ? {
+              // Dark mode palette
+              background: "#111827",
+              primaryColor: "#1e3a5f",
+              primaryTextColor: "#e5e7eb",
+              primaryBorderColor: "#374151",
+              secondaryColor: "#1e293b",
+              secondaryTextColor: "#d1d5db",
+              secondaryBorderColor: "#374151",
+              tertiaryColor: "#172033",
+              tertiaryTextColor: "#d1d5db",
+              tertiaryBorderColor: "#374151",
+              lineColor: "#6b7280",
+              textColor: "#e5e7eb",
+              mainBkg: "#1e3a5f",
+              nodeBorder: "#4b7bb5",
+              clusterBkg: "#1e293b",
+              clusterBorder: "#374151",
+              edgeLabelBackground: "#1f2937",
+              nodeTextColor: "#e5e7eb",
+            }
+          : {
+              // Light mode palette
+              background: "#ffffff",
+              primaryColor: "#dbeafe",
+              primaryTextColor: "#1e3a5f",
+              primaryBorderColor: "#93c5fd",
+              secondaryColor: "#f0f9ff",
+              secondaryTextColor: "#334155",
+              secondaryBorderColor: "#bfdbfe",
+              tertiaryColor: "#f8fafc",
+              tertiaryTextColor: "#334155",
+              tertiaryBorderColor: "#cbd5e1",
+              lineColor: "#94a3b8",
+              textColor: "#1e293b",
+              mainBkg: "#dbeafe",
+              nodeBorder: "#93c5fd",
+              clusterBkg: "#f0f9ff",
+              clusterBorder: "#bfdbfe",
+              edgeLabelBackground: "#ffffff",
+              nodeTextColor: "#1e3a5f",
+            },
       });
 
       for (const pre of pres) {
