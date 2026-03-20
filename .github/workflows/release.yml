@@ -75,8 +75,8 @@ jobs:
       - name: Install Vite+
         run: npm install -g vite-plus@latest
 
-      - name: Install @typescript/native-preview globally for tsgo DTS generation
-        run: npm install -g @typescript/native-preview@7.0.0-dev.20260316.1
+      - name: Install TypeScript globally for DTS generation
+        run: npm install -g typescript@~5.9.3 @typescript/native-preview@7.0.0-dev.20260316.1
 
       - name: Install dependencies
         run: vp install
@@ -122,8 +122,8 @@ jobs:
       - name: Install Vite+
         run: npm install -g vite-plus@latest
 
-      - name: Install @typescript/native-preview globally for tsgo DTS generation
-        run: npm install -g @typescript/native-preview@7.0.0-dev.20260316.1
+      - name: Install TypeScript globally for DTS generation
+        run: npm install -g typescript@~5.9.3 @typescript/native-preview@7.0.0-dev.20260316.1
 
       - name: Install dependencies
         run: vp install
