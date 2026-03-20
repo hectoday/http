@@ -1,0 +1,630 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * typography.css — Tailwind CSS v4 Typography Setup
+ *
+ * Based on best practices from:
+ *   - Butterick's Practical Typography (practicaltypography.com)
+ *   - Professional Web Typography by Donny Truong (prowebtype.com)
+ *
+ * Design principles encoded:
+ *   - Body text: 15–25px on screen (Butterick)
+ *   - Line height: 120–145% of font size (Butterick)
+ *   - Line length: 45–90 characters (Butterick)
+ *   - Paragraph spacing: 50–100% of body text size (Butterick)
+ *   - Heading sizes: subtle increments, not double (Butterick)
+ *   - Kerning always on (Butterick + Truong)
+ *   - Ligatures enabled (Truong)
+ *   - Letterspacing on caps/small-caps: 5–12% (Butterick)
+ *   - Mobile-first approach (Truong)
+ */
+
+/* --------------------------------------------------------
+ * 1. THEME — Design tokens via @theme
+ * -------------------------------------------------------- */
+
+@theme {
+  /* -- Font families --
+   * Swap these for your project's typefaces.
+   * Butterick: use a professional font, not system defaults.
+   * The stack below is a sensible starting point;
+   * replace with your licensed web font of choice. */
+  --font-body: "Charter", "Bitstream Charter", "Sitka Text", Cambria, serif;
+  --font-heading: "Charter", "Bitstream Charter", "Sitka Text", Cambria, serif;
+  --font-mono: "Söhne Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* -- Type scale --
+   * Butterick recommends 15–25px for web body text.
+   * Each step is a subtle increment (≈1.125–1.2 ratio),
+   * NOT the bloated 2× jumps browsers default to. */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-xs--line-height: 1.5;
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-sm--line-height: 1.5;
+  --font-size-base: 1.125rem; /* 18px — sweet spot for screen */
+  --font-size-base--line-height: 1.6;
+  --font-size-lg: 1.25rem; /* 20px */
+  --font-size-lg--line-height: 1.55;
+  --font-size-xl: 1.375rem; /* 22px */
+  --font-size-xl--line-height: 1.45;
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-2xl--line-height: 1.4;
+  --font-size-2xl--letter-spacing: -0.01em;
+  --font-size-3xl: 1.75rem; /* 28px */
+  --font-size-3xl--line-height: 1.3;
+  --font-size-3xl--letter-spacing: -0.015em;
+  --font-size-4xl: 2rem; /* 32px */
+  --font-size-4xl--line-height: 1.2;
+  --font-size-4xl--letter-spacing: -0.02em;
+  --font-size-5xl: 2.5rem; /* 40px */
+  --font-size-5xl--line-height: 1.15;
+  --font-size-5xl--letter-spacing: -0.025em;
+
+  /* -- Leading (line-height) --
+   * Butterick: 120–145% of point size.
+   * Truong: 1.4–1.6 for body text. */
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.7;
+  --leading-loose: 1.9;
+
+  /* -- Tracking (letter-spacing) --
+   * Butterick: 5–12% extra for ALL CAPS and small caps.
+   * Never letterspace lowercase body text. */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.08em;
+  --tracking-widest: 0.12em;
+
+  /* -- Spacing --
+   * Butterick: paragraph spacing = 50–100% of body text size.
+   * With base at 1.125rem (18px), that's ~9–18px. */
+  --spacing-paragraph: 1em;
+
+  /* -- Max widths for measure (line length) --
+   * Butterick: 45–90 characters per line.
+   * ~65ch is the sweet spot for comfortable reading. */
+  --width-prose: 65ch;
+  --width-prose-narrow: 50ch;
+  --width-prose-wide: 80ch;
+}
+
+/* --------------------------------------------------------
+ * 2. BASE LAYER — Typographic defaults
+ * -------------------------------------------------------- */
+
+@layer base {
+  /* -- Root typographic baseline -- */
+  html {
+    /* Butterick: body text 15–25px on screen.
+     * We set 100% (16px) as the root, then bump body to 1.125rem (18px).
+     * This preserves rem calculations while hitting the target range. */
+    font-size: 100%;
+
+    /* Truong: turn on kerning at the root. */
+    font-kerning: normal;
+
+    /* Truong: enable common ligatures and contextual alternates. */
+    font-variant-ligatures: common-ligatures contextual;
+
+    /* Smooth text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Enable OpenType features as baseline:
+     * kern = kerning, liga = standard ligatures, clig = contextual ligatures */
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "clig" 1;
+
+    /* Sensible text rendering for body copy */
+    text-rendering: optimizeLegibility;
+
+    /* Prevent text inflation on mobile (Truong: mobile-first) */
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base); /* 18px */
+    line-height: var(--leading-normal); /* 1.6 → ~29px */
+    font-weight: 400;
+    color: var(--color-gray-900);
+    /* Truong: centered composition */
+    margin-inline: auto;
+  }
+
+  /* -- Headings --
+   * Butterick: fewer levels, subtler emphasis.
+   * Prefer bold over italic, use the smallest
+   * size increment that creates visible difference.
+   * Don't double the size — the default h1 at 200% is excessive. */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    line-height: var(--leading-tight); /* 1.2 */
+    font-weight: 700;
+    text-wrap: balance;
+
+    /* Butterick: suppress hyphenation in headings */
+    hyphens: none;
+
+    /* Butterick: best emphasis is space above and below */
+    margin-block-start: 1.5em;
+    margin-block-end: 0.5em;
+  }
+
+  h1 {
+    font-size: var(--font-size-4xl); /* 32px — not 2× body */
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-block-start: 0;
+  }
+
+  h2 {
+    font-size: var(--font-size-2xl); /* 24px */
+    letter-spacing: -0.01em;
+    line-height: var(--leading-snug); /* 1.35 */
+  }
+
+  h3 {
+    font-size: var(--font-size-xl); /* 22px */
+    line-height: var(--leading-snug);
+  }
+
+  h4 {
+    font-size: var(--font-size-lg); /* 20px */
+    line-height: var(--leading-snug);
+  }
+
+  /* Butterick: two levels of headings is better than three.
+   * If you need h5/h6, keep them at body size but differentiated. */
+  h5 {
+    font-size: var(--font-size-base); /* 18px — same as body */
+    font-weight: 700;
+  }
+
+  h6 {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide); /* 0.05em */
+    text-transform: uppercase;
+  }
+
+  /* -- Paragraphs --
+   * Butterick: use 4–10pt space between paragraphs (50–100% of body size).
+   * Don't combine with first-line indent — use one or the other. */
+  p {
+    margin-block: 0 var(--spacing-paragraph);
+    max-inline-size: var(--width-prose); /* 65ch — line length constraint */
+  }
+
+  /* -- First-line indent alternative --
+   * Truong: first-line indent for long-form reading.
+   * Uncomment the block below and comment out the p margin-block rule
+   * above to switch to indent-based paragraph separation. */
+  /*
+  p { margin: 0; }
+  p + p { text-indent: 1em; }
+  */
+
+  /* -- Links --
+   * Butterick: underlining is for links only on web. */
+  a {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+    text-decoration-color: currentColor;
+    transition: text-decoration-color 150ms ease;
+  }
+
+  a:hover {
+    text-decoration-color: transparent;
+  }
+
+  /* -- Bold & Italic --
+   * Butterick: use bold OR italic, not both.
+   * Keep emphasis minimal. */
+  strong,
+  b {
+    font-weight: 700;
+  }
+
+  em,
+  i {
+    font-style: italic;
+  }
+
+  /* -- Small caps --
+   * Butterick: only use real small caps, never fake ones.
+   * Add 5–12% letterspacing with small caps. */
+  .small-caps {
+    font-variant-caps: small-caps;
+    letter-spacing: var(--tracking-wide); /* 0.05em ≈ 5% */
+  }
+
+  /* -- All caps --
+   * Butterick: fine for less than one line. Add letterspacing. */
+  .all-caps {
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider); /* 0.08em ≈ 8% */
+  }
+
+  /* -- Blockquotes --
+   * Butterick: block quotations should be indented, not italicized. */
+  blockquote {
+    margin-block: 1.5em;
+    margin-inline: 0;
+    padding-inline-start: 1.5em;
+    border-inline-start: 3px solid var(--color-gray-300);
+    max-inline-size: var(--width-prose);
+  }
+
+  blockquote p {
+    font-size: inherit;
+    margin-block: 0 0.75em;
+  }
+
+  blockquote p:last-child {
+    margin-block-end: 0;
+  }
+
+  /* -- Lists --
+   * Truong: hang bullets for uninterrupted reading flow.
+   * Ensure enough padding on mobile for hanging bullets. */
+  ul,
+  ol {
+    margin-block: 0 var(--spacing-paragraph);
+    padding-inline-start: 0;
+    max-inline-size: var(--width-prose);
+    list-style-position: outside;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+  ol {
+    list-style-type: decimal;
+  }
+
+  li {
+    margin-block-end: 0.35em;
+    padding-inline-start: 0.25em;
+  }
+
+  li > ul,
+  li > ol {
+    margin-block: 0.35em 0;
+    margin-inline-start: 1em;
+  }
+
+  /* -- Horizontal rules --
+   * Butterick: rules & borders should be subtle. */
+  hr {
+    border: none;
+    border-block-start: 1px solid var(--color-gray-300);
+    margin-block: 2em;
+    max-inline-size: var(--width-prose);
+  }
+
+  /* -- Code --
+   * Butterick: monospaced fonts have their place (code, not body text). */
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+  }
+
+  code {
+    font-size: 0.875em;
+  }
+
+  pre {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    overflow-x: auto;
+    padding: 1.25em 1.5em;
+    margin-block: 1.5em;
+    border-radius: 0.375rem;
+    background-color: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    max-inline-size: var(--width-prose-wide);
+  }
+
+  pre code {
+    font-size: inherit;
+    background: none;
+    padding: 0;
+  }
+
+  /* -- Tables --
+   * Butterick: tables should use minimal rules. */
+  table {
+    width: 100%;
+    max-inline-size: var(--width-prose-wide);
+    border-collapse: collapse;
+    margin-block: 1.5em;
+    font-variant-numeric: tabular-nums; /* Truong: tabular figures in data */
+  }
+
+  th {
+    font-weight: 700;
+    text-align: start;
+    padding: 0.5em 0.75em;
+    border-block-end: 2px solid var(--color-gray-300);
+  }
+
+  td {
+    padding: 0.5em 0.75em;
+    border-block-end: 1px solid var(--color-gray-200);
+    vertical-align: baseline;
+  }
+
+  /* -- Figures & captions -- */
+  figure {
+    margin-block: 1.5em;
+    margin-inline: 0;
+    max-inline-size: var(--width-prose-wide);
+  }
+
+  figcaption {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    margin-block-start: 0.75em;
+    line-height: var(--leading-snug);
+  }
+
+  /* -- Images inside prose -- */
+  img {
+    display: block;
+    max-inline-size: 100%;
+    height: auto;
+  }
+
+  /* -- Subscript & superscript --
+   * Prevent them from affecting line height */
+  sub,
+  sup {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+
+  /* -- Abbreviations -- */
+  abbr[title] {
+    text-decoration: underline dotted;
+    text-underline-offset: 0.15em;
+    cursor: help;
+  }
+}
+
+/* --------------------------------------------------------
+ * 3. COMPONENTS — Reusable typographic patterns
+ * -------------------------------------------------------- */
+
+@layer components {
+  /* -- Prose container --
+   * The main content wrapper that enforces line-length constraints.
+   * Truong: mobile-first with centered auto margins. */
+  .prose {
+    max-inline-size: var(--width-prose);
+    padding-inline: 2em; /* Truong: ≥2em for hanging bullets */
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    line-height: var(--leading-normal);
+  }
+
+  .prose-narrow {
+    max-inline-size: var(--width-prose-narrow);
+  }
+
+  .prose-wide {
+    max-inline-size: var(--width-prose-wide);
+  }
+
+  /* -- Lead paragraph --
+   * Slightly larger for article openings. */
+  .lead {
+    font-size: var(--font-size-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-gray-700);
+  }
+
+  /* -- Drop cap --
+   * For editorial/long-form openings. */
+  .drop-cap::first-letter {
+    float: inline-start;
+    font-size: 3.5em;
+    line-height: 0.8;
+    font-weight: 700;
+    margin-inline-end: 0.1em;
+    margin-block-start: 0.05em;
+  }
+
+  /* -- Numeric features --
+   * Truong: oldstyle figures for running text,
+   * tabular/lining for tables and data. */
+  .oldstyle-nums {
+    font-variant-numeric: oldstyle-nums proportional-nums;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  /* -- OpenType discretionary ligatures --
+   * Truong: decorative, suitable for headings only. */
+  .dlig {
+    font-variant-ligatures: discretionary-ligatures;
+  }
+
+  /* -- Hanging punctuation --
+   * For optical alignment of quotes and bullets. */
+  .hanging-punctuation {
+    hanging-punctuation: first last;
+  }
+}
+
+/* --------------------------------------------------------
+ * 4. RESPONSIVE TYPOGRAPHY
+ *
+ * Truong: mobile-first. Start at a comfortable
+ * mobile size, then scale up for larger viewports.
+ * Butterick: adjust line length, size, and spacing together.
+ * -------------------------------------------------------- */
+
+@media (min-width: 640px) {
+  /* Slightly increase body text on tablets */
+  body {
+    font-size: 1.1875rem; /* ~19px */
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Full desktop reading size */
+  body {
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.55;
+  }
+
+  /* Headings can breathe more on large screens */
+  h1 {
+    font-size: var(--font-size-5xl);
+  } /* 40px */
+  h2 {
+    font-size: var(--font-size-3xl);
+  } /* 28px */
+  h3 {
+    font-size: var(--font-size-2xl);
+  } /* 24px */
+  h4 {
+    font-size: var(--font-size-xl);
+  } /* 22px */
+}
+
+/* --------------------------------------------------------
+ * 5. DARK MODE
+ * -------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: var(--color-gray-100);
+  }
+
+  blockquote {
+    border-inline-start-color: var(--color-gray-600);
+  }
+
+  pre {
+    background-color: var(--color-gray-900);
+    border-color: var(--color-gray-700);
+  }
+
+  th {
+    border-block-end-color: var(--color-gray-600);
+  }
+
+  td {
+    border-block-end-color: var(--color-gray-700);
+  }
+
+  figcaption {
+    color: var(--color-gray-400);
+  }
+
+  hr {
+    border-block-start-color: var(--color-gray-700);
+  }
+}
+
+/* --------------------------------------------------------
+ * 6. PRINT STYLES
+ *
+ * Butterick: 10–12pt body text in print,
+ * with tighter line spacing and margins.
+ * -------------------------------------------------------- */
+
+@media print {
+  body {
+    font-size: 11pt;
+    line-height: 1.35;
+    color: #000;
+  }
+
+  h1 {
+    font-size: 18pt;
+  }
+  h2 {
+    font-size: 14pt;
+  }
+  h3 {
+    font-size: 12pt;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  pre,
+  blockquote {
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+    /* Butterick: keep headings with next paragraph */
+  }
+}

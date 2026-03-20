@@ -2,15 +2,33 @@
   "name": "@hectoday/openapi",
   "version": "0.1.0",
   "description": "OpenAPI 3.1 spec generation for @hectoday/http routes.",
+  "keywords": [
+    "api",
+    "documentation",
+    "hectoday",
+    "openapi",
+    "spec",
+    "swagger"
+  ],
+  "homepage": "https://github.com/hectoday/http#readme",
+  "bugs": {
+    "url": "https://github.com/hectoday/http/issues"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hectoday/http.git",
+    "directory": "packages/openapi"
+  },
   "files": [
     "dist"
   ],
   "type": "module",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs"
+      "default": "./dist/index.mjs"
     },
     "./package.json": "./package.json"
   },
