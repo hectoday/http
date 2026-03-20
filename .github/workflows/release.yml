@@ -3,6 +3,13 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
+      package:
+        description: "Package to publish"
+        required: true
+        type: choice
+        options:
+          - http
+          - openapi
       version:
         description: "Version to publish (e.g., 0.2.0)"
         required: true
@@ -72,16 +79,16 @@ jobs:
         run: vp install
 
       - name: Update package.json version
-        working-directory: ./packages/http
+        working-directory: ./packages/${{ inputs.package }}
         run: npm version ${{ inputs.version }} --no-git-tag-version
 
       - name: Build package
-        working-directory: ./packages/http
+        working-directory: ./packages/${{ inputs.package }}
         run: vp pack
 
       - name: Publish to npm
         if: inputs.publish-npm == true
-        working-directory: ./packages/http
+        working-directory: ./packages/${{ inputs.package }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
@@ -90,14 +97,14 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add packages/http/package.json
-          git commit -m "chore: bump version to ${{ inputs.version }}"
+          git add packages/${{ inputs.package }}/package.json
+          git commit -m "chore(${{ inputs.package }}): bump version to ${{ inputs.version }}"
           git push
 
       - name: Create Git Tag
         run: |
-          git tag "v${{ inputs.version }}"
-          git push origin "v${{ inputs.version }}"
+          git tag "${{ inputs.package }}/v${{ inputs.version }}"
+          git push origin "${{ inputs.package }}/v${{ inputs.version }}"
 
   dry-run:
     name: Dry Run
@@ -122,16 +129,16 @@ jobs:
         run: vp install
 
       - name: Update package.json version
-        working-directory: ./packages/http
+        working-directory: ./packages/${{ inputs.package }}
         run: npm version ${{ inputs.version }} --no-git-tag-version
 
       - name: Build package
-        working-directory: ./packages/http
+        working-directory: ./packages/${{ inputs.package }}
         run: vp pack
 
       - name: Dry run npm publish
         if: inputs.publish-npm == true
-        working-directory: ./packages/http
+        working-directory: ./packages/${{ inputs.package }}
         run: |
-          echo "Would publish @hectoday/http@${{ inputs.version }} to npm"
+          echo "Would publish @hectoday/${{ inputs.package }}@${{ inputs.version }} to npm"
           npm publish --dry-run --access public

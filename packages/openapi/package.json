@@ -28,6 +28,7 @@
   "exports": {
     ".": {
       "types": "./src/index.ts",
+      "development": "./src/index.ts",
       "default": "./dist/index.mjs"
     },
     "./package.json": "./package.json"
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@hectoday/http": "^0.2.0",
     "@types/node": "^25.5.0",
+    "bumpp": "^11.0.1",
     "@typescript/native-preview": "7.0.0-dev.20260316.1",
     "typescript": "^5.9.3",
     "vite-plus": "latest",
