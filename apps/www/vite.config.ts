@@ -12,6 +12,11 @@ const config = defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  server: {
+    watch: {
+      ignored: ["**/.content-collections/**", "**/routeTree.gen.ts"],
+    },
+  },
   plugins: [
     contentCollections(),
     devtools(),
