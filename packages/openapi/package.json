@@ -24,10 +24,10 @@
     "dist"
   ],
   "type": "module",
-  "types": "./dist/index.d.mts",
+  "types": "./src/index.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.mts",
+      "types": "./src/index.ts",
       "default": "./dist/index.mjs"
     },
     "./package.json": "./package.json"
