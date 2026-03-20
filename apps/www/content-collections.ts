@@ -25,7 +25,7 @@ const DOC_ORDER = [
 
 // Create highlighter once to avoid re-initialization on every transform
 const highlighter = await createHighlighter({
-  themes: ["github-light", "github-dark"],
+  themes: ["github-dark"],
   langs: ["typescript", "bash", "json"],
 });
 
@@ -38,13 +38,7 @@ const docs = defineCollection({
   }),
   transform: async (doc, ctx) => {
     const html = await compileMarkdown(ctx, doc, {
-      rehypePlugins: [
-        [
-          rehypeShikiFromHighlighter,
-          highlighter,
-          { themes: { light: "github-light", dark: "github-dark" } },
-        ],
-      ],
+      rehypePlugins: [[rehypeShikiFromHighlighter, highlighter, { theme: "github-dark" }]],
     });
     const titleMatch = doc.content.match(/^#\s+(.+)$/m);
     // Rewrite relative markdown links to /docs/ routes

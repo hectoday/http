@@ -21,16 +21,14 @@
  */
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: "Inter", "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-html.dark .shiki,
-html.dark .shiki span {
-  color: var(--shiki-dark) !important;
-  background-color: var(--shiki-dark-bg) !important;
+/* Shiki code blocks inherit dark styling from pre */
+.shiki {
+  background-color: transparent !important;
 }
 
 * {
@@ -398,22 +396,44 @@ body {
     font-family: var(--font-mono);
   }
 
+  /* Inline code — subtle pill with tinted background */
   code {
-    font-size: 0.9em;
+    font-size: 0.875em;
     font-weight: 450; /* Slightly heavier to match Inter 400 color */
+    background-color: var(--color-gray-100);
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-gray-200);
+    word-break: break-word;
   }
 
+  /* kbd — distinct from code to look like a keyboard key */
+  kbd {
+    font-size: 0.875em;
+    font-weight: 500;
+    background-color: var(--color-gray-50);
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-gray-300);
+    box-shadow: 0 1px 0 var(--color-gray-300);
+  }
+
+  /* Code blocks */
   pre {
     font-size: var(--font-size-sm);
-    line-height: 1.55;
+    line-height: 1.7;
     overflow-x: auto;
-    padding: 1em 1.25em;
-    margin-block: 1.5em;
-    border-radius: 0.5rem;
-    background-color: var(--color-gray-50);
-    border: 1px solid var(--color-gray-200);
+    padding: 1.25em 1.5em;
+    margin-block: 1.75em;
+    border-radius: 0.625rem;
+    background-color: var(--color-gray-950);
+    color: var(--color-gray-200);
+    border: 1px solid var(--color-gray-800);
     max-inline-size: var(--width-prose-wide);
     tab-size: 2;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gray-700) transparent;
   }
 
   pre code {
@@ -421,6 +441,10 @@ body {
     font-weight: inherit;
     background: none;
     padding: 0;
+    border: none;
+    border-radius: 0;
+    color: inherit;
+    word-break: normal;
   }
 
   /* -- Tables -- */
@@ -672,52 +696,112 @@ body {
  * subpixel rendering. We pull body to 350 (variable)
  * or keep at 400 if using static weights.
  * -------------------------------------------------------- */
+/* Dark mode — supports both system preference and class toggle */
 @media (prefers-color-scheme: dark) {
-  body {
+  :root:not(.light) {
+    color-scheme: dark;
+  }
+
+  :root:not(.light) body {
     color: var(--color-gray-100);
-    /* For Inter Variable, uncomment to reduce dark-mode blooming:
-     * font-variation-settings: "wght" 350; */
   }
 
-  strong,
-  b {
-    font-weight: 600; /* Keep emphasis ratio */
-    /* font-variation-settings: "wght" 550; */
+  :root:not(.light) strong,
+  :root:not(.light) b {
+    font-weight: 600;
   }
 
-  blockquote {
+  :root:not(.light) blockquote {
     border-inline-start-color: var(--color-gray-700);
   }
 
-  pre {
-    background-color: var(--color-gray-900);
-    border-color: var(--color-gray-800);
+  :root:not(.light) code {
+    font-weight: 400;
+    background-color: var(--color-gray-800);
+    border-color: var(--color-gray-700);
   }
 
-  code {
-    font-weight: 400; /* Code doesn't need weight bump in dark */
+  :root:not(.light) kbd {
+    background-color: var(--color-gray-800);
+    border-color: var(--color-gray-600);
+    box-shadow: 0 1px 0 var(--color-gray-600);
   }
 
-  th {
+  :root:not(.light) pre {
+    border-color: var(--color-gray-700);
+  }
+
+  :root:not(.light) th {
     border-block-end-color: var(--color-gray-700);
   }
 
-  td {
+  :root:not(.light) td {
     border-block-end-color: var(--color-gray-800);
   }
 
-  figcaption {
+  :root:not(.light) figcaption {
     color: var(--color-gray-400);
   }
 
-  hr {
+  :root:not(.light) hr {
     border-block-start-color: var(--color-gray-800);
   }
 
-  ::selection {
+  :root:not(.light) ::selection {
     background-color: var(--color-blue-900);
     color: var(--color-gray-100);
   }
+}
+
+/* Explicit dark class toggle */
+html.dark body {
+  color: var(--color-gray-100);
+}
+
+html.dark strong,
+html.dark b {
+  font-weight: 600;
+}
+
+html.dark blockquote {
+  border-inline-start-color: var(--color-gray-700);
+}
+
+html.dark code {
+  font-weight: 400;
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-700);
+}
+
+html.dark kbd {
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-600);
+  box-shadow: 0 1px 0 var(--color-gray-600);
+}
+
+html.dark pre {
+  border-color: var(--color-gray-700);
+}
+
+html.dark th {
+  border-block-end-color: var(--color-gray-700);
+}
+
+html.dark td {
+  border-block-end-color: var(--color-gray-800);
+}
+
+html.dark figcaption {
+  color: var(--color-gray-400);
+}
+
+html.dark hr {
+  border-block-start-color: var(--color-gray-800);
+}
+
+html.dark ::selection {
+  background-color: var(--color-blue-900);
+  color: var(--color-gray-100);
 }
 
 /* --------------------------------------------------------
