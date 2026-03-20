@@ -28,7 +28,9 @@
 
 /* Shiki code blocks — override inline background with design-system color */
 pre.shiki {
-  background-color: var(--color-gray-950) !important;
+  background-color: #fafafa !important;
+  color: #242529 !important;
+  border: 1px solid var(--color-gray-200) !important;
 }
 
 /* Mermaid diagrams — clean black & white card */
