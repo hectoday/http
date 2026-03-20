@@ -26,9 +26,9 @@
   --font-sans: "Inter", "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-/* Shiki code blocks inherit dark styling from pre */
-.shiki {
-  background-color: transparent !important;
+/* Shiki code blocks — override inline background with design-system color */
+pre.shiki {
+  background-color: var(--color-gray-950) !important;
 }
 
 * {
@@ -721,6 +721,13 @@ body {
     border-color: var(--color-gray-700);
   }
 
+  :root:not(.light) pre code {
+    background: none;
+    border: none;
+    font-weight: inherit;
+    color: inherit;
+  }
+
   :root:not(.light) kbd {
     background-color: var(--color-gray-800);
     border-color: var(--color-gray-600);
@@ -771,6 +778,13 @@ html.dark code {
   font-weight: 400;
   background-color: var(--color-gray-800);
   border-color: var(--color-gray-700);
+}
+
+html.dark pre code {
+  background: none;
+  border: none;
+  font-weight: inherit;
+  color: inherit;
 }
 
 html.dark kbd {
