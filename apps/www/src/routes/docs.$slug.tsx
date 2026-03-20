@@ -1,3 +1,4 @@
+import DiagramLightbox from "#/components/DiagramLightbox";
 import MermaidRenderer from "#/components/MermaidRenderer";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef } from "react";
@@ -31,6 +32,7 @@ function DocPage() {
         dangerouslySetInnerHTML={{ __html: doc.html }}
       />
       <MermaidRenderer containerRef={articleRef} />
+      <DiagramLightbox containerRef={articleRef} />
       <nav className="mt-16 flex items-center justify-between border-t pt-6 dark:border-neutral-800">
         {prev ? (
           <Link
