@@ -56,7 +56,7 @@ pre.mermaid svg {
   height: auto;
 }
 
-/* Rounded small borders on mermaid nodes */
+/* Rounded small borders and thick strokes on mermaid nodes */
 pre.mermaid .node rect,
 pre.mermaid .node circle,
 pre.mermaid .node polygon,
@@ -65,6 +65,18 @@ pre.mermaid .label-container,
 pre.mermaid .cluster rect {
   rx: 6px;
   ry: 6px;
+  stroke-width: 2px;
+}
+
+pre.mermaid .flowchart-link,
+pre.mermaid .edge-pattern-solid,
+pre.mermaid .edge-pattern-dotted,
+pre.mermaid path.path {
+  stroke-width: 2px;
+}
+
+pre.mermaid marker path {
+  stroke-width: 1px;
 }
 
 html.dark pre.mermaid,
