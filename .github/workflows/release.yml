@@ -101,11 +101,6 @@ jobs:
           git commit -m "chore(${{ inputs.package }}): bump version to ${{ inputs.version }}"
           git push
 
-      - name: Create Git Tag
-        run: |
-          git tag "${{ inputs.package }}/v${{ inputs.version }}"
-          git push origin "${{ inputs.package }}/v${{ inputs.version }}"
-
   dry-run:
     name: Dry Run
     needs: test
