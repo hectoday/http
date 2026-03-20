@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vite-plus";
 import contentCollections from "@content-collections/vite";
 import { devtools } from "@tanstack/devtools-vite";
 
@@ -25,6 +25,14 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  test: {
+    environment: "jsdom",
+    server: {
+      deps: {
+        inline: [/react/, /react-dom/],
+      },
+    },
+  },
 });
 
 export default config;
