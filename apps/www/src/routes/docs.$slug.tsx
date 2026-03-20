@@ -1,4 +1,6 @@
+import MermaidRenderer from "#/components/MermaidRenderer";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef } from "react";
 import { allDocs } from "content-collections";
 
 const ordered = allDocs.filter((d) => d.order < 999).sort((a, b) => a.order - b.order);
@@ -17,12 +19,18 @@ export const Route = createFileRoute("/docs/$slug")({
 
 function DocPage() {
   const { doc, prev, next } = Route.useLoaderData();
+  const articleRef = useRef<HTMLElement>(null);
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <Link to="/" className="text-sm text-blue-600 hover:underline dark:text-blue-400">
         &larr; Home
       </Link>
-      <article className="prose mt-8 max-w-none" dangerouslySetInnerHTML={{ __html: doc.html }} />
+      <article
+        ref={articleRef}
+        className="prose mt-8 max-w-none"
+        dangerouslySetInnerHTML={{ __html: doc.html }}
+      />
+      <MermaidRenderer containerRef={articleRef} />
       <nav className="mt-16 flex items-center justify-between border-t pt-6 dark:border-neutral-800">
         {prev ? (
           <Link
