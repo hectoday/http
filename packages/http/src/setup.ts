@@ -196,10 +196,11 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
     locals: TLocals,
   ): Promise<Response> {
     if (!onResponse) return response;
+    const fallback = response.clone();
     try {
       return await onResponse({ request, response, locals });
     } catch {
-      return response;
+      return fallback;
     }
   }
 

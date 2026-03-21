@@ -22,7 +22,8 @@
     "directory": "packages/http"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "type": "module",
   "types": "./src/index.ts",

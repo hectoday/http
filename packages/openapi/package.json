@@ -21,7 +21,8 @@
     "directory": "packages/openapi"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "type": "module",
   "types": "./src/index.ts",
