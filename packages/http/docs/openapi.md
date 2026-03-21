@@ -73,14 +73,7 @@ const CreateUser = z.object({
 });
 ```
 
-For examples and other OpenAPI-specific metadata, use `.openapi()` from `zod-openapi`. Import the extension once in your app entry point:
-
-```ts
-// app.ts
-import "zod-openapi/extend";
-```
-
-Then use `.openapi()` anywhere on your Zod schemas:
+For examples and other OpenAPI-specific metadata, use `.meta()` on your Zod schemas:
 
 ```ts
 const StatsResponse = z.object({
@@ -88,7 +81,7 @@ const StatsResponse = z.object({
     uptime: z.number(),
     memory: z.number(),
   }),
-}).openapi({
+}).meta({
   example: {
     stats: { uptime: 86400, memory: 134217728 },
   },

@@ -66,7 +66,7 @@ Each file exports a group:
 
 ```ts
 // users.ts
-import { z } from "zod";
+import * as z from "zod/v4";
 import { route, group } from "@hectoday/http";
 import { authenticate } from "./auth";
 

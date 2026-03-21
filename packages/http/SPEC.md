@@ -391,7 +391,7 @@ export const app = setup({
 
 ```ts
 // users.ts
-import { z } from "zod";
+import * as z from "zod/v4";
 import { route, group } from "@hectoday/http";
 
 export const userRoutes = group([
@@ -600,9 +600,9 @@ Use `Record<string, unknown>` instead of `any` for the locals type parameter in 
 
 ```ts
 function defineRoute<
-  TParamsSchema extends z.ZodTypeAny | undefined = undefined,
-  TQuerySchema extends z.ZodTypeAny | undefined = undefined,
-  TBodySchema extends z.ZodTypeAny | undefined = undefined,
+  TParamsSchema extends z.ZodType | undefined = undefined,
+  TQuerySchema extends z.ZodType | undefined = undefined,
+  TBodySchema extends z.ZodType | undefined = undefined,
 >(
   method: string,
   path: string,
@@ -652,9 +652,8 @@ const app = setup({
 - `openapi()` takes the routes array, not the app — avoids circular reference with `setup()`
 - `spec()` and `docs()` take `route` from the user — the openapi package never imports `@hectoday/http`
 - Same pattern as `cors()`: helper returns functions, user wires them into routes explicitly
-- `extendZodWithOpenApi(z)` runs lazily inside `openapi()`, not at module level
 - Security schemes are global config, not per-route — covers the common case without coupling route configs to OpenAPI concepts
-- Schema examples use `zod-openapi`'s `.openapi({ example })` — import `"zod-openapi/extend"` once in app entry point
+- Schema examples use Zod's native `.meta({ example })` — no extension import needed
 
 ### What was rejected
 

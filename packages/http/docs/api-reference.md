@@ -73,11 +73,11 @@ route.all(path, config); // matches any method
 ```ts
 {
   request?: {
-    params?: z.ZodTypeAny,
-    query?: z.ZodTypeAny,
-    body?: z.ZodTypeAny,
+    params?: z.ZodType,
+    query?: z.ZodType,
+    body?: z.ZodType,
   },
-  response?: Record<number, z.ZodTypeAny>,
+  response?: Record<number, z.ZodType>,
   resolve: (c: Context) => Response | Promise<Response>,
 }
 ```
@@ -204,11 +204,11 @@ interface RouteDescriptor {
   path: string;
   config: {
     request?: {
-      params?: z.ZodTypeAny;
-      query?: z.ZodTypeAny;
-      body?: z.ZodTypeAny;
+      params?: z.ZodType;
+      query?: z.ZodType;
+      body?: z.ZodType;
     };
-    response?: Record<number, z.ZodTypeAny>;
+    response?: Record<number, z.ZodType>;
     resolve: (c: Context) => Response | Promise<Response>;
   };
 }
