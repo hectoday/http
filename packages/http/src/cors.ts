@@ -30,9 +30,11 @@ export function cors(options: CorsOptions): CorsResult {
   const allowAnyOrigin = origins.includes("*");
 
   function applyOrigin(h: Headers, requestOrigin: string | null): void {
+    if (!requestOrigin) return;
+
     if (allowAnyOrigin && !credentials) {
       h.set("access-control-allow-origin", "*");
-    } else if (requestOrigin && (allowAnyOrigin || origins.includes(requestOrigin))) {
+    } else if (allowAnyOrigin || origins.includes(requestOrigin)) {
       h.set("access-control-allow-origin", requestOrigin);
       h.append("vary", "Origin");
     }
@@ -40,16 +42,18 @@ export function cors(options: CorsOptions): CorsResult {
     if (credentials && h.has("access-control-allow-origin")) {
       h.set("access-control-allow-credentials", "true");
     }
-
-    if (exposeHeaders.length > 0) {
-      h.set("access-control-expose-headers", exposeHeaders.join(", "));
-    }
   }
 
-  function applyPreflight(h: Headers): void {
+  function applyPreflight(h: Headers, request: Request): void {
     h.set("access-control-allow-methods", methods.join(", "));
     if (allowHeaders.length > 0) {
       h.set("access-control-allow-headers", allowHeaders.join(", "));
+    } else {
+      const requestedHeaders = request.headers.get("access-control-request-headers");
+      if (requestedHeaders) {
+        h.set("access-control-allow-headers", requestedHeaders);
+        h.append("vary", "Access-Control-Request-Headers");
+      }
     }
     if (maxAge !== undefined) {
       h.set("access-control-max-age", String(maxAge));
@@ -62,7 +66,9 @@ export function cors(options: CorsOptions): CorsResult {
         resolve: (c: { request: Request }) => {
           const h = new Headers();
           applyOrigin(h, c.request.headers.get("origin"));
-          applyPreflight(h);
+          if (h.has("access-control-allow-origin")) {
+            applyPreflight(h, c.request);
+          }
           return new Response(null, { status: 204, headers: h });
         },
       }),
@@ -70,6 +76,9 @@ export function cors(options: CorsOptions): CorsResult {
     headers: (request, response) => {
       const h = new Headers(response.headers);
       applyOrigin(h, request.headers.get("origin"));
+      if (exposeHeaders.length > 0 && h.has("access-control-allow-origin")) {
+        h.set("access-control-expose-headers", exposeHeaders.join(", "));
+      }
       return new Response(response.body, {
         status: response.status,
         statusText: response.statusText,

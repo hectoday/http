@@ -189,6 +189,36 @@ describe("openapi", () => {
     expect(doc.paths["/real"]).toBeDefined();
   });
 
+  test("skips named and nested wildcard paths", async () => {
+    const routes = [
+      route.get("/files/**", {
+        resolve: () => Response.json({ ok: true }),
+      }),
+      route.get("/files/**:path", {
+        resolve: () => Response.json({ ok: true }),
+      }),
+      route.get("/users/:id", {
+        request: { params: z.object({ id: z.string() }) },
+        resolve: () => Response.json({ ok: true }),
+      }),
+    ];
+
+    const { spec } = openapi(routes, {
+      info: { title: "Test", version: "1.0.0" },
+    });
+
+    const response = await spec(route).config.resolve({
+      request: new Request("http://localhost/openapi.json"),
+      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      locals: {},
+    });
+
+    const doc = await response.json();
+    expect(doc.paths["/files/**"]).toBeUndefined();
+    expect(doc.paths["/files/**:path"]).toBeUndefined();
+    expect(doc.paths["/users/{id}"]).toBeDefined();
+  });
+
   test("custom spec and docs paths", () => {
     const { spec, docs } = openapi([], {
       info: { title: "Test", version: "1.0.0" },

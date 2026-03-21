@@ -31,6 +31,26 @@ describe("cors", () => {
       expect(res.headers.get("access-control-allow-origin")).toBe("*");
     });
 
+    test("does not set allow-origin for wildcard requests without an origin header", async () => {
+      const { preflight } = cors({ origin: "*" });
+      const app = setup({ routes: [preflight(route)] });
+      const res = await app.fetch(new Request("http://localhost/test", { method: "OPTIONS" }));
+      expect(res.headers.get("access-control-allow-origin")).toBeNull();
+    });
+
+    test("does not set other preflight headers when the origin is missing", async () => {
+      const { preflight } = cors({
+        origin: "*",
+        maxAge: 3600,
+        allowHeaders: ["Content-Type"],
+      });
+      const app = setup({ routes: [preflight(route)] });
+      const res = await app.fetch(new Request("http://localhost/test", { method: "OPTIONS" }));
+      expect(res.headers.get("access-control-allow-methods")).toBeNull();
+      expect(res.headers.get("access-control-allow-headers")).toBeNull();
+      expect(res.headers.get("access-control-max-age")).toBeNull();
+    });
+
     test("sets allow-origin for matching origin", async () => {
       const { preflight } = cors({ origin: "https://app.com" });
       const app = setup({ routes: [preflight(route)] });
@@ -56,20 +76,48 @@ describe("cors", () => {
       expect(res.headers.get("access-control-allow-origin")).toBeNull();
     });
 
+    test("does not set other preflight headers for disallowed origins", async () => {
+      const { preflight } = cors({
+        origin: "https://app.com",
+        maxAge: 3600,
+        allowHeaders: ["Content-Type"],
+      });
+      const app = setup({ routes: [preflight(route)] });
+      const res = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: { origin: "https://evil.com" },
+        }),
+      );
+      expect(res.headers.get("access-control-allow-methods")).toBeNull();
+      expect(res.headers.get("access-control-allow-headers")).toBeNull();
+      expect(res.headers.get("access-control-max-age")).toBeNull();
+    });
+
     test("sets allowed methods", async () => {
       const { preflight } = cors({
         origin: "*",
         methods: ["GET", "POST"],
       });
       const app = setup({ routes: [preflight(route)] });
-      const res = await app.fetch(new Request("http://localhost/test", { method: "OPTIONS" }));
+      const res = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: { origin: "https://any.com" },
+        }),
+      );
       expect(res.headers.get("access-control-allow-methods")).toBe("GET, POST");
     });
 
     test("uses default methods when not specified", async () => {
       const { preflight } = cors({ origin: "*" });
       const app = setup({ routes: [preflight(route)] });
-      const res = await app.fetch(new Request("http://localhost/test", { method: "OPTIONS" }));
+      const res = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: { origin: "https://any.com" },
+        }),
+      );
       const methods = res.headers.get("access-control-allow-methods")!;
       expect(methods).toContain("GET");
       expect(methods).toContain("POST");
@@ -82,14 +130,55 @@ describe("cors", () => {
         allowHeaders: ["Content-Type", "Authorization"],
       });
       const app = setup({ routes: [preflight(route)] });
-      const res = await app.fetch(new Request("http://localhost/test", { method: "OPTIONS" }));
+      const res = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: { origin: "https://any.com" },
+        }),
+      );
       expect(res.headers.get("access-control-allow-headers")).toBe("Content-Type, Authorization");
+    });
+
+    test("reflects requested headers when allowHeaders is not configured", async () => {
+      const { preflight } = cors({ origin: "*" });
+      const app = setup({ routes: [preflight(route)] });
+      const res = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: {
+            origin: "https://any.com",
+            "access-control-request-headers": "x-api-key, authorization",
+          },
+        }),
+      );
+      expect(res.headers.get("access-control-allow-headers")).toBe("x-api-key, authorization");
+      expect(res.headers.get("vary")).toContain("Access-Control-Request-Headers");
+    });
+
+    test("does not set expose-headers on preflight responses", async () => {
+      const { preflight } = cors({
+        origin: "*",
+        exposeHeaders: ["X-Custom", "X-Request-Id"],
+      });
+      const app = setup({ routes: [preflight(route)] });
+      const res = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: { origin: "https://any.com" },
+        }),
+      );
+      expect(res.headers.get("access-control-expose-headers")).toBeNull();
     });
 
     test("sets max-age", async () => {
       const { preflight } = cors({ origin: "*", maxAge: 3600 });
       const app = setup({ routes: [preflight(route)] });
-      const res = await app.fetch(new Request("http://localhost/test", { method: "OPTIONS" }));
+      const res = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: { origin: "https://any.com" },
+        }),
+      );
       expect(res.headers.get("access-control-max-age")).toBe("3600");
     });
 
@@ -136,14 +225,40 @@ describe("cors", () => {
       expect(res.headers.get("access-control-allow-origin")).toBeNull();
     });
 
-    test("sets expose-headers", () => {
+    test("sets expose-headers for allowed origins", () => {
+      const { headers } = cors({
+        origin: "*",
+        exposeHeaders: ["X-Custom", "X-Request-Id"],
+      });
+      const req = new Request("http://localhost/test", {
+        headers: { origin: "https://app.com" },
+      });
+      const res = headers(req, new Response("ok"));
+      expect(res.headers.get("access-control-expose-headers")).toBe("X-Custom, X-Request-Id");
+    });
+
+    test("does not set CORS headers for wildcard responses without an origin header", () => {
       const { headers } = cors({
         origin: "*",
         exposeHeaders: ["X-Custom", "X-Request-Id"],
       });
       const req = new Request("http://localhost/test");
       const res = headers(req, new Response("ok"));
-      expect(res.headers.get("access-control-expose-headers")).toBe("X-Custom, X-Request-Id");
+      expect(res.headers.get("access-control-allow-origin")).toBeNull();
+      expect(res.headers.get("access-control-expose-headers")).toBeNull();
+    });
+
+    test("does not set expose-headers when the origin is not allowed", () => {
+      const { headers } = cors({
+        origin: "https://app.com",
+        exposeHeaders: ["X-Custom", "X-Request-Id"],
+      });
+      const req = new Request("http://localhost/test", {
+        headers: { origin: "https://evil.com" },
+      });
+      const res = headers(req, new Response("ok"));
+      expect(res.headers.get("access-control-allow-origin")).toBeNull();
+      expect(res.headers.get("access-control-expose-headers")).toBeNull();
     });
 
     test("supports multiple origins", () => {

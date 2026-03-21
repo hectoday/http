@@ -209,8 +209,9 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
   for (const descriptor of routes) {
     const { method, path, config: routeConfig } = descriptor;
 
-    // Skip catch-all handlers (route.all) and wildcard paths
-    if (!method || path === "/**") continue;
+    // Skip catch-all handlers (route.all) and wildcard paths.
+    // OpenAPI path templating cannot represent multi-segment wildcards.
+    if (!method || path.includes("**")) continue;
 
     const openApiPath = toOpenApiPath(path);
     if (!paths[openApiPath]) paths[openApiPath] = {};
