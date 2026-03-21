@@ -258,8 +258,14 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
         bodyState = "missing";
       } else {
         try {
-          rawBody = await request.json();
-          bodyState = "parsed";
+          const text = await request.text();
+
+          if (text.trim() === "") {
+            bodyState = "missing";
+          } else {
+            rawBody = JSON.parse(text);
+            bodyState = "parsed";
+          }
         } catch {
           bodyState = "invalid";
         }

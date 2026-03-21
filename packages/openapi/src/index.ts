@@ -1,7 +1,5 @@
 import type { RouteDescriptor } from "@hectoday/http";
 import * as z from "zod/v4";
-import { createDocument } from "zod-openapi";
-import type { ZodOpenApiOperationObject } from "zod-openapi";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -192,12 +190,90 @@ function scalarHtml(specUrl: string): string {
 </html>`;
 }
 
+type OpenApiSchema = Record<string, unknown>;
+
+type OpenApiParameter = {
+  in: "path" | "query";
+  name: string;
+  required?: boolean;
+  schema: OpenApiSchema;
+};
+
+type OpenApiRequestBody = {
+  content: {
+    "application/json": {
+      schema: OpenApiSchema;
+    };
+  };
+};
+
+type OpenApiResponse = {
+  description: string;
+  content?: {
+    "application/json": {
+      schema: OpenApiSchema;
+    };
+  };
+};
+
+type OpenApiOperation = {
+  parameters?: OpenApiParameter[];
+  requestBody?: OpenApiRequestBody;
+  responses: Record<string, OpenApiResponse>;
+};
+
+type JsonSchemaObject = {
+  type?: string | string[];
+  properties?: Record<string, OpenApiSchema>;
+  required?: string[];
+};
+
+function toJsonSchema(schema: z.ZodType): OpenApiSchema {
+  const jsonSchema = z.toJSONSchema(schema);
+  return "$schema" in jsonSchema
+    ? Object.fromEntries(Object.entries(jsonSchema).filter(([key]) => key !== "$schema"))
+    : jsonSchema;
+}
+
+function toJsonSchemaObject(schema: z.ZodType, label: string, method: string, path: string): JsonSchemaObject {
+  const jsonSchema = toJsonSchema(schema) as JsonSchemaObject;
+  const isObjectSchema = jsonSchema.type === "object" || (
+    Array.isArray(jsonSchema.type) && jsonSchema.type.includes("object")
+  );
+
+  if (!isObjectSchema) {
+    throw new Error(`${label} schema for ${method} ${path} must be a z.object()`);
+  }
+
+  return jsonSchema;
+}
+
+function createParameters(
+  location: "path" | "query",
+  schema: z.ZodType | undefined,
+  method: string,
+  path: string,
+): OpenApiParameter[] {
+  if (!schema) return [];
+
+  const jsonSchema = toJsonSchemaObject(schema, location === "path" ? "params" : "query", method, path);
+  const properties = jsonSchema.properties ?? {};
+  const required = new Set(jsonSchema.required ?? []);
+
+  return Object.entries(properties).map(([name, propertySchema]) => ({
+    in: location,
+    name,
+    required: location === "path" ? true : required.has(name),
+    schema: propertySchema,
+  }));
+}
+
 // ---------------------------------------------------------------------------
 // Core
 // ---------------------------------------------------------------------------
 
 export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenApiResult {
-  const paths: Record<string, Record<string, ZodOpenApiOperationObject>> = {};
+  const paths: Record<string, Record<string, OpenApiOperation>> = {};
 
   for (const descriptor of routes) {
     const { method, path, config: routeConfig } = descriptor;
@@ -209,29 +285,17 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
     const openApiPath = toOpenApiPath(path);
     if (!paths[openApiPath]) paths[openApiPath] = {};
 
-    const operation: ZodOpenApiOperationObject = {
+    const operation: OpenApiOperation = {
       responses: {},
     };
 
-    // --- request params & query (must be z.object() schemas) ---
-    const requestParams: Record<string, z.ZodType> = {};
+    const parameters = [
+      ...createParameters("path", routeConfig.request?.params, method, path),
+      ...createParameters("query", routeConfig.request?.query, method, path),
+    ];
 
-    if (routeConfig.request?.params) {
-      if (!(routeConfig.request.params instanceof z.ZodObject)) {
-        throw new Error(`params schema for ${method} ${path} must be a z.object()`);
-      }
-      requestParams.path = routeConfig.request.params;
-    }
-
-    if (routeConfig.request?.query) {
-      if (!(routeConfig.request.query instanceof z.ZodObject)) {
-        throw new Error(`query schema for ${method} ${path} must be a z.object()`);
-      }
-      requestParams.query = routeConfig.request.query;
-    }
-
-    if (Object.keys(requestParams).length > 0) {
-      operation.requestParams = requestParams;
+    if (parameters.length > 0) {
+      operation.parameters = parameters;
     }
 
     // --- request body ---
@@ -239,7 +303,7 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
       operation.requestBody = {
         content: {
           "application/json": {
-            schema: routeConfig.request.body,
+            schema: toJsonSchema(routeConfig.request.body),
           },
         },
       };
@@ -256,7 +320,7 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
         // These HTTP statuses do not allow a response body.
         if (responseCanHaveBody(code)) {
           entry.content = {
-            "application/json": { schema: schema as z.ZodType },
+            "application/json": { schema: toJsonSchema(schema as z.ZodType) },
           };
         }
 
@@ -274,7 +338,7 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
   const specPath = config.specPath ?? "/openapi.json";
   const docsPath = config.docsPath ?? "/docs";
 
-  const document = createDocument({
+  const document = {
     openapi: "3.1.0",
     info: config.info,
     servers: config.servers,
@@ -284,7 +348,7 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
       ? { securitySchemes: config.securitySchemes as any }
       : undefined,
     paths,
-  });
+  };
 
   return {
     spec: (route) =>
