@@ -2,6 +2,28 @@ import { describe, expect, test } from "vite-plus/test";
 import { z } from "zod";
 import { route } from "@hectoday/http";
 import { openapi } from "./index";
+import type { OpenApiConfig } from "./index";
+
+const securitySchemesTypecheck = {
+  bearerAuth: { type: "http", scheme: "bearer" },
+  apiKeyAuth: { type: "apiKey", name: "x-api-key", in: "header" },
+  oauthAuth: {
+    type: "oauth2",
+    flows: {
+      authorizationCode: {
+        authorizationUrl: "https://example.com/oauth/authorize",
+        tokenUrl: "https://example.com/oauth/token",
+        scopes: { read: "Read access" },
+      },
+    },
+  },
+  oidcAuth: {
+    type: "openIdConnect",
+    openIdConnectUrl: "https://example.com/.well-known/openid-configuration",
+  },
+} satisfies NonNullable<OpenApiConfig["securitySchemes"]>;
+
+void securitySchemesTypecheck;
 
 describe("openapi", () => {
   test("generates spec from routes with schemas", () => {
@@ -197,5 +219,34 @@ describe("openapi", () => {
     const post = doc.paths["/items"].post;
     expect(post.requestBody).toBeDefined();
     expect(post.requestBody.content["application/json"]).toBeDefined();
+  });
+
+  test("omits content for status codes that cannot include a response body", async () => {
+    const routes = [
+      route.get("/cache", {
+        response: {
+          204: z.object({ ok: z.boolean() }),
+          205: z.object({ reset: z.boolean() }),
+          304: z.object({ cached: z.boolean() }),
+        },
+        resolve: () => new Response(null, { status: 204 }),
+      }),
+    ];
+
+    const { spec } = openapi(routes, {
+      info: { title: "Test", version: "1.0.0" },
+    });
+
+    const response = await spec(route).config.resolve({
+      request: new Request("http://localhost/openapi.json"),
+      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      locals: {},
+    });
+
+    const doc = await response.json();
+    const responses = doc.paths["/cache"].get.responses;
+    expect(responses["204"].content).toBeUndefined();
+    expect(responses["205"].content).toBeUndefined();
+    expect(responses["304"].content).toBeUndefined();
   });
 });

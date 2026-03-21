@@ -1,7 +1,8 @@
+import { getOrderedDocs } from "#/docs";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { allDocs } from "content-collections";
 
-const ordered = allDocs.filter((d) => d.order < 999).sort((a, b) => a.order - b.order);
+const ordered = getOrderedDocs();
 
 export const Route = createFileRoute("/")({
   component: HomePage,

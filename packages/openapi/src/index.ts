@@ -24,14 +24,43 @@ export interface OpenApiConfig {
   securitySchemes?: Record<string, SecurityScheme>;
 }
 
-export interface SecurityScheme {
-  type: "http" | "apiKey" | "oauth2" | "openIdConnect";
-  scheme?: string;
-  bearerFormat?: string;
-  name?: string;
-  in?: "query" | "header" | "cookie";
-  description?: string;
-}
+export type OAuth2Flow = {
+  authorizationUrl?: string;
+  tokenUrl?: string;
+  refreshUrl?: string;
+  scopes: Record<string, string>;
+};
+
+export type OAuth2Flows = Partial<{
+  implicit: OAuth2Flow;
+  password: OAuth2Flow;
+  clientCredentials: OAuth2Flow;
+  authorizationCode: OAuth2Flow;
+}>;
+
+export type SecurityScheme =
+  | {
+      type: "http";
+      scheme: string;
+      bearerFormat?: string;
+      description?: string;
+    }
+  | {
+      type: "apiKey";
+      name: string;
+      in: "query" | "header" | "cookie";
+      description?: string;
+    }
+  | {
+      type: "oauth2";
+      flows: OAuth2Flows;
+      description?: string;
+    }
+  | {
+      type: "openIdConnect";
+      openIdConnectUrl: string;
+      description?: string;
+    };
 
 export interface OpenApiResult {
   /** Creates a GET route that serves the OpenAPI JSON document. */
@@ -46,6 +75,10 @@ export interface OpenApiResult {
 
 function toOpenApiPath(path: string): string {
   return path.replace(/:(\w+)/g, "{$1}");
+}
+
+function responseCanHaveBody(status: number): boolean {
+  return !(status >= 100 && status < 200) && status !== 204 && status !== 205 && status !== 304;
 }
 
 const STATUS_TEXT: Record<number, string> = {
@@ -192,8 +225,8 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
           description: STATUS_TEXT[code] ?? "Response",
         };
 
-        // No content for responses that have no body (e.g. 204)
-        if (code !== 204) {
+        // These HTTP statuses do not allow a response body.
+        if (responseCanHaveBody(code)) {
           entry.content = {
             "application/json": { schema: schema as z.ZodTypeAny },
           };

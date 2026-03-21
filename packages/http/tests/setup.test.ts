@@ -416,6 +416,25 @@ describe("setup - hooks", () => {
     expect(body.error).toContain("init fail");
   });
 
+  test("onResponse runs after onRequest errors", async () => {
+    const app = createApp({
+      onRequest: () => {
+        throw new Error("init fail");
+      },
+      routes: [route.get("/test", { resolve: () => Response.json({ ok: true }) })],
+      onError: ({ error }) => Response.json({ error: String(error) }, { status: 500 }),
+      onResponse: ({ response }) => {
+        const headers = new Headers(response.headers);
+        headers.set("x-after-error", "true");
+        return new Response(response.body, { status: response.status, headers });
+      },
+    });
+
+    const res = await app.request("/test");
+    expect(res.status).toBe(500);
+    expect(res.headers.get("x-after-error")).toBe("true");
+  });
+
   test("onNotFound error triggers onError", async () => {
     const app = createApp({
       routes: [],
@@ -426,6 +445,25 @@ describe("setup - hooks", () => {
     });
     const res = await app.request("/test");
     expect(res.status).toBe(500);
+  });
+
+  test("onResponse runs after onNotFound errors", async () => {
+    const app = createApp({
+      routes: [],
+      onNotFound: () => {
+        throw new Error("not found error");
+      },
+      onError: ({ error }) => Response.json({ error: String(error) }, { status: 500 }),
+      onResponse: ({ response }) => {
+        const headers = new Headers(response.headers);
+        headers.set("x-after-not-found-error", "true");
+        return new Response(response.body, { status: response.status, headers });
+      },
+    });
+
+    const res = await app.request("/test");
+    expect(res.status).toBe(500);
+    expect(res.headers.get("x-after-not-found-error")).toBe("true");
   });
 
   test("onResponse error is swallowed, original response returned", async () => {
@@ -519,6 +557,41 @@ describe("setup - app.request", () => {
     const res = await app.request("/search", { query: { q: "test" } });
     expect(res.status).toBe(200);
     expect((await res.json()).q).toBe("test");
+  });
+
+  test("merges options.query with query params already present in the path", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/search", {
+          request: { query: z.object({ existing: z.string(), q: z.string() }) },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({}, { status: 400 });
+            return Response.json({
+              existing: c.input.query.existing,
+              q: c.input.query.q,
+            });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.request("/search?existing=1", { query: { q: "test" } });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ existing: "1", q: "test" });
+  });
+
+  test("malformed percent-encoding in query does not crash request handling", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/search", {
+          resolve: (c) => Response.json({ q: c.input.ok ? c.input.query.q : undefined }),
+        }),
+      ],
+    });
+
+    const res = await app.fetch(new Request("http://localhost/search?q=%E0%A4%A"));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ q: "%E0%A4%A" });
   });
 });
 
