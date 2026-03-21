@@ -6,9 +6,10 @@ export function parseQuery(search: string): Record<string, string | string[] | u
   for (const pair of qs.split("&")) {
     if (!pair) continue;
     const eqIdx = pair.indexOf("=");
-    const key = decodeURIComponent((eqIdx === -1 ? pair : pair.slice(0, eqIdx)).replace(/\+/g, " "));
-    const value =
-      eqIdx === -1 ? "" : decodeURIComponent(pair.slice(eqIdx + 1).replace(/\+/g, " "));
+    const key = decodeURIComponent(
+      (eqIdx === -1 ? pair : pair.slice(0, eqIdx)).replace(/\+/g, " "),
+    );
+    const value = eqIdx === -1 ? "" : decodeURIComponent(pair.slice(eqIdx + 1).replace(/\+/g, " "));
 
     const existing = result[key];
     if (existing === undefined) {

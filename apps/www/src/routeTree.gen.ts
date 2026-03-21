@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root";
+import { Route as ChangelogRouteImport } from "./routes/changelog";
 import { Route as IndexRouteImport } from "./routes/index";
 import { Route as DocsSlugRouteImport } from "./routes/docs.$slug";
 
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: "/changelog",
+  path: "/changelog",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const IndexRoute = IndexRouteImport.update({
   id: "/",
   path: "/",
@@ -25,32 +31,43 @@ const DocsSlugRoute = DocsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
+  "/changelog": typeof ChangelogRoute;
   "/docs/$slug": typeof DocsSlugRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
+  "/changelog": typeof ChangelogRoute;
   "/docs/$slug": typeof DocsSlugRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/": typeof IndexRoute;
+  "/changelog": typeof ChangelogRoute;
   "/docs/$slug": typeof DocsSlugRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/docs/$slug";
+  fullPaths: "/" | "/changelog" | "/docs/$slug";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/docs/$slug";
-  id: "__root__" | "/" | "/docs/$slug";
+  to: "/" | "/changelog" | "/docs/$slug";
+  id: "__root__" | "/" | "/changelog" | "/docs/$slug";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  ChangelogRoute: typeof ChangelogRoute;
   DocsSlugRoute: typeof DocsSlugRoute;
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/changelog": {
+      id: "/changelog";
+      path: "/changelog";
+      fullPath: "/changelog";
+      preLoaderRoute: typeof ChangelogRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/": {
       id: "/";
       path: "/";
@@ -70,6 +87,7 @@ declare module "@tanstack/react-router" {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChangelogRoute: ChangelogRoute,
   DocsSlugRoute: DocsSlugRoute,
 };
 export const routeTree = rootRouteImport
