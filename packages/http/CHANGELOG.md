@@ -4,6 +4,10 @@
 
 ### Bug Fixes
 
+- **cors**: Only emit preflight allow-methods, allow-headers, and max-age headers when the request origin is actually allowed.
+- **cors**: Do not emit CORS response headers for wildcard configurations when the request has no `Origin` header.
+- **cors**: Only emit `Access-Control-Expose-Headers` on actual allowed CORS responses, not on preflight responses or disallowed origins.
+- **cors**: Reflect `Access-Control-Request-Headers` in preflight responses when `allowHeaders` is not configured, and add the matching `Vary` header for cache correctness.
 - **query**: Treat malformed percent-encoding as raw text instead of throwing during query parsing, so bad query strings do not crash request handling.
 - **setup**: Ensure `onResponse` still runs after `onRequest` and `onNotFound` errors are converted into error responses.
 - **setup**: Merge `app.request(path, { query })` with query params already present in `path` instead of producing malformed URLs.
