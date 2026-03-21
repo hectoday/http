@@ -26,130 +26,11 @@
   --font-sans: "Inter", "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-/* ---- Code block container (wrapper added by CodeCopyButton) ---- */
-.code-block {
-  border-radius: 0.5rem;
-  box-shadow: inset 0 0 0 1px var(--color-gray-200);
-  overflow: hidden;
-  margin-block: 1.75em;
-}
-
-.code-block pre.shiki {
-  margin-block: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-}
-
-/* Header bar with language label + copy button */
-.code-block-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 0.75rem 0.5rem 1rem;
-  background-color: #fcfcfd;
-  box-shadow: inset 0 -1px 0 0 var(--color-gray-200);
-}
-
-.code-block-lang {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--color-gray-400);
-  user-select: none;
-}
-
-/* Copy button */
-.copy-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 0.375rem;
-  border: none;
-  background: transparent;
-  color: var(--color-gray-400);
-  cursor: pointer;
-  opacity: 0;
-  transition:
-    opacity 150ms ease,
-    color 150ms ease,
-    background-color 150ms ease;
-}
-
-.code-block:hover .copy-btn {
-  opacity: 1;
-}
-
-.copy-btn:hover {
-  color: var(--color-gray-600);
-  background-color: var(--color-gray-100);
-}
-
-.copy-btn.copied {
-  color: var(--color-green-600);
-  opacity: 1;
-}
-
-/* Shiki code blocks — light theme */
+/* Shiki code blocks — override inline background with design-system color */
 pre.shiki {
-  background-color: #ffffff !important;
+  background-color: #fafafa !important;
   color: #242529 !important;
-  border: none !important;
-  box-shadow: inset 0 0 0 1px var(--color-gray-200);
-  border-radius: 0.5rem !important;
-}
-
-/* Dark mode */
-html.dark .code-block,
-:root:not(.light) .code-block {
-  box-shadow: inset 0 0 0 1px var(--color-gray-800);
-}
-
-html.dark .code-block-header,
-:root:not(.light) .code-block-header {
-  background-color: #1a1a1e;
-  box-shadow: inset 0 -1px 0 0 var(--color-gray-800);
-}
-
-html.dark .code-block-lang,
-:root:not(.light) .code-block-lang {
-  color: var(--color-gray-500);
-}
-
-html.dark .copy-btn:hover,
-:root:not(.light) .copy-btn:hover {
-  color: var(--color-gray-300);
-  background-color: var(--color-gray-800);
-}
-
-html.dark .copy-btn.copied,
-:root:not(.light) .copy-btn.copied {
-  color: var(--color-green-400);
-}
-
-html.dark pre.shiki,
-:root:not(.light) pre.shiki {
-  background-color: #141416 !important;
-  color: #e4e4e7 !important;
-  box-shadow: inset 0 0 0 1px var(--color-gray-800);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) .code-block {
-    box-shadow: inset 0 0 0 1px var(--color-gray-800);
-  }
-
-  :root:not(.light) .code-block-header {
-    background-color: #1a1a1e;
-    box-shadow: inset 0 -1px 0 0 var(--color-gray-800);
-  }
-
-  :root:not(.light) pre.shiki {
-    background-color: #141416 !important;
-    color: #e4e4e7 !important;
-    box-shadow: inset 0 0 0 1px var(--color-gray-800);
-  }
+  border: 1px solid var(--color-gray-200) !important;
 }
 
 /* Mermaid diagrams — clean black & white card */
@@ -580,16 +461,14 @@ body {
     font-family: var(--font-mono);
   }
 
-  /* Inline code — warm subtle pill */
+  /* Inline code — subtle pill with tinted background */
   code {
     font-size: 0.875em;
-    font-weight: 450;
-    color: #474645;
-    background-color: #fbfaf9;
+    font-weight: 450; /* Slightly heavier to match Inter 400 color */
+    background-color: var(--color-gray-100);
     padding: 0.15em 0.4em;
-    border-radius: 6px;
-    box-shadow: inset 0 0 0 1px #e8e8e8;
-    border: none;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-gray-200);
     word-break: break-word;
   }
 
@@ -606,21 +485,20 @@ body {
 
   /* Code blocks */
   pre {
-    font-size: 0.875rem;
-    line-height: 1.6;
+    font-size: var(--font-size-sm);
+    line-height: 1.7;
     overflow-x: auto;
-    padding: 1rem 1.25rem;
+    padding: 1.25em 1.5em;
     margin-block: 1.75em;
-    border-radius: 0.5rem;
-    background-color: #ffffff;
-    color: #242529;
-    border: none;
-    box-shadow: inset 0 0 0 1px var(--color-gray-200);
+    border-radius: 0.625rem;
+    background-color: var(--color-gray-950);
+    color: var(--color-gray-200);
+    border: 1px solid var(--color-gray-800);
     max-inline-size: var(--width-prose-wide);
     tab-size: 2;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
-    scrollbar-color: var(--color-gray-300) transparent;
+    scrollbar-color: var(--color-gray-700) transparent;
   }
 
   pre code {
@@ -904,9 +782,8 @@ body {
 
   :root:not(.light) code {
     font-weight: 400;
-    color: var(--color-gray-300);
     background-color: var(--color-gray-800);
-    box-shadow: inset 0 0 0 1px var(--color-gray-700);
+    border-color: var(--color-gray-700);
   }
 
   :root:not(.light) pre code {
@@ -923,7 +800,7 @@ body {
   }
 
   :root:not(.light) pre {
-    box-shadow: inset 0 0 0 1px var(--color-gray-700);
+    border-color: var(--color-gray-700);
   }
 
   :root:not(.light) th {
@@ -964,9 +841,8 @@ html.dark blockquote {
 
 html.dark code {
   font-weight: 400;
-  color: var(--color-gray-300);
   background-color: var(--color-gray-800);
-  box-shadow: inset 0 0 0 1px var(--color-gray-700);
+  border-color: var(--color-gray-700);
 }
 
 html.dark pre code {
@@ -983,7 +859,7 @@ html.dark kbd {
 }
 
 html.dark pre {
-  box-shadow: inset 0 0 0 1px var(--color-gray-700);
+  border-color: var(--color-gray-700);
 }
 
 html.dark th {
