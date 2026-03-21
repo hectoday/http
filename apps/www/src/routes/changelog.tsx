@@ -9,6 +9,7 @@ export const Route = createFileRoute("/changelog")({
       title: "Changelog",
       description: "Release history and changes for @hectoday/http.",
       path: "/changelog",
+      markdownPath: "/changelog.md",
     }),
   loader: () => {
     const entry = allChangelogs[0];

@@ -8,12 +8,24 @@ interface SeoHeadOptions {
   description?: string;
   path?: string;
   type?: "website" | "article";
+  markdownPath?: string;
 }
 
-export function seoHead({ title, description, path, type = "website" }: SeoHeadOptions = {}) {
+export function seoHead({
+  title,
+  description,
+  path,
+  type = "website",
+  markdownPath,
+}: SeoHeadOptions = {}) {
   const fullTitle = title ? `${title} - ${SITE_NAME}` : SITE_NAME;
   const desc = description ?? SITE_DESCRIPTION;
   const url = path ? `${SITE_URL}${path}` : SITE_URL;
+
+  const links: { rel: string; href: string; type?: string }[] = [{ rel: "canonical", href: url }];
+  if (markdownPath) {
+    links.push({ rel: "alternate", type: "text/markdown", href: markdownPath });
+  }
 
   return {
     meta: [
@@ -28,6 +40,6 @@ export function seoHead({ title, description, path, type = "website" }: SeoHeadO
       { name: "twitter:title", content: fullTitle },
       { name: "twitter:description", content: desc },
     ],
-    links: [{ rel: "canonical", href: url }],
+    links,
   };
 }

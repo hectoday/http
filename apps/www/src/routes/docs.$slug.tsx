@@ -24,6 +24,7 @@ export const Route = createFileRoute("/docs/$slug")({
           description: loaderData.doc.description,
           path: `/docs/${loaderData.doc.slug}`,
           type: "article",
+          markdownPath: `/docs/${loaderData.doc.slug}.md`,
         })
       : seoHead(),
 });

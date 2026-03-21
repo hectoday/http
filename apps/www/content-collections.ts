@@ -69,7 +69,7 @@ const changelog = defineCollection({
     const html = await compileMarkdown(ctx, doc, {
       rehypePlugins: [[rehypeShikiFromHighlighter, highlighter, { theme: "hectoday-light" }]],
     });
-    return { html };
+    return { content: doc.content, html };
   },
 });
 
@@ -100,6 +100,7 @@ const docs = defineCollection({
       slug,
       order: order === -1 ? 999 : order,
       description,
+      content: doc.content,
       html: rewrittenHtml,
     };
   },

@@ -3,3 +3,4 @@ User-agent: *
 Disallow:
 
 Sitemap: https://http.hectoday.com/sitemap.xml
+Llms-txt: https://http.hectoday.com/llms.txt

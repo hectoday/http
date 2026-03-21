@@ -6,7 +6,7 @@ const ordered = allDocs.filter((d) => d.order < 999).sort((a, b) => a.order - b.
 
 export const Route = createFileRoute("/")({
   component: HomePage,
-  head: () => seoHead({ path: "/" }),
+  head: () => seoHead({ path: "/", markdownPath: "/index.md" }),
   loader: () => {
     const doc = allDocs.find((d) => d.slug === "index");
     if (!doc) throw new Error("index doc not found");
