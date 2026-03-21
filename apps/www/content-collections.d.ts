@@ -7,6 +7,7 @@ interface Doc {
   title: string;
   slug: string;
   order: number;
+  description: string;
   html: string;
 }
 

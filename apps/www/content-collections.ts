@@ -88,6 +88,9 @@ const docs = defineCollection({
       ],
     });
     const titleMatch = doc.content.match(/^#\s+(.+)$/m);
+    // Extract first paragraph after the heading as description
+    const descMatch = doc.content.match(/^#[^\n]+\n+([^#`\n][^\n]{20,})/m);
+    const description = descMatch ? descMatch[1].slice(0, 160).trim() : "";
     // Rewrite relative markdown links to /docs/ routes
     const rewrittenHtml = html.replace(/href="\.\/([^"]+)\.md"/g, 'href="/docs/$1"');
     const slug = doc._meta.path;
@@ -96,6 +99,7 @@ const docs = defineCollection({
       title: titleMatch?.[1] ?? doc._meta.fileName.replace(/\.md$/, ""),
       slug,
       order: order === -1 ? 999 : order,
+      description,
       html: rewrittenHtml,
     };
   },

@@ -1,8 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { allChangelogs } from "content-collections";
+import { seoHead } from "../seo";
 
 export const Route = createFileRoute("/changelog")({
   component: ChangelogPage,
+  head: () =>
+    seoHead({
+      title: "Changelog",
+      description: "Release history and changes for @hectoday/http.",
+      path: "/changelog",
+    }),
   loader: () => {
     const entry = allChangelogs[0];
     if (!entry) throw new Error("Changelog not found");

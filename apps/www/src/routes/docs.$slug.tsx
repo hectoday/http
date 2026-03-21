@@ -3,6 +3,7 @@ import MermaidRenderer from "#/components/MermaidRenderer";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef } from "react";
 import { allDocs } from "content-collections";
+import { seoHead } from "../seo";
 
 const ordered = allDocs.filter((d) => d.order < 999).sort((a, b) => a.order - b.order);
 
@@ -16,6 +17,15 @@ export const Route = createFileRoute("/docs/$slug")({
     const next = idx !== -1 && idx < ordered.length - 1 ? ordered[idx + 1] : null;
     return { doc, prev, next };
   },
+  head: ({ loaderData }) =>
+    loaderData
+      ? seoHead({
+          title: loaderData.doc.title,
+          description: loaderData.doc.description,
+          path: `/docs/${loaderData.doc.slug}`,
+          type: "article",
+        })
+      : seoHead(),
 });
 
 function DocPage() {
