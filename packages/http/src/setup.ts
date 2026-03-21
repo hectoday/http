@@ -130,21 +130,18 @@ function runValidation(
 function buildRequest(path: string, options: RequestOptions = {}): Request {
   const method = (options.method ?? "GET").toUpperCase();
 
-  // Build query string
-  let url = `http://localhost${path}`;
+  const url = new URL(path, "http://localhost");
+
   if (options.query) {
-    const params = new URLSearchParams();
     for (const [k, v] of Object.entries(options.query)) {
       if (Array.isArray(v)) {
         for (const item of v) {
-          params.append(k, item);
+          url.searchParams.append(k, item);
         }
         continue;
       }
-      params.set(k, v);
+      url.searchParams.set(k, v);
     }
-    const qs = params.toString();
-    if (qs) url += `?${qs}`;
   }
 
   const headers = new Headers(options.headers);
@@ -201,6 +198,15 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
     }
   }
 
+  async function respondWithError(
+    error: unknown,
+    request: Request,
+    locals: TLocals,
+  ): Promise<Response> {
+    const response = await safeOnError(error, request, locals);
+    return safeOnResponse(request, response, locals);
+  }
+
   // The fetch handler
   const fetch = async (request: Request): Promise<Response> => {
     // 1. onRequest → locals (optional return)
@@ -213,7 +219,7 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
           locals = result as TLocals;
         }
       } catch (err) {
-        return safeOnError(err, request, locals);
+        return respondWithError(err, request, locals);
       }
     }
 
@@ -227,7 +233,7 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
         try {
           res = await onNotFound({ request, locals });
         } catch (err) {
-          return safeOnError(err, request, locals);
+          return respondWithError(err, request, locals);
         }
       } else {
         res = defaultNotFound();

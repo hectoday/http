@@ -24,14 +24,77 @@ export interface OpenApiConfig {
   securitySchemes?: Record<string, SecurityScheme>;
 }
 
-export interface SecurityScheme {
-  type: "http" | "apiKey" | "oauth2" | "openIdConnect";
-  scheme?: string;
-  bearerFormat?: string;
-  name?: string;
-  in?: "query" | "header" | "cookie";
-  description?: string;
-}
+export type OAuth2Scopes = Record<string, string>;
+
+export type OAuth2ImplicitFlow = {
+  authorizationUrl: string;
+  refreshUrl?: string;
+  scopes: OAuth2Scopes;
+};
+
+export type OAuth2PasswordFlow = {
+  tokenUrl: string;
+  refreshUrl?: string;
+  scopes: OAuth2Scopes;
+};
+
+export type OAuth2ClientCredentialsFlow = {
+  tokenUrl: string;
+  refreshUrl?: string;
+  scopes: OAuth2Scopes;
+};
+
+export type OAuth2AuthorizationCodeFlow = {
+  authorizationUrl: string;
+  tokenUrl: string;
+  refreshUrl?: string;
+  scopes: OAuth2Scopes;
+};
+
+type OAuth2FlowMap = {
+  implicit: OAuth2ImplicitFlow;
+  password: OAuth2PasswordFlow;
+  clientCredentials: OAuth2ClientCredentialsFlow;
+  authorizationCode: OAuth2AuthorizationCodeFlow;
+};
+
+export type OAuth2Flows =
+  | { implicit: OAuth2FlowMap["implicit"] }
+  | { password: OAuth2FlowMap["password"] }
+  | { clientCredentials: OAuth2FlowMap["clientCredentials"] }
+  | { authorizationCode: OAuth2FlowMap["authorizationCode"] }
+  | ({ implicit: OAuth2FlowMap["implicit"] } & Partial<Omit<OAuth2FlowMap, "implicit">>)
+  | ({ password: OAuth2FlowMap["password"] } & Partial<Omit<OAuth2FlowMap, "password">>)
+  | ({
+      clientCredentials: OAuth2FlowMap["clientCredentials"];
+    } & Partial<Omit<OAuth2FlowMap, "clientCredentials">>)
+  | ({
+      authorizationCode: OAuth2FlowMap["authorizationCode"];
+    } & Partial<Omit<OAuth2FlowMap, "authorizationCode">>);
+
+export type SecurityScheme =
+  | {
+      type: "http";
+      scheme: string;
+      bearerFormat?: string;
+      description?: string;
+    }
+  | {
+      type: "apiKey";
+      name: string;
+      in: "query" | "header" | "cookie";
+      description?: string;
+    }
+  | {
+      type: "oauth2";
+      flows: OAuth2Flows;
+      description?: string;
+    }
+  | {
+      type: "openIdConnect";
+      openIdConnectUrl: string;
+      description?: string;
+    };
 
 export interface OpenApiResult {
   /** Creates a GET route that serves the OpenAPI JSON document. */
@@ -46,6 +109,10 @@ export interface OpenApiResult {
 
 function toOpenApiPath(path: string): string {
   return path.replace(/:(\w+)/g, "{$1}");
+}
+
+function responseCanHaveBody(status: number): boolean {
+  return !(status >= 100 && status < 200) && status !== 204 && status !== 205 && status !== 304;
 }
 
 const STATUS_TEXT: Record<number, string> = {
@@ -192,8 +259,8 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
           description: STATUS_TEXT[code] ?? "Response",
         };
 
-        // No content for responses that have no body (e.g. 204)
-        if (code !== 204) {
+        // These HTTP statuses do not allow a response body.
+        if (responseCanHaveBody(code)) {
           entry.content = {
             "application/json": { schema: schema as z.ZodTypeAny },
           };
