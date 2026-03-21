@@ -15,6 +15,9 @@ dist-ssr
 *.db-shm
 *.db-wal
 
+# Generated / phantom directories
+apps/website
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
