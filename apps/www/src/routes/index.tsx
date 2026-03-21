@@ -18,8 +18,11 @@ function HomePage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <article className="prose max-w-none" dangerouslySetInnerHTML={{ __html: doc.html }} />
-      {next ? (
-        <nav className="mt-16 flex justify-end border-t pt-6 dark:border-neutral-800">
+      <nav className="mt-16 flex items-center justify-between border-t pt-6 dark:border-neutral-800">
+        <Link to="/changelog" className="text-sm text-blue-600 hover:underline dark:text-blue-400">
+          Changelog
+        </Link>
+        {next ? (
           <Link
             to="/docs/$slug"
             params={{ slug: next.slug }}
@@ -27,8 +30,8 @@ function HomePage() {
           >
             {next.title} &rarr;
           </Link>
-        </nav>
-      ) : null}
+        ) : null}
+      </nav>
     </main>
   );
 }
