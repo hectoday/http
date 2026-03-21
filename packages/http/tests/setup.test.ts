@@ -201,6 +201,30 @@ describe("setup - validation", () => {
     expect(await res.json()).toEqual({ body: null });
   });
 
+  test("optional body schema treats an empty request body as missing", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/optional", {
+          request: { body: z.object({ x: z.string() }).optional() },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({ body: c.input.body ?? null });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.fetch(
+      new Request("http://localhost/optional", {
+        method: "POST",
+        body: "",
+      }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ body: null });
+  });
+
   test("no body schema means body is not parsed", async () => {
     const app = createApp({
       routes: [
