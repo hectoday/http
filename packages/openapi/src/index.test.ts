@@ -198,4 +198,33 @@ describe("openapi", () => {
     expect(post.requestBody).toBeDefined();
     expect(post.requestBody.content["application/json"]).toBeDefined();
   });
+
+  test("omits content for status codes that cannot include a response body", async () => {
+    const routes = [
+      route.get("/cache", {
+        response: {
+          204: z.object({ ok: z.boolean() }),
+          205: z.object({ reset: z.boolean() }),
+          304: z.object({ cached: z.boolean() }),
+        },
+        resolve: () => new Response(null, { status: 204 }),
+      }),
+    ];
+
+    const { spec } = openapi(routes, {
+      info: { title: "Test", version: "1.0.0" },
+    });
+
+    const response = await spec(route).config.resolve({
+      request: new Request("http://localhost/openapi.json"),
+      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      locals: {},
+    });
+
+    const doc = await response.json();
+    const responses = doc.paths["/cache"].get.responses;
+    expect(responses["204"].content).toBeUndefined();
+    expect(responses["205"].content).toBeUndefined();
+    expect(responses["304"].content).toBeUndefined();
+  });
 });

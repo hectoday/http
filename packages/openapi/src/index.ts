@@ -48,6 +48,10 @@ function toOpenApiPath(path: string): string {
   return path.replace(/:(\w+)/g, "{$1}");
 }
 
+function responseCanHaveBody(status: number): boolean {
+  return !(status >= 100 && status < 200) && status !== 204 && status !== 205 && status !== 304;
+}
+
 const STATUS_TEXT: Record<number, string> = {
   100: "Continue",
   101: "Switching Protocols",
@@ -192,8 +196,8 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
           description: STATUS_TEXT[code] ?? "Response",
         };
 
-        // No content for responses that have no body (e.g. 204)
-        if (code !== 204) {
+        // These HTTP statuses do not allow a response body.
+        if (responseCanHaveBody(code)) {
           entry.content = {
             "application/json": { schema: schema as z.ZodTypeAny },
           };

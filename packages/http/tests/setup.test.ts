@@ -416,6 +416,25 @@ describe("setup - hooks", () => {
     expect(body.error).toContain("init fail");
   });
 
+  test("onResponse runs after onRequest errors", async () => {
+    const app = createApp({
+      onRequest: () => {
+        throw new Error("init fail");
+      },
+      routes: [route.get("/test", { resolve: () => Response.json({ ok: true }) })],
+      onError: ({ error }) => Response.json({ error: String(error) }, { status: 500 }),
+      onResponse: ({ response }) => {
+        const headers = new Headers(response.headers);
+        headers.set("x-after-error", "true");
+        return new Response(response.body, { status: response.status, headers });
+      },
+    });
+
+    const res = await app.request("/test");
+    expect(res.status).toBe(500);
+    expect(res.headers.get("x-after-error")).toBe("true");
+  });
+
   test("onNotFound error triggers onError", async () => {
     const app = createApp({
       routes: [],
@@ -426,6 +445,25 @@ describe("setup - hooks", () => {
     });
     const res = await app.request("/test");
     expect(res.status).toBe(500);
+  });
+
+  test("onResponse runs after onNotFound errors", async () => {
+    const app = createApp({
+      routes: [],
+      onNotFound: () => {
+        throw new Error("not found error");
+      },
+      onError: ({ error }) => Response.json({ error: String(error) }, { status: 500 }),
+      onResponse: ({ response }) => {
+        const headers = new Headers(response.headers);
+        headers.set("x-after-not-found-error", "true");
+        return new Response(response.body, { status: response.status, headers });
+      },
+    });
+
+    const res = await app.request("/test");
+    expect(res.status).toBe(500);
+    expect(res.headers.get("x-after-not-found-error")).toBe("true");
   });
 
   test("onResponse error is swallowed, original response returned", async () => {
