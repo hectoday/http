@@ -30,13 +30,18 @@ export function cors(options: CorsOptions): CorsResult {
   const allowAnyOrigin = origins.includes("*");
 
   function applyOrigin(h: Headers, requestOrigin: string | null): void {
+    // When the response varies by origin, always signal that to caches,
+    // even when the origin is disallowed or absent.
+    if (!(allowAnyOrigin && !credentials)) {
+      h.append("vary", "Origin");
+    }
+
     if (!requestOrigin) return;
 
     if (allowAnyOrigin && !credentials) {
       h.set("access-control-allow-origin", "*");
     } else if (allowAnyOrigin || origins.includes(requestOrigin)) {
       h.set("access-control-allow-origin", requestOrigin);
-      h.append("vary", "Origin");
     }
 
     if (credentials && h.has("access-control-allow-origin")) {

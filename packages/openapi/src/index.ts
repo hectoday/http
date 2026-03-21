@@ -181,6 +181,14 @@ const STATUS_TEXT: Record<number, string> = {
   511: "Network Authentication Required",
 };
 
+function escapeHtmlAttr(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function scalarHtml(specUrl: string): string {
   return `<!doctype html>
 <html>
@@ -190,7 +198,7 @@ function scalarHtml(specUrl: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
-  <script id="api-reference" data-url="${specUrl}"></script>
+  <script id="api-reference" data-url="${escapeHtmlAttr(specUrl)}"></script>
   <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
 </body>
 </html>`;
@@ -206,9 +214,10 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
   for (const descriptor of routes) {
     const { method, path, config: routeConfig } = descriptor;
 
-    // Skip catch-all handlers (route.all) and wildcard paths.
-    // OpenAPI path templating cannot represent multi-segment wildcards.
-    if (!method || path.includes("**")) continue;
+    // Skip catch-all handlers (route.all) and paths that OpenAPI path
+    // templating cannot represent: wildcards (*, **), optional params
+    // (:name?), and one-or-more params (:name+).
+    if (!method || path.includes("*") || /:\w+[?+]/.test(path)) continue;
 
     const openApiPath = toOpenApiPath(path);
     if (!paths[openApiPath]) paths[openApiPath] = {};
