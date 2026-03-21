@@ -1,5 +1,5 @@
 import { notFound } from "@tanstack/react-router";
-import { allDocs } from "../.content-collections/generated/index.js";
+import { allDocs } from "content-collections";
 
 const orderedDocs = allDocs.filter((doc) => doc.order < 999).sort((a, b) => a.order - b.order);
 
