@@ -1,3 +1,13 @@
+function safeDecodeQueryPart(value: string): string {
+  const normalized = value.replace(/\+/g, " ");
+
+  try {
+    return decodeURIComponent(normalized);
+  } catch {
+    return normalized;
+  }
+}
+
 export function parseQuery(search: string): Record<string, string | string[] | undefined> {
   const result: Record<string, string | string[]> = Object.create(null);
   if (!search || search === "?") return result;
@@ -6,10 +16,8 @@ export function parseQuery(search: string): Record<string, string | string[] | u
   for (const pair of qs.split("&")) {
     if (!pair) continue;
     const eqIdx = pair.indexOf("=");
-    const key = decodeURIComponent(
-      (eqIdx === -1 ? pair : pair.slice(0, eqIdx)).replace(/\+/g, " "),
-    );
-    const value = eqIdx === -1 ? "" : decodeURIComponent(pair.slice(eqIdx + 1).replace(/\+/g, " "));
+    const key = safeDecodeQueryPart(eqIdx === -1 ? pair : pair.slice(0, eqIdx));
+    const value = eqIdx === -1 ? "" : safeDecodeQueryPart(pair.slice(eqIdx + 1));
 
     const existing = result[key];
     if (existing === undefined) {

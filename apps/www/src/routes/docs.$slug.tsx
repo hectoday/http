@@ -1,21 +1,14 @@
 import DiagramLightbox from "#/components/DiagramLightbox";
 import MermaidRenderer from "#/components/MermaidRenderer";
+import { getDocPageData, getOrderedDocs } from "#/docs";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef } from "react";
-import { allDocs } from "content-collections";
 
-const ordered = allDocs.filter((d) => d.order < 999).sort((a, b) => a.order - b.order);
+const ordered = getOrderedDocs();
 
 export const Route = createFileRoute("/docs/$slug")({
   component: DocPage,
-  loader: ({ params }) => {
-    const idx = ordered.findIndex((d) => d.slug === params.slug);
-    const doc = idx !== -1 ? ordered[idx] : allDocs.find((d) => d.slug === params.slug);
-    if (!doc) throw new Error(`Doc not found: ${params.slug}`);
-    const prev = idx > 0 ? ordered[idx - 1] : null;
-    const next = idx !== -1 && idx < ordered.length - 1 ? ordered[idx + 1] : null;
-    return { doc, prev, next };
-  },
+  loader: ({ params }) => getDocPageData(params.slug),
 });
 
 function DocPage() {
