@@ -183,6 +183,24 @@ describe("setup - validation", () => {
     expect(body.issues.some((i: any) => i.code === "invalid_json")).toBe(true);
   });
 
+  test("optional body schema accepts missing body", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/optional", {
+          request: { body: z.object({ x: z.string() }).optional() },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({ body: c.input.body ?? null });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.fetch(new Request("http://localhost/optional", { method: "POST" }));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ body: null });
+  });
+
   test("no body schema means body is not parsed", async () => {
     const app = createApp({
       routes: [
@@ -199,6 +217,20 @@ describe("setup - validation", () => {
     expect(body.ok).toBe(true);
     // body is undefined because no body schema was defined
     expect(body.body).toBeUndefined();
+  });
+
+  test("app.request supports repeated query keys", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/tags", {
+          resolve: (c) => Response.json({ tag: c.input.ok ? c.input.query.tag : undefined }),
+        }),
+      ],
+    });
+
+    const res = await app.request("/tags", { query: { tag: ["a", "b"] } });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ tag: ["a", "b"] });
   });
 
   test("validation failure sets failed array", async () => {

@@ -50,6 +50,10 @@ describe("parseQuery", () => {
     expect(parseQuery("?hello%20world=foo%20bar")).toEqual({ "hello world": "foo bar" });
   });
 
+  test("decodes plus signs as spaces", () => {
+    expect(parseQuery("?q=hello+world")).toEqual({ q: "hello world" });
+  });
+
   test("handles special characters", () => {
     expect(parseQuery("?email=user%40example.com")).toEqual({ email: "user@example.com" });
   });

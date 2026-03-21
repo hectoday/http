@@ -27,16 +27,17 @@ export function cors(options: CorsOptions): CorsResult {
   const exposeHeaders = options.exposeHeaders ?? [];
   const credentials = options.credentials ?? false;
   const maxAge = options.maxAge;
+  const allowAnyOrigin = origins.includes("*");
 
   function applyOrigin(h: Headers, requestOrigin: string | null): void {
-    if (origins.includes("*")) {
+    if (allowAnyOrigin && !credentials) {
       h.set("access-control-allow-origin", "*");
-    } else if (requestOrigin && origins.includes(requestOrigin)) {
+    } else if (requestOrigin && (allowAnyOrigin || origins.includes(requestOrigin))) {
       h.set("access-control-allow-origin", requestOrigin);
       h.append("vary", "Origin");
     }
 
-    if (credentials) {
+    if (credentials && h.has("access-control-allow-origin")) {
       h.set("access-control-allow-credentials", "true");
     }
 

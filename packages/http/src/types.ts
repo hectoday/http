@@ -124,7 +124,7 @@ export interface RequestOptions {
   method?: string;
   body?: unknown;
   headers?: Record<string, string>;
-  query?: Record<string, string>;
+  query?: Record<string, string | string[]>;
 }
 
 export interface App {
