@@ -110,7 +110,14 @@ describe("openapi", () => {
     const specRoute = spec(route);
     const response = await specRoute.config.resolve({
       request: new Request("http://localhost/openapi.json"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -130,7 +137,14 @@ describe("openapi", () => {
     const docsRoute = docs(route);
     const response = await docsRoute.config.resolve({
       request: new Request("http://localhost/docs"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -156,7 +170,14 @@ describe("openapi", () => {
 
     const response = await spec(route).config.resolve({
       request: new Request("http://localhost/openapi.json"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -180,7 +201,14 @@ describe("openapi", () => {
 
     const response = await spec(route).config.resolve({
       request: new Request("http://localhost/openapi.json"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -209,7 +237,14 @@ describe("openapi", () => {
 
     const response = await spec(route).config.resolve({
       request: new Request("http://localhost/openapi.json"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -239,7 +274,14 @@ describe("openapi", () => {
 
     const response = await spec(route).config.resolve({
       request: new Request("http://localhost/openapi.json"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -264,7 +306,14 @@ describe("openapi", () => {
 
     const response = await spec(route).config.resolve({
       request: new Request("http://localhost/openapi.json"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -292,7 +341,14 @@ describe("openapi", () => {
 
     const response = await spec(route).config.resolve({
       request: new Request("http://localhost/openapi.json"),
-      input: { ok: true, params: {}, query: {}, body: undefined, issues: [], failed: [] },
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
       locals: {},
     });
 
@@ -301,5 +357,36 @@ describe("openapi", () => {
     expect(responses["204"].content).toBeUndefined();
     expect(responses["205"].content).toBeUndefined();
     expect(responses["304"].content).toBeUndefined();
+  });
+
+  test("omits response content for HEAD operations", async () => {
+    const routes = [
+      route.head("/health", {
+        response: {
+          200: z.object({ ok: z.boolean() }),
+        },
+        resolve: () => new Response(null, { status: 200 }),
+      }),
+    ];
+
+    const { spec } = openapi(routes, {
+      info: { title: "Test", version: "1.0.0" },
+    });
+
+    const response = await spec(route).config.resolve({
+      request: new Request("http://localhost/openapi.json"),
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
+      locals: {},
+    });
+
+    const doc = await response.json();
+    expect(doc.paths["/health"].head.responses["200"].content).toBeUndefined();
   });
 });

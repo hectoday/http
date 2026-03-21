@@ -27,7 +27,11 @@ describe("setup - routing", () => {
 
   test("matches POST route", async () => {
     const app = createApp({
-      routes: [route.post("/data", { resolve: () => new Response(null, { status: 201 }) })],
+      routes: [
+        route.post("/data", {
+          resolve: () => new Response(null, { status: 201 }),
+        }),
+      ],
     });
     const res = await app.request("/data", { method: "POST" });
     expect(res.status).toBe(201);
@@ -124,13 +128,18 @@ describe("setup - validation", () => {
           },
           resolve: (c) => {
             if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
-            return Response.json({ page: c.input.query.page, q: c.input.query.q });
+            return Response.json({
+              page: c.input.query.page,
+              q: c.input.query.q,
+            });
           },
         }),
       ],
     });
 
-    const res = await app.request("/search", { query: { page: "3", q: "hello" } });
+    const res = await app.request("/search", {
+      query: { page: "3", q: "hello" },
+    });
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.page).toBe(3);
@@ -150,11 +159,17 @@ describe("setup - validation", () => {
       ],
     });
 
-    const ok = await app.request("/items", { method: "POST", body: { name: "Widget" } });
+    const ok = await app.request("/items", {
+      method: "POST",
+      body: { name: "Widget" },
+    });
     expect(ok.status).toBe(201);
     expect((await ok.json()).name).toBe("Widget");
 
-    const bad = await app.request("/items", { method: "POST", body: { name: "" } });
+    const bad = await app.request("/items", {
+      method: "POST",
+      body: { name: "" },
+    });
     expect(bad.status).toBe(400);
   });
 
@@ -183,6 +198,31 @@ describe("setup - validation", () => {
     expect(body.issues.some((i: any) => i.code === "invalid_json")).toBe(true);
   });
 
+  test("whitespace-only JSON body produces invalid_json issue", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/data", {
+          request: { body: z.object({ x: z.number() }) },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({ x: c.input.body.x });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.fetch(
+      new Request("http://localhost/data", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: "   ",
+      }),
+    );
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.issues.some((i: any) => i.code === "invalid_json")).toBe(true);
+  });
+
   test("optional body schema accepts missing body", async () => {
     const app = createApp({
       routes: [
@@ -197,6 +237,31 @@ describe("setup - validation", () => {
     });
 
     const res = await app.fetch(new Request("http://localhost/optional", { method: "POST" }));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ body: null });
+  });
+
+  test("z.null body schema preserves a parsed null body", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/nullable", {
+          request: { body: z.null() },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({ body: c.input.body });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.fetch(
+      new Request("http://localhost/nullable", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: "null",
+      }),
+    );
+
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ body: null });
   });
@@ -230,12 +295,18 @@ describe("setup - validation", () => {
       routes: [
         route.post("/raw", {
           resolve: (c) => {
-            return Response.json({ ok: c.input.ok, body: c.input.ok ? c.input.body : null });
+            return Response.json({
+              ok: c.input.ok,
+              body: c.input.ok ? c.input.body : null,
+            });
           },
         }),
       ],
     });
-    const res = await app.request("/raw", { method: "POST", body: { test: true } });
+    const res = await app.request("/raw", {
+      method: "POST",
+      body: { test: true },
+    });
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.ok).toBe(true);
@@ -310,11 +381,18 @@ describe("setup - hooks", () => {
   test("onRequest produces locals", async () => {
     const app = createApp({
       onRequest: () => ({ rid: "abc-123" }),
-      routes: [route.get("/test", { resolve: (c) => Response.json({ rid: c.locals.rid }) })],
+      routes: [
+        route.get("/test", {
+          resolve: (c) => Response.json({ rid: c.locals.rid }),
+        }),
+      ],
       onResponse: ({ response, locals }) => {
         const h = new Headers(response.headers);
         h.set("x-rid", locals.rid as string);
-        return new Response(response.body, { status: response.status, headers: h });
+        return new Response(response.body, {
+          status: response.status,
+          headers: h,
+        });
       },
     });
     const res = await app.request("/test");
@@ -339,7 +417,10 @@ describe("setup - hooks", () => {
       onResponse: ({ response }) => {
         const h = new Headers(response.headers);
         h.set("x-custom", "value");
-        return new Response(response.body, { status: response.status, headers: h });
+        return new Response(response.body, {
+          status: response.status,
+          headers: h,
+        });
       },
     });
     const res = await app.request("/test");
@@ -352,7 +433,10 @@ describe("setup - hooks", () => {
       onResponse: ({ response }) => {
         const h = new Headers(response.headers);
         h.set("x-always", "true");
-        return new Response(response.body, { status: response.status, headers: h });
+        return new Response(response.body, {
+          status: response.status,
+          headers: h,
+        });
       },
     });
     const res = await app.request("/missing");
@@ -418,7 +502,10 @@ describe("setup - hooks", () => {
       onResponse: ({ response }) => {
         const h = new Headers(response.headers);
         h.set("x-after-error", "true");
-        return new Response(response.body, { status: response.status, headers: h });
+        return new Response(response.body, {
+          status: response.status,
+          headers: h,
+        });
       },
     });
     const res = await app.request("/err");
@@ -450,7 +537,10 @@ describe("setup - hooks", () => {
       onResponse: ({ response }) => {
         const headers = new Headers(response.headers);
         headers.set("x-after-error", "true");
-        return new Response(response.body, { status: response.status, headers });
+        return new Response(response.body, {
+          status: response.status,
+          headers,
+        });
       },
     });
 
@@ -481,7 +571,10 @@ describe("setup - hooks", () => {
       onResponse: ({ response }) => {
         const headers = new Headers(response.headers);
         headers.set("x-after-not-found-error", "true");
-        return new Response(response.body, { status: response.status, headers });
+        return new Response(response.body, {
+          status: response.status,
+          headers,
+        });
       },
     });
 
@@ -552,6 +645,28 @@ describe("setup - app.request", () => {
     expect((await res.json()).x).toBe(42);
   });
 
+  test("preserves explicit content-type when serializing a body", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/content-type", {
+          resolve: (c) =>
+            Response.json({
+              contentType: c.request.headers.get("content-type"),
+            }),
+        }),
+      ],
+    });
+
+    const res = await app.request("/content-type", {
+      method: "POST",
+      headers: { "content-type": "application/merge-patch+json" },
+      body: { x: 42 },
+    });
+
+    expect(res.status).toBe(200);
+    expect((await res.json()).contentType).toBe("application/merge-patch+json");
+  });
+
   test("sets custom headers", async () => {
     const app = createApp({
       routes: [
@@ -599,7 +714,9 @@ describe("setup - app.request", () => {
       ],
     });
 
-    const res = await app.request("/search?existing=1", { query: { q: "test" } });
+    const res = await app.request("/search?existing=1", {
+      query: { q: "test" },
+    });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ existing: "1", q: "test" });
   });
@@ -646,7 +763,11 @@ describe("setup - async", () => {
         await new Promise((r) => setTimeout(r, 1));
         return { ts: 1 };
       },
-      routes: [route.get("/test", { resolve: (c) => Response.json({ ts: c.locals.ts }) })],
+      routes: [
+        route.get("/test", {
+          resolve: (c) => Response.json({ ts: c.locals.ts }),
+        }),
+      ],
     });
     const res = await app.request("/test");
     expect((await res.json()).ts).toBe(1);

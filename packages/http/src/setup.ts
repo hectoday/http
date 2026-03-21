@@ -20,9 +20,9 @@ import type * as z from "zod/v4";
 function inputOk(params?: unknown, query?: unknown, body?: unknown): InputStateOk {
   return {
     ok: true,
-    params: params ?? undefined,
-    query: query ?? undefined,
-    body: body ?? undefined,
+    params,
+    query,
+    body,
     issues: [],
     failed: [],
   };
@@ -32,7 +32,14 @@ function inputFailed(
   issues: ValidationIssue[],
   failed: ("params" | "query" | "body")[],
 ): InputStateFailed {
-  return { ok: false, params: undefined, query: undefined, body: undefined, issues, failed };
+  return {
+    ok: false,
+    params: undefined,
+    query: undefined,
+    body: undefined,
+    issues,
+    failed,
+  };
 }
 
 function makeContext(
@@ -93,11 +100,20 @@ function runValidation(
   let body: unknown = rawBody;
 
   if (bodyState === "invalid") {
-    issues.push({ part: "body", path: [], message: "Invalid JSON", code: "invalid_json" });
+    issues.push({
+      part: "body",
+      path: [],
+      message: "Invalid JSON",
+      code: "invalid_json",
+    });
     failed.push("body");
   }
 
-  const parts: { key: "params" | "query" | "body"; schema?: z.ZodType; input: unknown }[] = [
+  const parts: {
+    key: "params" | "query" | "body";
+    schema?: z.ZodType;
+    input: unknown;
+  }[] = [
     { key: "params", schema: schemas.params, input: rawParams },
     { key: "query", schema: schemas.query, input: rawQuery },
   ];
@@ -150,7 +166,9 @@ function buildRequest(path: string, options: RequestOptions = {}): Request {
 
   if (options.body !== undefined) {
     init.body = JSON.stringify(options.body);
-    headers.set("content-type", "application/json");
+    if (!headers.has("content-type")) {
+      headers.set("content-type", "application/json");
+    }
   }
 
   return new Request(url, init);
@@ -260,7 +278,7 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
         try {
           const text = await request.text();
 
-          if (text.trim() === "") {
+          if (text === "") {
             bodyState = "missing";
           } else {
             rawBody = JSON.parse(text);

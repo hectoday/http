@@ -113,6 +113,10 @@ function responseCanHaveBody(status: number): boolean {
   return !(status >= 100 && status < 200) && status !== 204 && status !== 205 && status !== 304;
 }
 
+function operationCanHaveResponseBody(method: string, status: number): boolean {
+  return method.toUpperCase() !== "HEAD" && responseCanHaveBody(status);
+}
+
 const STATUS_TEXT: Record<number, string> = {
   100: "Continue",
   101: "Switching Protocols",
@@ -254,7 +258,7 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
         };
 
         // These HTTP statuses do not allow a response body.
-        if (responseCanHaveBody(code)) {
+        if (operationCanHaveResponseBody(method, code)) {
           entry.content = {
             "application/json": { schema: schema as z.ZodType },
           };
