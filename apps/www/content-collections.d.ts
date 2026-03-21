@@ -7,10 +7,13 @@ interface Doc {
   title: string;
   slug: string;
   order: number;
+  description: string;
+  content: string;
   html: string;
 }
 
 interface Changelog {
+  content: string;
   html: string;
 }
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { allDocs } from "content-collections";
+import { allDocs } from "../../.content-collections/generated/index.js";
 
 describe("content-collections: docs", () => {
   it("should load all 16 documents", () => {

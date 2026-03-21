@@ -1,14 +1,23 @@
 import DiagramLightbox from "#/components/DiagramLightbox";
 import MermaidRenderer from "#/components/MermaidRenderer";
-import { getDocPageData, getOrderedDocs } from "#/docs";
+import { getDocPageData } from "#/docs";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef } from "react";
-
-const ordered = getOrderedDocs();
+import { seoHead } from "../seo";
 
 export const Route = createFileRoute("/docs/$slug")({
   component: DocPage,
   loader: ({ params }) => getDocPageData(params.slug),
+  head: ({ loaderData }) =>
+    loaderData
+      ? seoHead({
+          title: loaderData.doc.title,
+          description: loaderData.doc.description,
+          path: `/docs/${loaderData.doc.slug}`,
+          type: "article",
+          markdownPath: `/docs/${loaderData.doc.slug}.md`,
+        })
+      : seoHead(),
 });
 
 function DocPage() {

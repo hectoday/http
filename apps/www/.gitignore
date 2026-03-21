@@ -12,3 +12,9 @@ dist-ssr
 __unconfig*
 .content-collections
 todos.json
+
+# Generated markdown files for LLM access (built from packages/http/docs)
+public/docs/
+public/index.md
+public/changelog.md
+public/llms.txt

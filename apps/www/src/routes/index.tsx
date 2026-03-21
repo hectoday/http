@@ -1,11 +1,13 @@
 import { getOrderedDocs } from "#/docs";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { allDocs } from "content-collections";
+import { seoHead } from "../seo";
 
 const ordered = getOrderedDocs();
 
 export const Route = createFileRoute("/")({
   component: HomePage,
+  head: () => seoHead({ path: "/", markdownPath: "/index.md" }),
   loader: () => {
     const doc = allDocs.find((d) => d.slug === "index");
     if (!doc) throw new Error("index doc not found");
