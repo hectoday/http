@@ -1,5 +1,7 @@
+import CodeCopyButton from "#/components/CodeCopyButton";
 import { getOrderedDocs } from "#/docs";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef } from "react";
 import { allDocs } from "content-collections";
 import { seoHead } from "../seo";
 
@@ -18,9 +20,15 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { doc, next } = Route.useLoaderData();
+  const articleRef = useRef<HTMLElement>(null);
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
-      <article className="prose max-w-none" dangerouslySetInnerHTML={{ __html: doc.html }} />
+      <article
+        ref={articleRef}
+        className="prose max-w-none"
+        dangerouslySetInnerHTML={{ __html: doc.html }}
+      />
+      <CodeCopyButton containerRef={articleRef} />
       <nav className="mt-16 flex items-center justify-between border-t pt-6 dark:border-neutral-800">
         <Link to="/changelog" className="text-sm text-blue-600 hover:underline dark:text-blue-400">
           Changelog

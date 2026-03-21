@@ -1,3 +1,4 @@
+import CodeCopyButton from "#/components/CodeCopyButton";
 import DiagramLightbox from "#/components/DiagramLightbox";
 import MermaidRenderer from "#/components/MermaidRenderer";
 import { getDocPageData } from "#/docs";
@@ -33,6 +34,7 @@ function DocPage() {
         className="prose mt-8 max-w-none"
         dangerouslySetInnerHTML={{ __html: doc.html }}
       />
+      <CodeCopyButton containerRef={articleRef} />
       <MermaidRenderer containerRef={articleRef} />
       <DiagramLightbox containerRef={articleRef} />
       <nav className="mt-16 flex items-center justify-between border-t pt-6 dark:border-neutral-800">

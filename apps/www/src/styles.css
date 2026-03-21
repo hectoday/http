@@ -28,9 +28,75 @@
 
 /* Shiki code blocks — override inline background with design-system color */
 pre.shiki {
+  position: relative;
   background-color: #fafafa !important;
   color: #242529 !important;
   border: 1px solid var(--color-gray-200) !important;
+  border-radius: 0.75rem !important;
+}
+
+html.dark pre.shiki,
+:root:not(.light) pre.shiki {
+  background-color: #161618 !important;
+  color: #e4e4e7 !important;
+  border-color: var(--color-gray-800) !important;
+}
+
+/* Copy button */
+.copy-btn {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-gray-200);
+  background-color: var(--color-white);
+  color: var(--color-gray-400);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 150ms ease,
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+pre:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-300);
+  background-color: var(--color-gray-50);
+}
+
+.copy-btn.copied {
+  color: var(--color-green-600);
+  opacity: 1;
+}
+
+html.dark .copy-btn,
+:root:not(.light) .copy-btn {
+  border-color: var(--color-gray-700);
+  background-color: var(--color-gray-800);
+  color: var(--color-gray-500);
+}
+
+html.dark .copy-btn:hover,
+:root:not(.light) .copy-btn:hover {
+  color: var(--color-gray-300);
+  border-color: var(--color-gray-600);
+  background-color: var(--color-gray-700);
+}
+
+html.dark .copy-btn.copied,
+:root:not(.light) .copy-btn.copied {
+  color: var(--color-green-400);
 }
 
 /* Mermaid diagrams — clean black & white card */
@@ -461,15 +527,18 @@ body {
     font-family: var(--font-mono);
   }
 
-  /* Inline code — subtle pill with tinted background */
+  /* Inline code — modern pill */
   code {
-    font-size: 0.875em;
-    font-weight: 450; /* Slightly heavier to match Inter 400 color */
+    font-size: 0.85em;
+    font-weight: 450;
     background-color: var(--color-gray-100);
-    padding: 0.15em 0.4em;
-    border-radius: 0.25rem;
+    padding: 0.2em 0.45em;
+    border-radius: 0.375rem;
     border: 1px solid var(--color-gray-200);
     word-break: break-word;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
   }
 
   /* kbd — distinct from code to look like a keyboard key */
@@ -488,9 +557,9 @@ body {
     font-size: var(--font-size-sm);
     line-height: 1.7;
     overflow-x: auto;
-    padding: 1.25em 1.5em;
+    padding: 1rem 1.25em;
     margin-block: 1.75em;
-    border-radius: 0.625rem;
+    border-radius: 0.75rem;
     background-color: var(--color-gray-950);
     color: var(--color-gray-200);
     border: 1px solid var(--color-gray-800);
@@ -499,6 +568,9 @@ body {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--color-gray-700) transparent;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
   }
 
   pre code {
