@@ -130,11 +130,13 @@ function runValidation(
 function buildRequest(path: string, options: RequestOptions = {}): Request {
   const method = (options.method ?? "GET").toUpperCase();
 
+  const url = new URL(path, "http://localhost");
+
   // Build query string
-  let url = `http://localhost${path}`;
   if (options.query) {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(url.search);
     for (const [k, v] of Object.entries(options.query)) {
+      params.delete(k);
       if (Array.isArray(v)) {
         for (const item of v) {
           params.append(k, item);
@@ -143,8 +145,7 @@ function buildRequest(path: string, options: RequestOptions = {}): Request {
       }
       params.set(k, v);
     }
-    const qs = params.toString();
-    if (qs) url += `?${qs}`;
+    url.search = params.toString();
   }
 
   const headers = new Headers(options.headers);

@@ -558,6 +558,43 @@ describe("setup - app.request", () => {
     expect(res.status).toBe(200);
     expect((await res.json()).q).toBe("test");
   });
+
+  test("merges query params with an existing query string in the path", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/search", {
+          resolve: (c) =>
+            Response.json({
+              existing: c.input.ok ? c.input.query.existing : undefined,
+              added: c.input.ok ? c.input.query.added : undefined,
+              replaced: c.input.ok ? c.input.query.replaced : undefined,
+            }),
+        }),
+      ],
+    });
+
+    const res = await app.request("/search?existing=1&replaced=old", {
+      query: { added: "2", replaced: "new" },
+    });
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ existing: "1", added: "2", replaced: "new" });
+  });
+
+  test("malformed query strings do not crash request handling", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/search", {
+          resolve: (c) => Response.json({ q: c.input.ok ? c.input.query.q : undefined }),
+        }),
+      ],
+      onError: ({ error }) => Response.json({ error: String(error) }, { status: 500 }),
+    });
+
+    const res = await app.fetch(new Request("http://localhost/search?q=%E0%A4%A"));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ q: "%E0%A4%A" });
+  });
 });
 
 // ---------------------------------------------------------------------------

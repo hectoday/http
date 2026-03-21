@@ -66,4 +66,8 @@ describe("parseQuery", () => {
   test("value with equals sign", () => {
     expect(parseQuery("?expr=a=b")).toEqual({ expr: "a=b" });
   });
+
+  test("malformed percent-encoding does not throw", () => {
+    expect(parseQuery("?bad=%E0%A4%A")).toEqual({ bad: "%E0%A4%A" });
+  });
 });
