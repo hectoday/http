@@ -10,4 +10,9 @@ interface Doc {
   html: string;
 }
 
+interface Changelog {
+  html: string;
+}
+
+export declare const allChangelogs: Changelog[];
 export declare const allDocs: Doc[];

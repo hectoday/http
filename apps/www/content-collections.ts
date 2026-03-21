@@ -58,6 +58,21 @@ const highlighter = await createHighlighter({
   langs: ["typescript", "bash", "json"],
 });
 
+const changelog = defineCollection({
+  name: "changelog",
+  directory: "../../packages/http",
+  include: "CHANGELOG.md",
+  schema: z.object({
+    content: z.string(),
+  }),
+  transform: async (doc, ctx) => {
+    const html = await compileMarkdown(ctx, doc, {
+      rehypePlugins: [[rehypeShikiFromHighlighter, highlighter, { theme: "hectoday-light" }]],
+    });
+    return { html };
+  },
+});
+
 const docs = defineCollection({
   name: "docs",
   directory: "../../packages/http/docs",
@@ -87,5 +102,5 @@ const docs = defineCollection({
 });
 
 export default defineConfig({
-  content: [docs],
+  content: [changelog, docs],
 });

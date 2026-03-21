@@ -20,7 +20,7 @@ export default function DiagramLightbox({
     if (!container) return;
 
     function onClick(e: Event) {
-      const pre = (e.currentTarget as HTMLElement);
+      const pre = e.currentTarget as HTMLElement;
       const svg = pre.querySelector("svg");
       if (!svg) return;
       setHtml(svg.outerHTML);

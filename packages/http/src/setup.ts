@@ -51,6 +51,11 @@ function defaultError(): Response {
   return Response.json({ error: "Internal Server Error" }, { status: 500 });
 }
 
+type ParsedJsonBody =
+  | { state: "missing"; value: undefined }
+  | { state: "parsed"; value: unknown }
+  | { state: "invalid"; value: undefined };
+
 // ---------------------------------------------------------------------------
 // Validation
 // ---------------------------------------------------------------------------
@@ -78,7 +83,7 @@ function runValidation(
   rawParams: Record<string, string | undefined>,
   rawQuery: Record<string, string | string[] | undefined>,
   rawBody: unknown,
-  hasBodySchema: boolean,
+  bodyState: ParsedJsonBody["state"],
 ): InputState {
   const issues: ValidationIssue[] = [];
   const failed: ("params" | "query" | "body")[] = [];
@@ -87,7 +92,7 @@ function runValidation(
   let query: unknown = rawQuery;
   let body: unknown = rawBody;
 
-  if (hasBodySchema && rawBody === undefined) {
+  if (bodyState === "invalid") {
     issues.push({ part: "body", path: [], message: "Invalid JSON", code: "invalid_json" });
     failed.push("body");
   }
@@ -97,7 +102,7 @@ function runValidation(
     { key: "query", schema: schemas.query, input: rawQuery },
   ];
 
-  if (hasBodySchema && rawBody !== undefined) {
+  if (schemas.body && bodyState !== "invalid") {
     parts.push({ key: "body", schema: schemas.body, input: rawBody });
   }
 
@@ -130,6 +135,12 @@ function buildRequest(path: string, options: RequestOptions = {}): Request {
   if (options.query) {
     const params = new URLSearchParams();
     for (const [k, v] of Object.entries(options.query)) {
+      if (Array.isArray(v)) {
+        for (const item of v) {
+          params.append(k, item);
+        }
+        continue;
+      }
       params.set(k, v);
     }
     const qs = params.toString();
@@ -231,12 +242,21 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
     const rawQuery = parseQuery(url.search);
     let rawBody: unknown = undefined;
     const hasBodySchema = routeConfig.request?.body !== undefined;
+    let bodyState: ParsedJsonBody["state"] = "missing";
 
     if (hasBodySchema) {
-      try {
-        rawBody = await request.json();
-      } catch {
-        rawBody = undefined;
+      const contentLength = request.headers.get("content-length");
+      const transferEncoding = request.headers.get("transfer-encoding");
+
+      if (request.body === null || (contentLength === "0" && !transferEncoding)) {
+        bodyState = "missing";
+      } else {
+        try {
+          rawBody = await request.json();
+          bodyState = "parsed";
+        } catch {
+          bodyState = "invalid";
+        }
       }
     }
 
@@ -247,7 +267,7 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
       (routeConfig.request.params || routeConfig.request.query || routeConfig.request.body);
 
     if (hasSchemas) {
-      input = runValidation(routeConfig.request!, rawParams, rawQuery, rawBody, hasBodySchema);
+      input = runValidation(routeConfig.request!, rawParams, rawQuery, rawBody, bodyState);
     } else {
       input = inputOk(rawParams, rawQuery, rawBody);
     }

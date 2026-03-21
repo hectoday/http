@@ -103,6 +103,7 @@ describe("cors", () => {
         }),
       );
       expect(res.headers.get("access-control-allow-credentials")).toBe("true");
+      expect(res.headers.get("access-control-allow-origin")).toBe("https://app.com");
     });
   });
 
@@ -168,6 +169,16 @@ describe("cors", () => {
       expect(
         headers(reqC, new Response("ok")).headers.get("access-control-allow-origin"),
       ).toBeNull();
+    });
+
+    test("does not set credentials header when origin is not allowed", () => {
+      const { headers } = cors({ origin: "https://app.com", credentials: true });
+      const req = new Request("http://localhost/test", {
+        headers: { origin: "https://evil.com" },
+      });
+      const res = headers(req, new Response("ok"));
+      expect(res.headers.get("access-control-allow-origin")).toBeNull();
+      expect(res.headers.get("access-control-allow-credentials")).toBeNull();
     });
   });
 });

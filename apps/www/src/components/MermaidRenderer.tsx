@@ -100,13 +100,13 @@ export default function MermaidRenderer({
       }
     }
 
-    render();
+    void render();
 
     // Re-render when the theme class changes on <html>.
     const observer = new MutationObserver((mutations) => {
       for (const m of mutations) {
         if (m.attributeName === "class") {
-          render();
+          void render();
           break;
         }
       }
