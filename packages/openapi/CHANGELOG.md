@@ -4,6 +4,11 @@
 
 ### Bug Fixes
 
-- **paths**: Skip wildcard route patterns containing `**` when generating OpenAPI documents, avoiding invalid path entries for catch-all routes.
-- **responses**: Omit OpenAPI `content` entries for response status codes that cannot include a body (`1xx`, `204`, `205`, `304`).
-- **types**: Fix `securitySchemes` typings so valid `oauth2` and `openIdConnect` configurations type-check correctly.
+- **paths**: Skip wildcard routes containing `**` in OpenAPI document generation.
+- **responses**: Omit `content` for status codes that cannot have a body (`1xx`, `204`, `205`, `304`).
+- **types**: Fix `securitySchemes` typings for `oauth2` and `openIdConnect` schemes.
+
+### Dependencies
+
+- Upgrade `zod-openapi` to `5.x`.
+- Migrate to Zod v4 (`zod/v4`). Minimum peer dependency is now `^3.25.0`.

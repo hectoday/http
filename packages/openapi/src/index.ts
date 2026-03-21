@@ -1,9 +1,7 @@
 import type { RouteDescriptor } from "@hectoday/http";
-import { z } from "zod";
-import { createDocument, extendZodWithOpenApi } from "zod-openapi";
+import * as z from "zod/v4";
+import { createDocument } from "zod-openapi";
 import type { ZodOpenApiOperationObject } from "zod-openapi";
-
-let extended = false;
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -199,11 +197,6 @@ function scalarHtml(specUrl: string): string {
 // ---------------------------------------------------------------------------
 
 export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenApiResult {
-  if (!extended) {
-    extendZodWithOpenApi(z);
-    extended = true;
-  }
-
   const paths: Record<string, Record<string, ZodOpenApiOperationObject>> = {};
 
   for (const descriptor of routes) {
@@ -221,7 +214,7 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
     };
 
     // --- request params & query (must be z.object() schemas) ---
-    const requestParams: Record<string, z.ZodTypeAny> = {};
+    const requestParams: Record<string, z.ZodType> = {};
 
     if (routeConfig.request?.params) {
       if (!(routeConfig.request.params instanceof z.ZodObject)) {
@@ -263,7 +256,7 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
         // These HTTP statuses do not allow a response body.
         if (responseCanHaveBody(code)) {
           entry.content = {
-            "application/json": { schema: schema as z.ZodTypeAny },
+            "application/json": { schema: schema as z.ZodType },
           };
         }
 

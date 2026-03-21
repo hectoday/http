@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type * as z from "zod/v4";
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -58,16 +58,16 @@ export interface Context<
 
 export interface RouteConfig<
   TLocals extends Record<string, unknown> = Record<string, unknown>,
-  TParamsSchema extends z.ZodTypeAny | undefined = undefined,
-  TQuerySchema extends z.ZodTypeAny | undefined = undefined,
-  TBodySchema extends z.ZodTypeAny | undefined = undefined,
+  TParamsSchema extends z.ZodType | undefined = undefined,
+  TQuerySchema extends z.ZodType | undefined = undefined,
+  TBodySchema extends z.ZodType | undefined = undefined,
 > {
   request?: {
     params?: TParamsSchema;
     query?: TQuerySchema;
     body?: TBodySchema;
   };
-  response?: Record<number, z.ZodTypeAny>;
+  response?: Record<number, z.ZodType>;
   /**
    * Handle the request and return a Response.
    *
@@ -76,11 +76,11 @@ export interface RouteConfig<
    */
   resolve(
     c: Context<
-      TParamsSchema extends z.ZodTypeAny ? z.output<TParamsSchema> : Record<string, string>,
-      TQuerySchema extends z.ZodTypeAny
+      TParamsSchema extends z.ZodType ? z.output<TParamsSchema> : Record<string, string>,
+      TQuerySchema extends z.ZodType
         ? z.output<TQuerySchema>
         : Record<string, string | string[] | undefined>,
-      TBodySchema extends z.ZodTypeAny ? z.output<TBodySchema> : unknown,
+      TBodySchema extends z.ZodType ? z.output<TBodySchema> : unknown,
       TLocals
     >,
   ): Response | Promise<Response>;

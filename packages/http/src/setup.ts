@@ -11,7 +11,7 @@ import type {
   SetupConfig,
   ValidationIssue,
 } from "./types";
-import type { z } from "zod";
+import type * as z from "zod/v4";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -61,7 +61,7 @@ type ParsedJsonBody =
 // ---------------------------------------------------------------------------
 
 function validatePart(
-  schema: z.ZodTypeAny,
+  schema: z.ZodType,
   input: unknown,
   part: "params" | "query" | "body",
 ): { ok: true; value: unknown } | { ok: false; issues: ValidationIssue[] } {
@@ -79,7 +79,7 @@ function validatePart(
 }
 
 function runValidation(
-  schemas: { params?: z.ZodTypeAny; query?: z.ZodTypeAny; body?: z.ZodTypeAny },
+  schemas: { params?: z.ZodType; query?: z.ZodType; body?: z.ZodType },
   rawParams: Record<string, string | undefined>,
   rawQuery: Record<string, string | string[] | undefined>,
   rawBody: unknown,
@@ -97,7 +97,7 @@ function runValidation(
     failed.push("body");
   }
 
-  const parts: { key: "params" | "query" | "body"; schema?: z.ZodTypeAny; input: unknown }[] = [
+  const parts: { key: "params" | "query" | "body"; schema?: z.ZodType; input: unknown }[] = [
     { key: "params", schema: schemas.params, input: rawParams },
     { key: "query", schema: schemas.query, input: rawQuery },
   ];

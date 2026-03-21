@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod/v4";
 import { eq, and } from "drizzle-orm";
 import { route, group } from "@hectoday/http";
 import { db } from "../db.ts";

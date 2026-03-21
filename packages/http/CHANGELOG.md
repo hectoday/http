@@ -4,22 +4,20 @@
 
 ### Bug Fixes
 
-- **cors**: Only emit preflight allow-methods, allow-headers, and max-age headers when the request origin is actually allowed.
-- **cors**: Do not emit CORS response headers for wildcard configurations when the request has no `Origin` header.
-- **cors**: Only emit `Access-Control-Expose-Headers` on actual allowed CORS responses, not on preflight responses or disallowed origins.
-- **cors**: Reflect `Access-Control-Request-Headers` in preflight responses when `allowHeaders` is not configured, and add the matching `Vary` header for cache correctness.
-- **query**: Treat malformed percent-encoding as raw text instead of throwing during query parsing, so bad query strings do not crash request handling.
-- **setup**: Ensure `onResponse` still runs after `onRequest` and `onNotFound` errors are converted into error responses.
-- **setup**: Merge `app.request(path, { query })` with query params already present in `path` instead of producing malformed URLs.
-
-## 0.2.1
-
-### Bug Fixes
-
-- **cors**: Reflect request origin instead of `*` when `credentials: true` is used with a wildcard origin, matching the CORS specification. Only set `Access-Control-Allow-Credentials` header when the request origin is actually allowed.
-- **query**: Decode `+` as space in query string keys and values, fixing form-encoded input like `?q=hello+world`.
-- **setup**: Distinguish between missing and invalid request bodies so that optional body schemas (`z.object({...}).optional()`) accept empty requests instead of rejecting them as invalid JSON.
+- **cors**: Only emit CORS headers when the request origin is allowed.
+- **cors**: Reflect requested headers in preflight responses when `allowHeaders` is not configured.
+- **query**: Handle malformed percent-encoding gracefully instead of throwing.
+- **setup**: Ensure `onResponse` runs after `onRequest` and `onNotFound` errors.
+- **setup**: Merge `app.request()` query option with query params already in the path.
+- **cors**: Reflect request origin when `credentials: true` is used with a wildcard origin.
+- **query**: Decode `+` as space in query string keys and values.
+- **setup**: Accept empty request bodies for optional body schemas.
 
 ### Improvements
 
-- **setup**: `app.request()` now accepts `string[]` values in the `query` option, producing repeated query keys (e.g., `{ tag: ["a", "b"] }` → `?tag=a&tag=b`).
+- **setup**: `app.request()` now accepts `string[]` values in the `query` option.
+
+### Dependencies
+
+- Upgrade `rou3` to `0.8.x`.
+- Migrate to Zod v4 (`zod/v4`). Minimum peer dependency is now `^3.25.0`.

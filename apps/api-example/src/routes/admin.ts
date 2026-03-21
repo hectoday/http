@@ -1,5 +1,4 @@
-import "zod-openapi/extend";
-import { z } from "zod";
+import * as z from "zod/v4";
 import { route, group } from "@hectoday/http";
 import { authenticate, requireAdmin } from "../auth.ts";
 
@@ -13,7 +12,7 @@ export const adminRoutes = group([
             memory: z.number(),
           }),
         })
-        .openapi({
+        .meta({
           example: {
             stats: { uptime: 86400, memory: 134217728 },
           },

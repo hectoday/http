@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vite-plus/test";
-import { z } from "zod";
+import * as z from "zod/v4";
 import { route } from "@hectoday/http";
 import { openapi } from "./index";
 import type { OpenApiConfig } from "./index";
