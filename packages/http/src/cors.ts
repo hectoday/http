@@ -20,6 +20,24 @@ export interface CorsResult {
 
 const DEFAULT_METHODS = ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"];
 
+function appendVary(h: Headers, value: string): void {
+  const existing = h.get("vary");
+  if (!existing) {
+    h.set("vary", value);
+    return;
+  }
+
+  const values = existing
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (values.some((part) => part.toLowerCase() === value.toLowerCase())) return;
+
+  values.push(value);
+  h.set("vary", values.join(", "));
+}
+
 export function cors(options: CorsOptions): CorsResult {
   const origins = Array.isArray(options.origin) ? options.origin : [options.origin];
   const methods = options.methods ?? DEFAULT_METHODS;
@@ -33,7 +51,7 @@ export function cors(options: CorsOptions): CorsResult {
     // When the response varies by origin, always signal that to caches,
     // even when the origin is disallowed or absent.
     if (!(allowAnyOrigin && !credentials)) {
-      h.append("vary", "Origin");
+      appendVary(h, "Origin");
     }
 
     if (!requestOrigin) return;
@@ -57,7 +75,7 @@ export function cors(options: CorsOptions): CorsResult {
       const requestedHeaders = request.headers.get("access-control-request-headers");
       if (requestedHeaders) {
         h.set("access-control-allow-headers", requestedHeaders);
-        h.append("vary", "Access-Control-Request-Headers");
+        appendVary(h, "Access-Control-Request-Headers");
       }
     }
     if (maxAge !== undefined) {
