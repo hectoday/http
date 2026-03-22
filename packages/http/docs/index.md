@@ -40,10 +40,14 @@ Deno.serve(app.fetch);
 12. [Versioning](./versioning.md)
 13. [Serving](./serving.md)
 
+### Recipes
+
+14. [Caching](./caching.md)
+
 ### Reference
 
-14. [API reference](./api-reference.md)
-15. [Diagrams](./diagrams.md)
+15. [API reference](./api-reference.md)
+16. [Diagrams](./diagrams.md)
 
 ## What this is
 
