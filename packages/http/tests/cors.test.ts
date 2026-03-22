@@ -286,6 +286,38 @@ describe("cors", () => {
       ).toBeNull();
     });
 
+    test("preserves existing vary values without duplicating Origin", () => {
+      const { headers } = cors({ origin: "https://app.com" });
+      const req = new Request("http://localhost/test", {
+        headers: { origin: "https://app.com" },
+      });
+      const res = headers(
+        req,
+        new Response("ok", {
+          headers: { vary: "Accept-Encoding, Origin" },
+        }),
+      );
+
+      expect(res.headers.get("vary")).toBe("Accept-Encoding, Origin");
+    });
+
+    test("adds Access-Control-Request-Headers to vary only once", async () => {
+      const { preflight } = cors({ origin: "https://app.com" });
+      const app = setup({ routes: [preflight(route)] });
+
+      const first = await app.fetch(
+        new Request("http://localhost/test", {
+          method: "OPTIONS",
+          headers: {
+            origin: "https://app.com",
+            "access-control-request-headers": "authorization",
+          },
+        }),
+      );
+
+      expect(first.headers.get("vary")).toBe("Origin, Access-Control-Request-Headers");
+    });
+
     test("does not set credentials header when origin is not allowed", () => {
       const { headers } = cors({ origin: "https://app.com", credentials: true });
       const req = new Request("http://localhost/test", {

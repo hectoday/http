@@ -105,8 +105,39 @@ export interface OpenApiResult {
 // Helpers
 // ---------------------------------------------------------------------------
 
+function extractPathParamNames(path: string): string[] {
+  return Array.from(path.matchAll(/:(\w+)/g), (match) => match[1]);
+}
+
 function toOpenApiPath(path: string): string {
   return path.replace(/:(\w+)/g, "{$1}");
+}
+
+function getSchemaObjectKeys(schema: z.ZodObject<any>): string[] {
+  return Object.keys(schema.shape);
+}
+
+function assertPathParamsMatchPath(
+  method: string,
+  path: string,
+  schema: z.ZodObject<any>,
+): void {
+  const pathParamNames = extractPathParamNames(path);
+  const schemaParamNames = getSchemaObjectKeys(schema);
+
+  const hasExactMatch =
+    pathParamNames.length === schemaParamNames.length &&
+    pathParamNames.every((name) => schemaParamNames.includes(name));
+
+  if (hasExactMatch) return;
+
+  if (pathParamNames.length === 0) {
+    throw new Error(`params schema for ${method} ${path} cannot define path params when the path has none`);
+  }
+
+  throw new Error(
+    `params schema for ${method} ${path} must define exactly these path params: ${pathParamNames.join(", ")}`,
+  );
 }
 
 function responseCanHaveBody(status: number): boolean {
@@ -228,12 +259,18 @@ export function openapi(routes: RouteDescriptor[], config: OpenApiConfig): OpenA
 
     // --- request params & query (must be z.object() schemas) ---
     const requestParams: Record<string, z.ZodType> = {};
+    const inferredPathParams = extractPathParamNames(path);
 
     if (routeConfig.request?.params) {
       if (!(routeConfig.request.params instanceof z.ZodObject)) {
         throw new Error(`params schema for ${method} ${path} must be a z.object()`);
       }
+      assertPathParamsMatchPath(method, path, routeConfig.request.params);
       requestParams.path = routeConfig.request.params;
+    } else if (inferredPathParams.length > 0) {
+      requestParams.path = z.object(
+        Object.fromEntries(inferredPathParams.map((name) => [name, z.string()])),
+      );
     }
 
     if (routeConfig.request?.query) {

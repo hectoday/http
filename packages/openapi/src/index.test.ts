@@ -154,6 +154,56 @@ describe("openapi", () => {
     expect(html).toContain("/openapi.json");
   });
 
+  test("infers string path parameters when no params schema is provided", async () => {
+    const routes = [
+      route.get("/users/:id", {
+        resolve: () => Response.json({ ok: true }),
+      }),
+    ];
+
+    const { spec } = openapi(routes, {
+      info: { title: "Test", version: "1.0.0" },
+    });
+
+    const response = await spec(route).config.resolve({
+      request: new Request("http://localhost/openapi.json"),
+      input: {
+        ok: true,
+        params: {},
+        query: {},
+        body: undefined,
+        issues: [],
+        failed: [],
+      },
+      locals: {},
+    });
+
+    const doc = await response.json();
+    expect(doc.paths["/users/{id}"].get.parameters).toEqual([
+      expect.objectContaining({
+        in: "path",
+        name: "id",
+        required: true,
+      }),
+    ]);
+  });
+
+  test("throws when params schema does not match path parameters", () => {
+    expect(() =>
+      openapi(
+        [
+          route.get("/users/:id", {
+            request: {
+              params: z.object({ slug: z.string() }),
+            },
+            resolve: () => Response.json({ ok: true }),
+          }),
+        ],
+        { info: { title: "Test", version: "1.0.0" } },
+      ),
+    ).toThrow("params schema for GET /users/:id must define exactly these path params: id");
+  });
+
   test("converts path params from :id to {id}", async () => {
     const routes = [
       route.get("/users/:userId/posts/:postId", {
