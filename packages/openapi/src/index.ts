@@ -117,11 +117,7 @@ function getSchemaObjectKeys(schema: z.ZodObject<any>): string[] {
   return Object.keys(schema.shape);
 }
 
-function assertPathParamsMatchPath(
-  method: string,
-  path: string,
-  schema: z.ZodObject<any>,
-): void {
+function assertPathParamsMatchPath(method: string, path: string, schema: z.ZodObject<any>): void {
   const pathParamNames = extractPathParamNames(path);
   const schemaParamNames = getSchemaObjectKeys(schema);
 
@@ -132,7 +128,9 @@ function assertPathParamsMatchPath(
   if (hasExactMatch) return;
 
   if (pathParamNames.length === 0) {
-    throw new Error(`params schema for ${method} ${path} cannot define path params when the path has none`);
+    throw new Error(
+      `params schema for ${method} ${path} cannot define path params when the path has none`,
+    );
   }
 
   throw new Error(

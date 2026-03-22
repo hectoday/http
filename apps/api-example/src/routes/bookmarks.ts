@@ -6,7 +6,7 @@ import * as schema from "../schema.ts";
 import { authenticate } from "../auth.ts";
 
 const CreateBookmark = z.object({
-  url: z.string().url(),
+  url: z.url(),
   title: z.string().min(1).max(300),
   tags: z.array(z.string().min(1)).default([]),
 });
@@ -23,7 +23,7 @@ const ListQuery = z.object({
 
 const BookmarkObject = z.object({
   id: z.string(),
-  url: z.string().url(),
+  url: z.url(),
   title: z.string(),
   tags: z.array(z.string()),
   createdBy: z.string(),

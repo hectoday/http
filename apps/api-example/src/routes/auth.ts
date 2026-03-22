@@ -7,20 +7,20 @@ import * as schema from "../schema.ts";
 import { type User, authenticate } from "../auth.ts";
 
 const LoginBody = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(1),
 });
 
 const SignupBody = z.object({
   name: z.string().min(1).max(100),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(6),
 });
 
 const UserObject = z.object({
   id: z.string(),
   name: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   role: z.enum(["admin", "user"]),
 });
 
