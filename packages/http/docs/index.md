@@ -43,11 +43,12 @@ Deno.serve(app.fetch);
 ### Recipes
 
 14. [Caching](./caching.md)
+15. [Rate limiting](./rate-limiting.md)
 
 ### Reference
 
-15. [API reference](./api-reference.md)
-16. [Diagrams](./diagrams.md)
+16. [API reference](./api-reference.md)
+17. [Diagrams](./diagrams.md)
 
 ## What this is
 
