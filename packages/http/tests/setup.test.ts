@@ -146,6 +146,88 @@ describe("setup - validation", () => {
     expect(body.q).toBe("hello");
   });
 
+  test("applies query schema defaults when no query params provided", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/items", {
+          request: {
+            query: z.object({
+              cursor: z.string().optional(),
+              limit: z.coerce.number().int().min(1).max(100).default(20),
+            }),
+          },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({
+              cursor: c.input.query.cursor,
+              limit: c.input.query.limit,
+            });
+          },
+        }),
+      ],
+    });
+
+    // No query params at all — defaults should apply
+    const res = await app.request("/items");
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.limit).toBe(20);
+    expect(body.cursor).toBeUndefined();
+  });
+
+  test("applies query defaults via app.fetch with bare URL", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/items", {
+          request: {
+            query: z.object({
+              page: z.coerce.number().int().min(1).default(1),
+              limit: z.coerce.number().int().min(1).max(100).default(20),
+            }),
+          },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({ page: c.input.query.page, limit: c.input.query.limit });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.fetch(new Request("http://localhost/items"));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.page).toBe(1);
+    expect(body.limit).toBe(20);
+  });
+
+  test("applies query defaults when only some params provided", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/items", {
+          request: {
+            query: z.object({
+              cursor: z.string().optional(),
+              limit: z.coerce.number().int().min(1).max(100).default(20),
+            }),
+          },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({
+              cursor: c.input.query.cursor,
+              limit: c.input.query.limit,
+            });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.fetch(new Request("http://localhost/items?cursor=abc"));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.cursor).toBe("abc");
+    expect(body.limit).toBe(20);
+  });
+
   test("validates body with Zod schema", async () => {
     const app = createApp({
       routes: [
@@ -771,5 +853,57 @@ describe("setup - async", () => {
     });
     const res = await app.request("/test");
     expect((await res.json()).ts).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Error handling during extraction/validation
+// ---------------------------------------------------------------------------
+
+describe("setup - extraction/validation error handling", () => {
+  test("errors during validation route through onError", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/test", {
+          request: {
+            // Use a custom Zod schema that throws during safeParse
+            query: {
+              safeParse: () => {
+                throw new Error("unexpected validation error");
+              },
+            } as unknown as z.ZodType,
+          },
+          resolve: () => Response.json({ reached: true }),
+        }),
+      ],
+      onError: ({ error }) =>
+        Response.json({ caught: true, message: String(error) }, { status: 500 }),
+    });
+
+    const res = await app.request("/test");
+    expect(res.status).toBe(500);
+    const body = await res.json();
+    expect(body.caught).toBe(true);
+    expect(body.message).toContain("unexpected validation error");
+  });
+
+  test("errors during validation return 500 without onError", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/test", {
+          request: {
+            query: {
+              safeParse: () => {
+                throw new Error("boom");
+              },
+            } as unknown as z.ZodType,
+          },
+          resolve: () => Response.json({ reached: true }),
+        }),
+      ],
+    });
+
+    const res = await app.request("/test");
+    expect(res.status).toBe(500);
   });
 });
