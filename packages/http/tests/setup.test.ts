@@ -328,6 +328,64 @@ describe("setup - validation", () => {
     expect(await res.json()).toEqual({ tag: ["a", "b"] });
   });
 
+  test("query schema defaults applied when no query params present", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/api/items", {
+          request: {
+            query: z.object({
+              cursor: z.string().optional(),
+              limit: z.coerce.number().int().min(1).max(100).default(20),
+            }),
+          },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+            return Response.json({
+              limit: c.input.query.limit,
+              cursor: c.input.query.cursor,
+            });
+          },
+        }),
+      ],
+    });
+
+    // Via app.request helper
+    const res = await app.request("/api/items");
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.limit).toBe(20);
+
+    // Via app.fetch with raw Request (closer to real server usage)
+    const res2 = await app.fetch(new Request("http://localhost/api/items"));
+    expect(res2.status).toBe(200);
+    const body2 = await res2.json();
+    expect(body2.limit).toBe(20);
+  });
+
+  test("error during validation triggers onError instead of crashing", async () => {
+    // A schema whose safeParse throws (simulates unexpected Zod error)
+    const throwingSchema = {
+      safeParse() {
+        throw new Error("unexpected schema error");
+      },
+    } as unknown as z.ZodType;
+
+    const app = createApp({
+      routes: [
+        route.get("/bad-schema", {
+          request: { query: throwingSchema },
+          resolve: () => Response.json({ ok: true }),
+        }),
+      ],
+      onError: ({ error }) => Response.json({ error: String(error) }, { status: 500 }),
+    });
+
+    const res = await app.request("/bad-schema");
+    expect(res.status).toBe(500);
+    const body = await res.json();
+    expect(body.error).toContain("unexpected schema error");
+  });
+
   test("validation failure sets failed array", async () => {
     const app = createApp({
       routes: [

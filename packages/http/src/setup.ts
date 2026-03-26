@@ -262,61 +262,58 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
 
     const { config: routeConfig } = matched.data;
 
-    // 3. Extract raw inputs
-    const rawParams = (matched.params as Record<string, string | undefined>) ?? {};
-    const rawQuery = parseQuery(url.search);
-    let rawBody: unknown = undefined;
-    const hasBodySchema = routeConfig.request?.body !== undefined;
-    let bodyState: ParsedJsonBody["state"] = "missing";
+    try {
+      // 3. Extract raw inputs
+      const rawParams = (matched.params as Record<string, string | undefined>) ?? {};
+      const rawQuery = parseQuery(url.search);
+      let rawBody: unknown = undefined;
+      const hasBodySchema = routeConfig.request?.body !== undefined;
+      let bodyState: ParsedJsonBody["state"] = "missing";
 
-    if (hasBodySchema) {
-      const contentLength = request.headers.get("content-length");
-      const transferEncoding = request.headers.get("transfer-encoding");
+      if (hasBodySchema) {
+        const contentLength = request.headers.get("content-length");
+        const transferEncoding = request.headers.get("transfer-encoding");
 
-      if (request.body === null || (contentLength === "0" && !transferEncoding)) {
-        bodyState = "missing";
-      } else {
-        try {
-          const text = await request.text();
+        if (request.body === null || (contentLength === "0" && !transferEncoding)) {
+          bodyState = "missing";
+        } else {
+          try {
+            const text = await request.text();
 
-          if (text === "") {
-            bodyState = "missing";
-          } else {
-            rawBody = JSON.parse(text);
-            bodyState = "parsed";
+            if (text === "") {
+              bodyState = "missing";
+            } else {
+              rawBody = JSON.parse(text);
+              bodyState = "parsed";
+            }
+          } catch {
+            bodyState = "invalid";
           }
-        } catch {
-          bodyState = "invalid";
         }
       }
-    }
 
-    // 4. Validate
-    let input: InputState;
-    const hasSchemas =
-      routeConfig.request &&
-      (routeConfig.request.params || routeConfig.request.query || routeConfig.request.body);
+      // 4. Validate
+      let input: InputState;
+      const hasSchemas =
+        routeConfig.request &&
+        (routeConfig.request.params || routeConfig.request.query || routeConfig.request.body);
 
-    if (hasSchemas) {
-      input = runValidation(routeConfig.request!, rawParams, rawQuery, rawBody, bodyState);
-    } else {
-      input = inputOk(rawParams, rawQuery, rawBody);
-    }
+      if (hasSchemas) {
+        input = runValidation(routeConfig.request!, rawParams, rawQuery, rawBody, bodyState);
+      } else {
+        input = inputOk(rawParams, rawQuery, rawBody);
+      }
 
-    // 5. Handler
-    const context = makeContext(request, input, locals);
-    let response: Response;
-    try {
-      response = await routeConfig.resolve(context);
+      // 5. Handler
+      const context = makeContext(request, input, locals);
+      const response = await routeConfig.resolve(context);
+      return safeOnResponse(request, response, locals);
     } catch (err) {
       if (err instanceof Response) {
         return safeOnResponse(request, err, locals);
       }
-      const errResponse = await safeOnError(err, request, locals);
-      return safeOnResponse(request, errResponse, locals);
+      return respondWithError(err, request, locals);
     }
-
-    return safeOnResponse(request, response, locals);
   };
 
   // app.request convenience
