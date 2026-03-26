@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Bug Fixes
+
+- **setup**: Wrap input extraction and validation in error handling so unexpected failures route through `onError` instead of crashing the server with an unhandled exception (#40).
+
 ## 0.3.0
 
 ### Bug Fixes
