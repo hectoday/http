@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+### Improvements
+
+- **setup**: Type the `error` argument in `onError` as `Error` instead of `unknown`. Non-`Error` values are wrapped with `new Error(String(error), { cause: error })` to preserve the original value.
+
 ## 0.3.1
 
 ### Bug Fixes

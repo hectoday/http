@@ -211,7 +211,9 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
   ): Promise<Response> {
     if (!onError) return defaultError();
     try {
-      return await onError({ error, request, locals });
+      const normalizedError =
+        error instanceof Error ? error : new Error(String(error), { cause: error });
+      return await onError({ error: normalizedError, request, locals });
     } catch {
       return defaultError();
     }

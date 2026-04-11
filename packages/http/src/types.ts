@@ -109,7 +109,7 @@ export interface SetupConfig<TLocals extends Record<string, unknown> = Record<st
     locals: TLocals;
   }) => Response | Promise<Response>;
   onError?: (args: {
-    error: unknown;
+    error: Error;
     request: Request;
     locals: Partial<TLocals>;
   }) => Response | Promise<Response>;

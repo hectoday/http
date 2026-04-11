@@ -1,0 +1,22 @@
+{
+  "name": "beginners-guide-api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp exec tsx --watch src/server.ts",
+    "build": "vp pack",
+    "start": "node dist/server.mjs"
+  },
+  "dependencies": {
+    "@hectoday/http": "*",
+    "srvx": "^0.7.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "~5.9.3",
+    "vite-plus": "latest"
+  }
+}
