@@ -53,6 +53,50 @@ export interface Context<
 }
 
 // ---------------------------------------------------------------------------
+// Resolve context – narrows input to InputStateOk when no schemas are defined
+// ---------------------------------------------------------------------------
+
+type InferParams<T> = T extends z.ZodType ? z.output<T> : Record<string, string>;
+type InferQuery<T> = T extends z.ZodType
+  ? z.output<T>
+  : Record<string, string | string[] | undefined>;
+type InferBody<T> = T extends z.ZodType ? z.output<T> : unknown;
+
+type HasSchema<P, Q, B> = P extends z.ZodType
+  ? true
+  : Q extends z.ZodType
+    ? true
+    : B extends z.ZodType
+      ? true
+      : false;
+
+type ResolveContext<
+  TParamsSchema,
+  TQuerySchema,
+  TBodySchema,
+  TLocals extends Record<string, unknown>,
+> =
+  HasSchema<TParamsSchema, TQuerySchema, TBodySchema> extends true
+    ? {
+        readonly request: Request;
+        readonly input: InputState<
+          InferParams<TParamsSchema>,
+          InferQuery<TQuerySchema>,
+          InferBody<TBodySchema>
+        >;
+        readonly locals: TLocals;
+      }
+    : {
+        readonly request: Request;
+        readonly input: InputStateOk<
+          InferParams<TParamsSchema>,
+          InferQuery<TQuerySchema>,
+          InferBody<TBodySchema>
+        >;
+        readonly locals: TLocals;
+      };
+
+// ---------------------------------------------------------------------------
 // Route config
 // ---------------------------------------------------------------------------
 
@@ -75,14 +119,7 @@ export interface RouteConfig<
    * annotating `c` with a wider locals type if needed.
    */
   resolve(
-    c: Context<
-      TParamsSchema extends z.ZodType ? z.output<TParamsSchema> : Record<string, string>,
-      TQuerySchema extends z.ZodType
-        ? z.output<TQuerySchema>
-        : Record<string, string | string[] | undefined>,
-      TBodySchema extends z.ZodType ? z.output<TBodySchema> : unknown,
-      TLocals
-    >,
+    c: ResolveContext<TParamsSchema, TQuerySchema, TBodySchema, TLocals>,
   ): Response | Promise<Response>;
 }
 
@@ -93,7 +130,11 @@ export interface RouteConfig<
 export interface RouteDescriptor {
   method: string;
   path: string;
-  config: RouteConfig<any, any, any, any>;
+  config: {
+    request?: { params?: z.ZodType; query?: z.ZodType; body?: z.ZodType };
+    response?: Record<number, z.ZodType>;
+    resolve(c: Context): Response | Promise<Response>;
+  };
 }
 
 // ---------------------------------------------------------------------------

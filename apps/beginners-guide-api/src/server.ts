@@ -91,7 +91,7 @@ const app = setup({
     }),
     route.delete("/bookmarks/:id", {
       resolve: (c) => {
-        const { id } = c.input.params as { id: string };
+        const { id } = c.input.params;
         deleteById(id);
         return new Response(null, { status: 204 });
       },

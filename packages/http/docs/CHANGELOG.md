@@ -5,6 +5,7 @@
 ### Improvements
 
 - **setup**: Type the `error` argument in `onError` as `Error` instead of `unknown`. Non-`Error` values are wrapped with `new Error(String(error), { cause: error })` to preserve the original value.
+- **setup**: Type `c.input` as `InputStateOk` when no request schemas are defined, removing the need to check `c.input.ok` or cast `c.input.params` on routes without validation.
 
 ## 0.3.1
 
