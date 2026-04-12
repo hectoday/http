@@ -90,9 +90,12 @@ const app = setup({
       },
     }),
     route.delete("/bookmarks/:id", {
+      request: { params: z.object({ id: z.uuid() }) },
       resolve: (c) => {
-        const { id } = c.input.params;
-        deleteById(id);
+        if (!c.input.ok) {
+          return Response.json({ error: "Invalid bookmark ID" }, { status: 400 });
+        }
+        deleteById(c.input.params.id);
         return new Response(null, { status: 204 });
       },
     }),

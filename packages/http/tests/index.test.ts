@@ -156,6 +156,7 @@ const app = setup({
       resolve: () => Response.json({ status: "ok" }),
     }),
     route.get("/echo/:word", {
+      request: { params: z.object({ word: z.string() }) },
       resolve: (c) => {
         if (!c.input.ok) return Response.json({ error: c.input.issues }, { status: 400 });
         return Response.json({ word: c.input.params.word });

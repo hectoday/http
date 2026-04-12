@@ -57,6 +57,7 @@ describe("setup - routing", () => {
     const app = createApp({
       routes: [
         route.get("/items/:id", {
+          request: { params: z.object({ id: z.string() }) },
           resolve: (c) => {
             if (!c.input.ok) return Response.json({ error: "bad" }, { status: 400 });
             return Response.json({ id: c.input.params.id });
@@ -295,10 +296,7 @@ describe("setup - validation", () => {
       routes: [
         route.post("/raw", {
           resolve: (c) => {
-            return Response.json({
-              ok: c.input.ok,
-              body: c.input.ok ? c.input.body : null,
-            });
+            return Response.json({ method: c.request.method });
           },
         }),
       ],
@@ -309,15 +307,14 @@ describe("setup - validation", () => {
     });
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body.ok).toBe(true);
-    // body is undefined because no body schema was defined
-    expect(body.body).toBeUndefined();
+    expect(body.method).toBe("POST");
   });
 
   test("app.request supports repeated query keys", async () => {
     const app = createApp({
       routes: [
         route.get("/tags", {
+          request: { query: z.object({ tag: z.any() }) },
           resolve: (c) => Response.json({ tag: c.input.ok ? c.input.query.tag : undefined }),
         }),
       ],
@@ -418,6 +415,7 @@ describe("setup - validation", () => {
     const app = createApp({
       routes: [
         route.get("/echo/:word", {
+          request: { params: z.object({ word: z.string() }) },
           resolve: (c) => {
             if (!c.input.ok) return Response.json({}, { status: 400 });
             return Response.json({ word: c.input.params.word });
@@ -783,6 +781,7 @@ describe("setup - app.request", () => {
     const app = createApp({
       routes: [
         route.get("/search", {
+          request: { query: z.object({ q: z.string().optional() }) },
           resolve: (c) => Response.json({ q: c.input.ok ? c.input.query.q : undefined }),
         }),
       ],

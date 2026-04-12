@@ -53,7 +53,7 @@ export interface Context<
 }
 
 // ---------------------------------------------------------------------------
-// Resolve context – narrows input to InputStateOk when no schemas are defined
+// Resolve context – omits input when no schemas are defined
 // ---------------------------------------------------------------------------
 
 type InferParams<T> = T extends z.ZodType ? z.output<T> : Record<string, string>;
@@ -88,11 +88,6 @@ type ResolveContext<
       }
     : {
         readonly request: Request;
-        readonly input: InputStateOk<
-          InferParams<TParamsSchema>,
-          InferQuery<TQuerySchema>,
-          InferBody<TBodySchema>
-        >;
         readonly locals: TLocals;
       };
 
