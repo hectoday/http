@@ -50,7 +50,7 @@ jobs:
         run: vp check
 
       - name: Run tests
-        run: vp run test -r
+        run: vp test
 
   publish:
     name: Publish
