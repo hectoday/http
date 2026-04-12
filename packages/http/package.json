@@ -1,6 +1,6 @@
 {
   "name": "@hectoday/http",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A lightweight HTTP framework built on web standards.",
   "keywords": [
     "api",
