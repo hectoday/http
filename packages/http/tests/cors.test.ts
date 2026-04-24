@@ -183,7 +183,7 @@ describe("cors", () => {
     });
 
     test("sets credentials header", async () => {
-      const { preflight } = cors({ origin: "*", credentials: true });
+      const { preflight } = cors({ origin: "https://app.com", credentials: true });
       const app = setup({ routes: [preflight(route)] });
       const res = await app.fetch(
         new Request("http://localhost/test", {
@@ -193,6 +193,24 @@ describe("cors", () => {
       );
       expect(res.headers.get("access-control-allow-credentials")).toBe("true");
       expect(res.headers.get("access-control-allow-origin")).toBe("https://app.com");
+    });
+
+    test("throws when wildcard origin is combined with credentials", () => {
+      expect(() => cors({ origin: "*", credentials: true })).toThrow(
+        "Invalid CORS configuration: credentials=true cannot be combined with origin '*'. Use explicit origins instead.",
+      );
+    });
+
+    test("throws when origin array is empty", () => {
+      expect(() => cors({ origin: [] })).toThrow(
+        "Invalid CORS configuration: at least one origin must be provided.",
+      );
+    });
+
+    test("throws when origin contains an empty string", () => {
+      expect(() => cors({ origin: ["https://app.com", ""] })).toThrow(
+        "Invalid CORS configuration: origin values cannot be empty strings.",
+      );
     });
   });
 

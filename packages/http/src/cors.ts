@@ -40,6 +40,18 @@ function appendVary(h: Headers, value: string): void {
 
 export function cors(options: CorsOptions): CorsResult {
   const origins = Array.isArray(options.origin) ? options.origin : [options.origin];
+  if (origins.length === 0) {
+    throw new Error("Invalid CORS configuration: at least one origin must be provided.");
+  }
+  if (origins.some((origin) => origin.trim() === "")) {
+    throw new Error("Invalid CORS configuration: origin values cannot be empty strings.");
+  }
+  if (options.credentials && origins.includes("*")) {
+    throw new Error(
+      "Invalid CORS configuration: credentials=true cannot be combined with origin '*'. Use explicit origins instead.",
+    );
+  }
+
   const methods = options.methods ?? DEFAULT_METHODS;
   const allowHeaders = options.allowHeaders ?? [];
   const exposeHeaders = options.exposeHeaders ?? [];
