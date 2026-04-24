@@ -310,6 +310,54 @@ describe("setup - validation", () => {
     expect(body.method).toBe("POST");
   });
 
+  test("app.request sends string bodies without JSON-stringifying them", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/echo", {
+          resolve: async (c) => {
+            const text = await c.request.text();
+            return Response.json({ text });
+          },
+        }),
+      ],
+    });
+
+    const res = await app.request("/echo", {
+      method: "POST",
+      body: "plain text",
+      headers: { "content-type": "text/plain" },
+    });
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ text: "plain text" });
+  });
+
+  test("app.request preserves URLSearchParams bodies", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/echo-form", {
+          resolve: async (c) => {
+            const text = await c.request.text();
+            return Response.json({ text });
+          },
+        }),
+      ],
+    });
+
+    const body = new URLSearchParams({
+      mode: "quick",
+      q: "hectoday",
+    });
+
+    const res = await app.request("/echo-form", {
+      method: "POST",
+      body,
+    });
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ text: "mode=quick&q=hectoday" });
+  });
+
   test("app.request supports repeated query keys", async () => {
     const app = createApp({
       routes: [
@@ -651,6 +699,27 @@ describe("setup - hooks", () => {
     expect(res.status).toBe(200);
   });
 
+  test("onResponse fallback does not crash when response cannot be cloned", async () => {
+    const app = createApp({
+      routes: [
+        route.get("/consumed", {
+          resolve: async () => {
+            const response = new Response("already consumed");
+            await response.text();
+            return response;
+          },
+        }),
+      ],
+      onResponse: () => {
+        throw new Error("response hook fail");
+      },
+      onError: () => Response.json({ error: "hook crash" }, { status: 500 }),
+    });
+
+    const res = await app.request("/consumed");
+    expect(res.status).toBe(200);
+  });
+
   test("onError itself throwing returns default 500", async () => {
     const app = createApp({
       routes: [
@@ -721,6 +790,39 @@ describe("setup - app.request", () => {
 
     expect(res.status).toBe(200);
     expect((await res.json()).contentType).toBe("application/merge-patch+json");
+  });
+
+  test("does not crash when FormData global is unavailable", async () => {
+    const app = createApp({
+      routes: [
+        route.post("/echo", {
+          request: { body: z.object({ x: z.number() }) },
+          resolve: (c) => {
+            if (!c.input.ok) return Response.json({}, { status: 400 });
+            return Response.json({ x: c.input.body.x });
+          },
+        }),
+      ],
+    });
+
+    const originalDescriptor = Object.getOwnPropertyDescriptor(globalThis, "FormData");
+    Object.defineProperty(globalThis, "FormData", {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
+
+    try {
+      const res = await app.request("/echo", { method: "POST", body: { x: 7 } });
+      expect(res.status).toBe(200);
+      expect((await res.json()).x).toBe(7);
+    } finally {
+      if (originalDescriptor) {
+        Object.defineProperty(globalThis, "FormData", originalDescriptor);
+      } else {
+        delete (globalThis as { FormData?: unknown }).FormData;
+      }
+    }
   });
 
   test("sets custom headers", async () => {

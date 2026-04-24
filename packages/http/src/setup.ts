@@ -165,9 +165,23 @@ function buildRequest(path: string, options: RequestOptions = {}): Request {
   const init: RequestInit = { method, headers };
 
   if (options.body !== undefined) {
-    init.body = JSON.stringify(options.body);
-    if (!headers.has("content-type")) {
-      headers.set("content-type", "application/json");
+    const body = options.body;
+    const isBodyInitLike =
+      typeof body === "string" ||
+      (typeof Blob !== "undefined" && body instanceof Blob) ||
+      (typeof FormData !== "undefined" && body instanceof FormData) ||
+      (typeof URLSearchParams !== "undefined" && body instanceof URLSearchParams) ||
+      (typeof ReadableStream !== "undefined" && body instanceof ReadableStream) ||
+      body instanceof ArrayBuffer ||
+      ArrayBuffer.isView(body);
+
+    if (isBodyInitLike) {
+      init.body = body;
+    } else {
+      init.body = JSON.stringify(body);
+      if (!headers.has("content-type")) {
+        headers.set("content-type", "application/json");
+      }
     }
   }
 
@@ -196,7 +210,13 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
     locals: TLocals,
   ): Promise<Response> {
     if (!onResponse) return response;
-    const fallback = response.clone();
+    let fallback = response;
+    try {
+      fallback = response.clone();
+    } catch {
+      // Some responses (e.g. already-consumed bodies) cannot be cloned.
+      // In that case, still run onResponse and fall back to the original response.
+    }
     try {
       return await onResponse({ request, response, locals });
     } catch {
