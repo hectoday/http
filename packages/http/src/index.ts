@@ -1,7 +1,9 @@
 export { setup } from "./setup";
-export { route } from "./route";
+export { route, createRoutes } from "./route";
 export { group } from "./group";
 export { cors } from "./cors";
+
+export type { RouteFactory } from "./route";
 
 export type {
   App,

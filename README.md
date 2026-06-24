@@ -158,6 +158,47 @@ route.get("/health", {
 });
 ```
 
+## Convex
+
+Run a Hectoday app inside [Convex](https://convex.dev) HTTP actions -- the
+Hectoday take on [Hono with Convex](https://stack.convex.dev/hono-with-convex).
+The Convex `ActionCtx` is exposed to handlers as `c.env`, so you can run queries
+and mutations straight from a route.
+
+```bash
+npm install @hectoday/convex
+```
+
+```ts
+// convex/http.ts
+import { setup } from "@hectoday/http";
+import { convexRouter, convexRoutes } from "@hectoday/convex";
+import { z } from "zod/v4";
+import type { ActionCtx } from "./_generated/server";
+import { api } from "./_generated/api";
+
+const route = convexRoutes<ActionCtx>();
+
+const app = setup({
+  routes: [
+    route.get("/listMessages/:userId", {
+      request: { params: z.object({ userId: z.string().regex(/^[0-9]+$/) }) },
+      resolve: async (c) => {
+        if (!c.input.ok) return Response.json(c.input.issues, { status: 400 });
+        const messages = await c.env.runQuery(api.messages.getByAuthor, {
+          authorNumber: c.input.params.userId,
+        });
+        return Response.json(messages);
+      },
+    }),
+  ],
+});
+
+export default convexRouter(app);
+```
+
+See the [Convex guide](./packages/http/docs/convex.md) for hooks, CORS, and testing.
+
 ## Testing
 
 The app exposes a `request()` helper for testing without a running server:
@@ -187,6 +228,7 @@ test("POST /bookmarks validates body", async () => {
 | ----------------------------------------- | -------------------------------------------------- |
 | [`@hectoday/http`](./packages/http)       | Core framework -- routing, validation, hooks, CORS |
 | [`@hectoday/openapi`](./packages/openapi) | OpenAPI 3.1 spec generation and Scalar docs        |
+| [`@hectoday/convex`](./packages/convex)   | Run a Hectoday app inside Convex HTTP actions      |
 
 ## Examples
 
