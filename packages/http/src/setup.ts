@@ -46,8 +46,9 @@ function makeContext(
   request: Request,
   input: InputState,
   locals: Record<string, unknown>,
+  env: unknown,
 ): Context {
-  return Object.freeze({ request, input, locals });
+  return Object.freeze({ request, input, locals, env });
 }
 
 function defaultNotFound(): Response {
@@ -178,9 +179,10 @@ function buildRequest(path: string, options: RequestOptions = {}): Request {
 // setup()
 // ---------------------------------------------------------------------------
 
-export function setup<TLocals extends Record<string, unknown> = Record<string, unknown>>(
-  config: SetupConfig<TLocals>,
-): App {
+export function setup<
+  TLocals extends Record<string, unknown> = Record<string, unknown>,
+  TEnv = unknown,
+>(config: SetupConfig<TLocals, TEnv>): App<TEnv> {
   const { routes: handlers, onRequest, onResponse, onError, onNotFound } = config;
 
   // Build rou3 router
@@ -194,11 +196,12 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
     request: Request,
     response: Response,
     locals: TLocals,
+    env: TEnv,
   ): Promise<Response> {
     if (!onResponse) return response;
     const fallback = response.clone();
     try {
-      return await onResponse({ request, response, locals });
+      return await onResponse({ request, response, locals, env });
     } catch {
       return fallback;
     }
@@ -208,12 +211,13 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
     error: unknown,
     request: Request,
     locals: Partial<TLocals>,
+    env: TEnv,
   ): Promise<Response> {
     if (!onError) return defaultError();
     try {
       const normalizedError =
         error instanceof Error ? error : new Error(String(error), { cause: error });
-      return await onError({ error: normalizedError, request, locals });
+      return await onError({ error: normalizedError, request, locals, env });
     } catch {
       return defaultError();
     }
@@ -223,24 +227,27 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
     error: unknown,
     request: Request,
     locals: TLocals,
+    env: TEnv,
   ): Promise<Response> {
-    const response = await safeOnError(error, request, locals);
-    return safeOnResponse(request, response, locals);
+    const response = await safeOnError(error, request, locals, env);
+    return safeOnResponse(request, response, locals, env);
   }
 
   // The fetch handler
-  const fetch = async (request: Request): Promise<Response> => {
+  const fetch = async (request: Request, env?: TEnv): Promise<Response> => {
+    const boundEnv = env as TEnv;
+
     // 1. onRequest → locals (optional return)
     let locals = {} as TLocals;
 
     if (onRequest) {
       try {
-        const result = await onRequest({ request });
+        const result = await onRequest({ request, env: boundEnv });
         if (result !== undefined && result !== null) {
           locals = result as TLocals;
         }
       } catch (err) {
-        return respondWithError(err, request, locals);
+        return respondWithError(err, request, locals, boundEnv);
       }
     }
 
@@ -252,14 +259,14 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
       let res: Response;
       if (onNotFound) {
         try {
-          res = await onNotFound({ request, locals });
+          res = await onNotFound({ request, locals, env: boundEnv });
         } catch (err) {
-          return respondWithError(err, request, locals);
+          return respondWithError(err, request, locals, boundEnv);
         }
       } else {
         res = defaultNotFound();
       }
-      return safeOnResponse(request, res, locals);
+      return safeOnResponse(request, res, locals, boundEnv);
     }
 
     const { config: routeConfig } = matched.data;
@@ -307,14 +314,14 @@ export function setup<TLocals extends Record<string, unknown> = Record<string, u
       }
 
       // 5. Handler
-      const context = makeContext(request, input, locals);
+      const context = makeContext(request, input, locals, boundEnv);
       const response = await routeConfig.resolve(context);
-      return safeOnResponse(request, response, locals);
+      return safeOnResponse(request, response, locals, boundEnv);
     } catch (err) {
       if (err instanceof Response) {
-        return safeOnResponse(request, err, locals);
+        return safeOnResponse(request, err, locals, boundEnv);
       }
-      return respondWithError(err, request, locals);
+      return respondWithError(err, request, locals, boundEnv);
     }
   };
 

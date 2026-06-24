@@ -119,6 +119,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     expect(response.status).toBe(200);
@@ -146,6 +147,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     expect(response.headers.get("content-type")).toBe("text/html");
@@ -176,6 +178,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();
@@ -229,6 +232,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();
@@ -260,6 +264,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();
@@ -296,6 +301,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();
@@ -333,6 +339,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();
@@ -365,6 +372,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();
@@ -400,6 +408,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();
@@ -434,6 +443,7 @@ describe("openapi", () => {
         failed: [],
       },
       locals: {},
+      env: undefined,
     });
 
     const doc = await response.json();

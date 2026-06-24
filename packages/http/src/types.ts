@@ -46,10 +46,19 @@ export interface Context<
   TQuery = unknown,
   TBody = unknown,
   TLocals extends Record<string, unknown> = Record<string, unknown>,
+  TEnv = unknown,
 > {
   readonly request: Request;
   readonly input: InputState<TParams, TQuery, TBody>;
   readonly locals: TLocals;
+  /**
+   * Runtime binding passed as the second argument to `app.fetch(request, env)`.
+   *
+   * Empty (`undefined`) when the app is served directly. Hosting adapters use
+   * this to expose their platform context — e.g. the Convex `ActionCtx`, so
+   * handlers can call `c.env.runQuery(...)` / `c.env.runMutation(...)`.
+   */
+  readonly env: TEnv;
 }
 
 // ---------------------------------------------------------------------------
@@ -75,6 +84,7 @@ type ResolveContext<
   TQuerySchema,
   TBodySchema,
   TLocals extends Record<string, unknown>,
+  TEnv,
 > =
   HasSchema<TParamsSchema, TQuerySchema, TBodySchema> extends true
     ? {
@@ -85,10 +95,12 @@ type ResolveContext<
           InferBody<TBodySchema>
         >;
         readonly locals: TLocals;
+        readonly env: TEnv;
       }
     : {
         readonly request: Request;
         readonly locals: TLocals;
+        readonly env: TEnv;
       };
 
 // ---------------------------------------------------------------------------
@@ -100,6 +112,7 @@ export interface RouteConfig<
   TParamsSchema extends z.ZodType | undefined = undefined,
   TQuerySchema extends z.ZodType | undefined = undefined,
   TBodySchema extends z.ZodType | undefined = undefined,
+  TEnv = unknown,
 > {
   request?: {
     params?: TParamsSchema;
@@ -114,7 +127,7 @@ export interface RouteConfig<
    * annotating `c` with a wider locals type if needed.
    */
   resolve(
-    c: ResolveContext<TParamsSchema, TQuerySchema, TBodySchema, TLocals>,
+    c: ResolveContext<TParamsSchema, TQuerySchema, TBodySchema, TLocals, TEnv>,
   ): Response | Promise<Response>;
 }
 
@@ -136,20 +149,32 @@ export interface RouteDescriptor {
 // Setup config
 // ---------------------------------------------------------------------------
 
-export interface SetupConfig<TLocals extends Record<string, unknown> = Record<string, unknown>> {
+export interface SetupConfig<
+  TLocals extends Record<string, unknown> = Record<string, unknown>,
+  TEnv = unknown,
+> {
   routes: RouteDescriptor[];
-  onRequest?: (args: { request: Request }) => TLocals | Promise<TLocals> | void | Promise<void>;
+  onRequest?: (args: {
+    request: Request;
+    env: TEnv;
+  }) => TLocals | Promise<TLocals> | void | Promise<void>;
   onResponse?: (args: {
     request: Request;
     response: Response;
     locals: TLocals;
+    env: TEnv;
   }) => Response | Promise<Response>;
   onError?: (args: {
     error: Error;
     request: Request;
     locals: Partial<TLocals>;
+    env: TEnv;
   }) => Response | Promise<Response>;
-  onNotFound?: (args: { request: Request; locals: TLocals }) => Response | Promise<Response>;
+  onNotFound?: (args: {
+    request: Request;
+    locals: TLocals;
+    env: TEnv;
+  }) => Response | Promise<Response>;
 }
 
 // ---------------------------------------------------------------------------
@@ -163,8 +188,15 @@ export interface RequestOptions {
   query?: Record<string, string | string[]>;
 }
 
-export interface App {
-  fetch: (request: Request) => Response | Promise<Response>;
+export interface App<TEnv = unknown> {
+  /**
+   * Web-standard fetch handler.
+   *
+   * The optional second argument is exposed to handlers as `c.env`. Hosting
+   * adapters pass their platform context here — e.g. Convex calls
+   * `app.fetch(request, ctx)`.
+   */
+  fetch: (request: Request, env?: TEnv) => Response | Promise<Response>;
   request: (path: string, options?: RequestOptions) => Promise<Response>;
   routes: RouteDescriptor[];
 }

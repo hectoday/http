@@ -21,14 +21,15 @@
 11. [Client types](./client-types.md)
 12. [Versioning](./versioning.md)
 13. [Serving](./serving.md)
+14. [Convex](./convex.md)
 
 ## Recipes
 
-14. [Caching](./caching.md)
-15. [Rate limiting](./rate-limiting.md)
+15. [Caching](./caching.md)
+16. [Rate limiting](./rate-limiting.md)
 
 ## Reference
 
-16. [API reference](./api-reference.md)
-17. [Diagrams](./diagrams.md)
-18. [Changelog](./CHANGELOG.md)
+17. [API reference](./api-reference.md)
+18. [Diagrams](./diagrams.md)
+19. [Changelog](./CHANGELOG.md)
