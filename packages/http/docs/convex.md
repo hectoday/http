@@ -100,8 +100,10 @@ CORS works exactly as it does elsewhere — see [CORS](./cors.md). Add the
 HTTP method on a Convex `httpRouter`, each backed by an `httpAction` that calls
 `app.fetch(request, ctx)`. All routing decisions are made by Hectoday.
 
-By default it registers `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`, and `PATCH`.
-Pass `{ methods: [...] }` to narrow that set.
+By default it registers `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`, and `PATCH`
+(every method Convex can route). Pass `{ methods: [...] }` to narrow that set.
+`HEAD` probes are served by the matching `GET` route — Hectoday runs the handler
+and strips the body — so health checks work without extra configuration.
 
 ```ts
 export default convexRouter(app, { methods: ["GET", "POST"] });

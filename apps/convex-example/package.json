@@ -1,0 +1,20 @@
+{
+  "name": "convex-example",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "convex dev",
+    "codegen": "convex codegen"
+  },
+  "dependencies": {
+    "@hectoday/convex": "*",
+    "@hectoday/http": "*",
+    "convex": "^1.17.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vite-plus": "latest"
+  }
+}

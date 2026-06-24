@@ -233,8 +233,8 @@ export function setup<
     return safeOnResponse(request, response, locals, env);
   }
 
-  // The fetch handler
-  const fetch = async (request: Request, env?: TEnv): Promise<Response> => {
+  // The core request handler
+  const handle = async (request: Request, env?: TEnv): Promise<Response> => {
     const boundEnv = env as TEnv;
 
     // 1. onRequest → locals (optional return)
@@ -253,7 +253,11 @@ export function setup<
 
     // 2. Route matching
     const url = new URL(request.url);
-    const matched = findRoute(router, request.method, url.pathname);
+    // A HEAD request falls back to its GET route (web-standard behavior); the
+    // body is stripped from the response by the `fetch` wrapper below.
+    const matched =
+      findRoute(router, request.method, url.pathname) ??
+      (request.method === "HEAD" ? findRoute(router, "GET", url.pathname) : undefined);
 
     if (!matched) {
       let res: Response;
@@ -323,6 +327,20 @@ export function setup<
       }
       return respondWithError(err, request, locals, boundEnv);
     }
+  };
+
+  // The fetch handler. A HEAD response must never carry a body, so strip it
+  // after the (GET) handler runs while keeping status and headers intact.
+  const fetch = async (request: Request, env?: TEnv): Promise<Response> => {
+    const response = await handle(request, env);
+    if (request.method === "HEAD" && response.body !== null) {
+      return new Response(null, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+      });
+    }
+    return response;
   };
 
   // app.request convenience

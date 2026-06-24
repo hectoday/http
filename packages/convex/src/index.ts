@@ -73,7 +73,10 @@ export type ConvexEnv<DataModel extends GenericDataModel = GenericDataModel> =
  * ```
  */
 export function convexRoutes<
-  Ctx extends GenericActionCtx<GenericDataModel> = GenericActionCtx<GenericDataModel>,
+  // `GenericActionCtx<any>` (rather than `<GenericDataModel>`) mirrors
+  // convex-helpers' `HonoWithConvex` constraint: a concrete generated
+  // `ActionCtx` is assignable to it, whereas `<GenericDataModel>` rejects it.
+  Ctx extends GenericActionCtx<any> = GenericActionCtx<GenericDataModel>,
 >(): RouteFactory<Ctx> {
   return createRoutes<Ctx>();
 }
