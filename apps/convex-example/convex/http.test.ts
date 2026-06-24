@@ -55,6 +55,33 @@ describe("convex http router (via convex-test)", () => {
     expect(await res.text()).toBe("");
   });
 
+  test("an authenticated route rejects anonymous callers", async () => {
+    const t = convexTest(schema, modules);
+    const res = await t.fetch("/sendAs", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ body: "hi" }),
+    });
+    expect(res.status).toBe(401);
+  });
+
+  test("an authenticated route uses the identity from c.env.auth", async () => {
+    const t = convexTest(schema, modules);
+    const asAda = t.withIdentity({ name: "Ada", subject: "user|ada" });
+
+    const res = await asAda.fetch("/sendAs", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ body: "from ada" }),
+    });
+    expect(res.status).toBe(201);
+    expect(await res.json()).toEqual({ author: "Ada", body: "from ada" });
+
+    // The message was stored under the authenticated identity.
+    const byAuthor = await t.fetch("/listMessages/Ada");
+    expect(await byAuthor.json()).toMatchObject([{ author: "Ada", body: "from ada" }]);
+  });
+
   test("OPTIONS preflight returns CORS headers", async () => {
     const t = convexTest(schema, modules);
     const res = await t.fetch("/postMessage", {

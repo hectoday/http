@@ -51,6 +51,22 @@ const app = setup<Record<string, never>, ActionCtx>({
         return new Response("Sent message!");
       },
     }),
+
+    // POST /sendAs -> insert a message authored by the authenticated user.
+    // `c.env.auth` is the Convex auth context, so authentication is just a
+    // call on the binding — no separate middleware wiring required.
+    route.post("/sendAs", {
+      request: { body: z.object({ body: z.string().min(1).max(2000) }) },
+      resolve: async (c) => {
+        const identity = await c.env.auth.getUserIdentity();
+        if (!identity) return new Response("Unauthorized", { status: 401 });
+        if (!c.input.ok) return Response.json({ issues: c.input.issues }, { status: 400 });
+
+        const author = identity.name ?? identity.subject;
+        await c.env.runMutation(api.messages.send, { author, body: c.input.body.body });
+        return Response.json({ author, body: c.input.body.body }, { status: 201 });
+      },
+    }),
   ],
 });
 

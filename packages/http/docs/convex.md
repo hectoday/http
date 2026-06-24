@@ -115,8 +115,31 @@ export default convexRouter(app, { methods: ["GET", "POST"] });
 
 ## Testing
 
-You can test handlers without a Convex backend by calling `app.fetch` with a
-mock context:
+For full-stack tests through the real Convex router (and a simulated database),
+use [`convex-test`](https://docs.convex.dev/testing/convex-test). Its
+`t.fetch(path, init)` routes through your `convex/http.ts` default export, and
+`t.withIdentity(...)` exercises authenticated routes:
+
+```ts
+import { convexTest } from "convex-test";
+import { expect, test } from "vitest";
+import schema from "./schema";
+
+const modules = import.meta.glob("./**/*.ts");
+
+test("sends a message", async () => {
+  const t = convexTest(schema, modules);
+  const res = await t.fetch("/postMessage", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ author: "ada", body: "hi" }),
+  });
+  expect(res.status).toBe(200);
+});
+```
+
+For a quick unit test of a single handler, you can also call `app.fetch`
+directly with a mock context:
 
 ```ts
 import { expect, test, vi } from "vitest";
